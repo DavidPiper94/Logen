@@ -1,0 +1,6 @@
+    This file was generated and must not be modified.
+    Any changes made in this file will be overriden. 
+    If you want to make changes, please make them in the source json file 
+    and use the python script to generate the Localized.strings 
+    as well as the LocalizableKeys.swift file for an iOS project 
+    and the strings.xml file for an Anroid project.
