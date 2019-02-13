@@ -1,3 +1,4 @@
+import os
 
 # Writes given content to given filepath.
 def writeFile(filepath, content):
@@ -7,3 +8,9 @@ def writeFile(filepath, content):
 
 def readFile(filepath):
     return open(filepath, "r").read()
+
+def readLines(filepath):
+    return open(filepath).read().split("\n")
+
+def fileExtension(filepath):
+    return os.path.splitext(filepath)[-1].lower()

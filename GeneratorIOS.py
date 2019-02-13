@@ -15,7 +15,6 @@ def makeIOSEntry(key, value):
     return "\"{}\" = \"{}\";\n".format(key, value)
 
 def writeIOSStringResource(dict, destinationDirectory, addMockText, addLongText):
-    print(type(dict))
     for sectionKey, sectionValue in dict.items():
         
         for languageKey, localization in sectionValue.items():
