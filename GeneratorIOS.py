@@ -2,6 +2,9 @@ import os
 
 from lib import FileHelper
 
+mockString = FileHelper.readFile("./templates/template_common_mock.txt")
+longString = FileHelper.readFile("./templates/template_common_lorem.txt")
+
 def makeIOSGeneratedWarning():
     warning = FileHelper.readFile("./templates/template_common_generated_warning.txt")
     return "/*\n{}\n */\n".format(warning)
@@ -11,7 +14,7 @@ def makeIOSEntry(key, value):
     value = value.replace("'", "\\'")
     return "\"{}\" = \"{}\";\n".format(key, value)
 
-def writeIOSStringResource(dict, destinationDirectory, mockText, longText):
+def writeIOSStringResource(dict, destinationDirectory, addMockText, addLongText):
     print(type(dict))
     for sectionKey, sectionValue in dict.items():
         
@@ -30,9 +33,9 @@ def writeIOSStringResource(dict, destinationDirectory, mockText, longText):
             content += FileHelper.readFile("./templates/template_ios_section_header.txt").format(sectionKey)
             
             for key, value in localization.items():
-                if mockText:
+                if addMockText:
                     content += makeIOSEntry(key, "{} - {}".format(mockString,value))
-                elif longText:
+                elif addLongText:
                     content += makeIOSEntry(key, "{} - {}".format(longString,value))
                 else:
                     content += makeIOSEntry(key, value)

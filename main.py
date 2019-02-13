@@ -15,43 +15,7 @@ import GeneratorAndroid
 
 ##### common #####
 
-mockString = FileHelper.readFile("./templates/template_common_mock_string.txt")
-longString = FileHelper.readFile("./templates/template_common_lorem.txt")
-
-def showHelp():
-    print("This pyhton script generates the localization for an iOS and an Android project.")
-    print("It takes at least two arguments:")
-    print("1) Path to source directory. This directory has to contain only json files.")
-    print("2) Path to destination directory. Into this directory a new directory will be added which contains the generated files.")
-    print("Additionally you can add following flags:")
-    print("-h or --help: Shows this text as help.")
-    print("-m or --mock: Präfixes all strings with {}. This can be used to check if all texts are localized.".format(mockString))
-    print("-l or --long: Präfixes all strings with the first 300 chars of 'Lorem ipsum' to test long strings.")
-
-def checkInput(arguments):
-    
-    if "-h" in sys.argv or "--help" in sys.argv:
-        showHelp()
-        sys.exit()
-    
-    if len(arguments) < 3:
-        print(TerminalStyle.TerminalStyle.FAIL + "You provided not enough arguments." + TerminalStyle.TerminalStyle.ENDC)
-        showHelp()
-        sys.exit()
-    
-    if len(arguments) > 4:
-        print(TerminalStyle.TerminalStyle.FAIL + "You provided too many arguments." + TerminalStyle.TerminalStyle.ENDC)
-        showHelp()
-        sys.exit()
-    
-    sourceDirectory = arguments[1]
-    if not os.path.isdir(sourceDirectory):
-        print(TerminalStyle.TerminalStyle.FAIL + "The source directory does not exist." + TerminalStyle.TerminalStyle.ENDC)
-        showHelp()
-        sys.exit()
-
 def checkSourceFilepath(path):
-    print(TerminalStyle.TerminalStyle.GREEN + "Converting file {}".format(path) + TerminalStyle.TerminalStyle.ENDC)
     if not JsonHelper.isJSONFile(path):
         print(TerminalStyle.TerminalStyle.FAIL + "Given file is not a .json file. Converting cancled." + TerminalStyle.TerminalStyle.ENDC)
         sys.exit()
@@ -70,7 +34,16 @@ def createOrOverrideDirectory(path):
 def openDirectory(directory):
     subprocess.check_call(['open', '--', directory])
 
-def main(sourceFilenames, destinationDirectory, mockText, longText):
+def setupParser():
+    parser = argparse.ArgumentParser(description = "Generates localization files for iOS and Android projects.")
+    parser.add_argument("source", help = "Path to source directory")
+    parser.add_argument("destination", help = "Path at which destination directory will be created")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("-m", "--mock", action='store_true', help = "Präfixes all strings with the content of templates/template_common_mock. This can be used to check if all texts are localized.")
+    group.add_argument("-l", "--long", action='store_true', help = "Präfixes all strings with the first 300 chars of 'Lorem ipsum' to test long strings.")
+    return parser
+
+def main(sourceFilenames, destinationDirectory, addMockText, addLongText):
     
     # Construct destination paths.
     path = "{}/localization_gen".format(destinationDirectory)
@@ -86,23 +59,26 @@ def main(sourceFilenames, destinationDirectory, mockText, longText):
     
     # Process each source file.
     for source in sourceFilenames:
+        print(TerminalStyle.TerminalStyle.GREEN + "Converting file {}".format(path) + TerminalStyle.TerminalStyle.ENDC)
         filepath = checkSourceFilepath(source)
         dict = JsonHelper.readJSON(filepath)
-        GeneratorIOS.writeIOSStringResource(dict, iosDestinationPath, mockText, longText)
+        GeneratorIOS.writeIOSStringResource(dict, iosDestinationPath, addMockText, addLongText)
         GeneratorIOSEnum.writeIOSEnumFile(dict, iosEnumDestinationPath)
-        GeneratorAndroid.writeAndroidStringResource(dict, androidDestinationPath, mockText, longText)
+        GeneratorAndroid.writeAndroidStringResource(dict, androidDestinationPath, addMockText, addLongText)
             
     # Open the output directory.
     openDirectory(destinationDirectory)
 
 if __name__ == "__main__":
-    checkInput(sys.argv)
     
-    # get soruce dir and destination dir from given arguments
-    sourceDirectory = sys.argv[1]
-    destinationDirectory = sys.argv[2]
-    mockText = "-m" in sys.argv or "--mock" in sys.argv
-    longText = "-l" in sys.argv or "--long" in sys.argv
+    parser = setupParser()
+    args = parser.parse_args()
+
+    # get source dir and destination dir from given arguments
+    sourceDirectory = args.source
+    destinationDirectory = args.destination
+    addMockText = args.mock
+    addLongText = args.long
     
     # get all json files from source directory
     sourceFilenames = []
@@ -110,4 +86,4 @@ if __name__ == "__main__":
         sourceFilenames.append(file)
     
     # start main function
-    main(sourceFilenames, destinationDirectory, mockText, longText)
+    main(sourceFilenames, destinationDirectory, addMockText, addLongText)
