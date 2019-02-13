@@ -2,6 +2,9 @@ import os
 
 from lib import FileHelper
 
+mockString = FileHelper.readFile("./templates/template_common_mock.txt")
+longString = FileHelper.readFile("./templates/template_common_lorem.txt")
+
 def makeAndroidGeneratedWarning():
     warning = FileHelper.readFile("./templates/template_common_generated_warning.txt")
     return "<!-- \n{} \n-->\n\n".format(warning)
@@ -11,7 +14,7 @@ def makeAndroidEntry(key, value):
     value = value.replace("'", "\\'")
     return "    <string name=\"{}\">{}</string>\n".format(key, value)
 
-def writeAndroidStringResource(dict, destinationDirectory, mockText, longText):
+def writeAndroidStringResource(dict, destinationDirectory, addMockText, addLongText):
     
     for sectionKey, sectionValue in dict.items():
         
@@ -29,9 +32,9 @@ def writeAndroidStringResource(dict, destinationDirectory, mockText, longText):
             content = "\n    <!-- {} --> \n\n".format(sectionKey)
             for key, value in localization.items():
                 androidKey = "{}.{}".format(sectionKey, key)
-                if mockText:
+                if addMockText:
                     content += makeAndroidEntry(androidKey, "{} - {}".format(mockString, value))
-                elif longText:
+                elif addLongText:
                     content += makeAndroidEntry(androidKey, "{} - {}".format(longString, value))
                 else:
                     content += makeAndroidEntry(androidKey, value)
