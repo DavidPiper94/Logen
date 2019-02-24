@@ -13,6 +13,7 @@ import GeneratorIOS
 import GeneratorIOSEnum
 import GeneratorAndroid
 import GeneratorJSON
+from IntermediateLocalization import Converter
 
 def checkSourceFilepath(path):
     if not JsonHelper.isJSONFile(path):
@@ -83,9 +84,24 @@ def generateCommonLocalization(args):
         print(TerminalStyle.TerminalStyle.GREEN + "Converting file {}".format(path) + TerminalStyle.TerminalStyle.ENDC)
         filepath = checkSourceFilepath(source)
         dict = JsonHelper.readJSON(filepath)
-        GeneratorIOS.writeIOSStringResource(dict, iosDestinationPath, addMockText, addLongText)
+        #GeneratorIOS.writeIOSStringResource(dict, iosDestinationPath, addMockText, addLongText)
         GeneratorIOSEnum.writeIOSEnumFile(dict, iosEnumDestinationPath)
         GeneratorAndroid.writeAndroidStringResource(dict, androidDestinationPath, addMockText, addLongText)
+
+        converter = Converter()
+        intermediate = converter.dictToIntermediateLocalization(dict)
+        listOfIosLocalizations = converter.intermediateLocalizationToIosFiles(intermediate)
+        for localizationFile in listOfIosLocalizations:
+
+            filepath = "{}/{}".format(iosDestinationPath, localizationFile.foldername)
+            filename = "{}/{}".format(filepath, localizationFile.filename)
+
+            if not os.path.exists(filepath):
+                print("Creating directory {}".format(filepath))
+                os.makedirs(filepath)
+
+            FileHelper.writeFile(filename, localizationFile.filecontent)
+        #print(listOfIosLocalizations)
             
     # Open the output directory.
     openDirectory(destinationDirectory)
