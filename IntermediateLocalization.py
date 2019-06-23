@@ -60,6 +60,13 @@ class LocalizationFile:
         self.filename = filename
         self.filecontent = filecontent
 
+    def __eq__(self, other):
+        """Override the default Equals behavior"""
+        return self.foldername == other.foldername and self.filename == other.filename and self.filecontent == other.filecontent
+
+    def __str__(self):
+         return "LocalizationFile:\nFolder: {}\nFilename: {}\nContent: {}".format(self.foldername, self.filename, self.filecontent)
+
 # ==============================
 # Generator
 # ==============================
@@ -113,8 +120,8 @@ class Converter:
         content += FileHelper.readFile("./templates/template_ios_enum_documentation.txt")
         content += "extension LocalizableKeys {\n"
         content += "    enum {0}: String {{\n".format(intermediateLocalization.localizationIdentifier)
-        for entry in language.localizationEntries:
-            key = entry.replace(".", "_")
+        for entry in language.intermediateEntries:
+            key = entry.key.replace(".", "_")
             content += "        case {} = \"{}\"\n".format(key, entry)
         content += "    }\n"
         content += "}"

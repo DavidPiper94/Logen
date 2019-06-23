@@ -43,8 +43,8 @@ def setupParser():
     mainParser.add_argument("source", help = "Path to source directory")
     mainParser.add_argument("destination", help = "Path at which destination directory will be created")
     group = mainParser.add_mutually_exclusive_group()
-    group.add_argument("-m", "--mock", action='store_true', help = "Präfixes all strings with the content of templates/template_common_mock. This can be used to check if all texts are localized.")
-    group.add_argument("-l", "--long", action='store_true', help = "Präfixes all strings with the first 300 chars of 'Lorem ipsum' to test long strings.")
+    group.add_argument("-m", "--mock", action='store_true', help = "Prefixes all strings with the content of templates/template_common_mock. This can be used to check if all texts are localized.")
+    group.add_argument("-l", "--long", action='store_true', help = "Prefixes all strings with the first 300 chars of 'Lorem ipsum' to test long strings.")
     mainParser.set_defaults(func=generateCommonLocalization)
 
     subParser = subparsers.add_parser("toJSON", description = "Converts a given .strings iOS localization file or .xml Android localization file to a common JSON localization file.")
@@ -84,13 +84,14 @@ def generateCommonLocalization(args):
         print(TerminalStyle.TerminalStyle.GREEN + "Converting file {}".format(path) + TerminalStyle.TerminalStyle.ENDC)
         filepath = checkSourceFilepath(source)
         dict = JsonHelper.readJSON(filepath)
+        print(dict)
         #GeneratorIOS.writeIOSStringResource(dict, iosDestinationPath, addMockText, addLongText)
-        GeneratorIOSEnum.writeIOSEnumFile(dict, iosEnumDestinationPath)
-        GeneratorAndroid.writeAndroidStringResource(dict, androidDestinationPath, addMockText, addLongText)
+        # GeneratorIOSEnum.writeIOSEnumFile(dict, iosEnumDestinationPath)
+        # GeneratorAndroid.writeAndroidStringResource(dict, androidDestinationPath, addMockText, addLongText)
 
         converter = Converter()
-        intermediate = converter.dictToIntermediateLocalization(dict)
-        listOfIosLocalizations = converter.intermediateLocalizationToIosFiles(intermediate)
+        intermediate = converter.generateIntermediate(dict)
+        listOfIosLocalizations = converter.generateIOS(intermediate)
         for localizationFile in listOfIosLocalizations:
 
             filepath = "{}/{}".format(iosDestinationPath, localizationFile.foldername)
@@ -101,8 +102,17 @@ def generateCommonLocalization(args):
                 os.makedirs(filepath)
 
             FileHelper.writeFile(filename, localizationFile.filecontent)
-        #print(listOfIosLocalizations)
-            
+
+        enumFile = converter.generateIOSEnum(intermediate)
+        filepath = "{}/{}".format(iosEnumDestinationPath, enumFile.foldername)
+        filename = "{}/{}".format(filepath, enumFile.filename)
+
+        if not os.path.exists(filepath):
+            print("Creating directory {}".format(filepath))
+            os.makedirs(filepath)
+
+        FileHelper.writeFile(filename, enumFile.filecontent)
+
     # Open the output directory.
     openDirectory(destinationDirectory)
 
