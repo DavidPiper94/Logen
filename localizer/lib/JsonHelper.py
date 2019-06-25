@@ -13,3 +13,6 @@ def readJSON(filepath):
 def isJSONFile(filepath):
     ext = os.path.splitext(filepath)[-1].lower()
     return ext == ".json"
+
+def dictToJSONString(dict):
+    return json.dumps(dict)

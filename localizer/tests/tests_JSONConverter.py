@@ -1,6 +1,4 @@
 import unittest
-import json
-import os
 
 from localizer.lib import FileHelper
 from localizer.lib import JsonHelper
@@ -17,10 +15,10 @@ class TestJSONConverter(unittest.TestCase):
     def test_assertJSONStructure(self):
         """Assures equality between json and dict representation"""
         dict = JsonHelper.readJSON("localizer/tests/testdata/ExampleJSON.json")
-        expectation = json.dumps(dict).replace('\n', '').replace(' ', '')
+        expectation = JsonHelper.dictToJSONString(dict).replace('\n', '').replace(' ', '')
 
         exampleDict = self.helper_createExampleDict()
-        result = json.dumps(exampleDict).replace(' ', '')
+        result = JsonHelper.dictToJSONString(exampleDict).replace(' ', '')
 
         self.assertEqual(expectation, result)
 
