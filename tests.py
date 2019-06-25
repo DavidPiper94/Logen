@@ -10,7 +10,8 @@ from model.IntermediateLanguage import IntermediateLanguage
 from model.IntermediateLocalization import IntermediateLocalization
 from model.LocalizationFile import LocalizationFile
 
-from converter import iOSConverter
+from converter.JSONConverter import JSONConverter
+from converter.iOSConverter import iOSConverter
 
 class TestConverter(unittest.TestCase):
 
@@ -31,7 +32,7 @@ class TestConverter(unittest.TestCase):
         intermediate = IntermediateLocalization("FileName", [language])
 
         exampleDict = self.helper_createExampleDict()
-        result = Converter().generateIntermediate(exampleDict)
+        result = JSONConverter().toIntermediate("testdata/ExampleJSON.json")
         
         self.assertEqual(intermediate, result)
 
@@ -42,7 +43,7 @@ class TestConverter(unittest.TestCase):
 
         exampleDict = self.helper_createExampleDict()
         intermediate = Converter().generateIntermediate(exampleDict)
-        result = iOSConverter.iOSConverter().fromIntermediate(intermediate)[0]
+        result = iOSConverter().fromIntermediate(intermediate)[0]
         
         self.assertEqual(expectation, result)
 
