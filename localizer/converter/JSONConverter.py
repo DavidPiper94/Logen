@@ -1,8 +1,8 @@
 from ConverterInterface import ConverterInterface as Base
-from model.IntermediateEntry import IntermediateEntry
-from model.IntermediateLanguage import IntermediateLanguage
-from model.IntermediateLocalization import IntermediateLocalization
-from lib import JsonHelper
+from localizer.model.IntermediateEntry import IntermediateEntry
+from localizer.model.IntermediateLanguage import IntermediateLanguage
+from localizer.model.IntermediateLocalization import IntermediateLocalization
+from localizer.lib import JsonHelper
 
 class JSONConverter(Base):
 
