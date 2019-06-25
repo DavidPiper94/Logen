@@ -1,9 +1,11 @@
 import unittest
 import json
-import os
 
-from lib import FileHelper
-from lib import JsonHelper
+import os,sys,inspect
+# sys.path.insert(1, os.path.join(sys.path[0], '..'))
+
+from generate_localization.lib import FileHelper
+from generate_localization.lib import JsonHelper
 
 from IntermediateLocalization import Converter
 from model.IntermediateEntry import IntermediateEntry
