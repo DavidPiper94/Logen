@@ -27,6 +27,28 @@ class TestiOSConverter(unittest.TestCase):
         self.assertEqual("key", iOSConverter()._correctEntry("   \"key\""))
         self.assertEqual("key", iOSConverter()._correctEntry("\"key\"   "))
         self.assertEqual("key", iOSConverter()._correctEntry("   \"key\"   "))
+        # TODO: Fix this test case:
+        #self.assertEqual("This is a \"value\"", iOSConverter()._correctEntry("This is a \"value\""))
+
+    def test_mergeIntermediateLocalization(self):
+        example = self._createExampleIntermediateLanguage()
+        example.intermediateLanguages[0].languageIdentifier = "de"
+
+        otherExample = self._createExampleIntermediateLanguage()
+        otherExample.intermediateLanguages[0].languageIdentifier = "en"
+
+        result = iOSConverter()._merge(example, otherExample)
+
+        listOfLanguageIdentifier = []
+        for intermediateLanguage in result.mergedIntermediateLocalization.intermediateLanguages:
+            listOfLanguageIdentifier.append(intermediateLanguage.languageIdentifier)
+
+        self.assertEqual(sorted(listOfLanguageIdentifier), sorted(["de", "en"]))
+
+        example.intermediateLanguages[0].intermediateEntries.append(IntermediateEntry("FirstNewKey", "FirstNewValue"))
+        otherExample.intermediateLanguages[0].intermediateEntries.append(IntermediateEntry("SecondNewKey", "SecondNewValue"))
+        newResult = iOSConverter()._merge(example, otherExample)
+        print(newResult)
 
     def test_generateIOS(self):
         expectedFilepath = "ExampleLanguage.lproj/FileName.strings"
