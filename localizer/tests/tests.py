@@ -4,23 +4,22 @@ import json
 import os,sys,inspect
 # sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
-from generate_localization.lib import FileHelper
-from generate_localization.lib import JsonHelper
+from localizer.lib import FileHelper
+from localizer.lib import JsonHelper
 
-from IntermediateLocalization import Converter
-from model.IntermediateEntry import IntermediateEntry
-from model.IntermediateLanguage import IntermediateLanguage
-from model.IntermediateLocalization import IntermediateLocalization
-from model.LocalizationFile import LocalizationFile
+from localizer.model.IntermediateEntry import IntermediateEntry
+from localizer.model.IntermediateLanguage import IntermediateLanguage
+from localizer.model.IntermediateLocalization import IntermediateLocalization
+from localizer.model.LocalizationFile import LocalizationFile
 
-from converter.JSONConverter import JSONConverter
-from converter.iOSConverter import iOSConverter
+from localizer.converter.JSONConverter import JSONConverter
+from localizer.converter.iOSConverter import iOSConverter
 
 class TestConverter(unittest.TestCase):
 
     def test_assertJSONStructure(self):
         """Assures equality between json and dict representation"""
-        dict = JsonHelper.readJSON("testdata/ExampleJSON.json")
+        dict = JsonHelper.readJSON("localizer/tests/testdata/ExampleJSON.json")
         expectation = json.dumps(dict).replace('\n', '').replace(' ', '')
 
         exampleDict = self.helper_createExampleDict()
@@ -33,13 +32,13 @@ class TestConverter(unittest.TestCase):
         expectation = self.helper_createExampleIntermediateLanguage()
 
         exampleDict = self.helper_createExampleDict()
-        result = JSONConverter().toIntermediate("testdata/ExampleJSON.json")
+        result = JSONConverter().toIntermediate("localizer/tests/testdata/ExampleJSON.json")
         
         self.assertEqual(expectation, result)
 
     def test_generateIntermediateFromiOS(self):
         expectation = self.helper_createExampleIntermediateLanguage()
-        result = iOSConverter().toIntermediate("testdata/ExampleLanguage.lproj/FileName.strings")
+        result = iOSConverter().toIntermediate("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
         self.assertEqual(expectation, result)
 
     def test_correctInput(self):
@@ -53,11 +52,11 @@ class TestConverter(unittest.TestCase):
 
     def test_generateIOS(self):
         expectedFilepath = "ExampleLanguage.lproj/FileName.strings"
-        expectedContent = FileHelper.readFile("testdata/ExampleLanguage.lproj/FileName.strings")
+        expectedContent = FileHelper.readFile("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
 
         exampleDict = self.helper_createExampleDict()
-        intermediate = Converter().generateIntermediate(exampleDict)
+        intermediate = self.helper_createExampleIntermediateLanguage()
         result = iOSConverter().fromIntermediate(intermediate)[0]
         
         self.assertEqual(expectation, result)

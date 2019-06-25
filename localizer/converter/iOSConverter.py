@@ -1,12 +1,13 @@
+import os
+
 from ConverterInterface import ConverterInterface as Base
 
-from model.IntermediateEntry import IntermediateEntry
-from model.IntermediateLanguage import IntermediateLanguage
-from model.IntermediateLocalization import IntermediateLocalization
-from model.LocalizationFile import LocalizationFile
+from localizer.model.IntermediateEntry import IntermediateEntry
+from localizer.model.IntermediateLanguage import IntermediateLanguage
+from localizer.model.IntermediateLocalization import IntermediateLocalization
+from localizer.model.LocalizationFile import LocalizationFile
 
-from lib import FileHelper
-import os
+from localizer.lib import FileHelper
 
 class iOSConverter(Base):
 
@@ -48,13 +49,13 @@ class iOSConverter(Base):
     def fromIntermediate(self, intermediateLocalization):
         listOfLocalizationFiles = []
 
-        warning = FileHelper.readFile("./templates/template_common_generated_warning.txt")
+        warning = FileHelper.readFile("localizer/templates/template_common_generated_warning.txt")
         formattedWarning = "/*\n{}\n */\n".format(warning)
 
         for language in intermediateLocalization.intermediateLanguages:
 
             content = formattedWarning
-            sectionHeaderTemplate = FileHelper.readFile("./templates/template_ios_section_header.txt")
+            sectionHeaderTemplate = FileHelper.readFile("localizer/templates/template_ios_section_header.txt")
             content += sectionHeaderTemplate.format(intermediateLocalization.localizationIdentifier)
 
             for entry in language.intermediateEntries:
