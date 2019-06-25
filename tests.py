@@ -5,16 +5,18 @@ from lib import FileHelper
 from lib import JsonHelper
 
 from IntermediateLocalization import Converter
-from IntermediateLocalization import IntermediateEntry
-from IntermediateLocalization import IntermediateLanguage
-from IntermediateLocalization import IntermediateLocalization
-from IntermediateLocalization import LocalizationFile
+from model.IntermediateEntry import IntermediateEntry
+from model.IntermediateLanguage import IntermediateLanguage
+from model.IntermediateLocalization import IntermediateLocalization
+from model.LocalizationFile import LocalizationFile
+
+from converter import iOSConverter
 
 class TestConverter(unittest.TestCase):
 
     def test_assertJSONStructure(self):
         """Assures equality between json and dict representation"""
-        dict = JsonHelper.readJSON("test/ExampleJSON.json")
+        dict = JsonHelper.readJSON("testdata/ExampleJSON.json")
         expectation = json.dumps(dict).replace('\n', '').replace(' ', '')
 
         exampleDict = self.helper_createExampleDict()
@@ -34,27 +36,14 @@ class TestConverter(unittest.TestCase):
         self.assertEqual(intermediate, result)
 
     def test_generateIOS(self):
-        expectedFolder = "Language.lproj"
-        expectedFilename = "FileName.strings"
-        expectedContent = FileHelper.readFile("test/ExpectedStringsContent.txt")
-        expectation = LocalizationFile(expectedFolder, expectedFilename, expectedContent)
+        expectedFilepath = "Language.lproj/FileName.strings"
+        expectedContent = FileHelper.readFile("testdata/ExpectedStringsContent.txt")
+        expectation = LocalizationFile(expectedFilepath, expectedContent)
 
         exampleDict = self.helper_createExampleDict()
         intermediate = Converter().generateIntermediate(exampleDict)
-        result = Converter().generateIOS(intermediate)[0]
+        result = iOSConverter.iOSConverter().fromIntermediate(intermediate)[0]
         
-        self.assertEqual(expectation, result)
-
-    def test_generateIOSEnum(self):
-        expectedFolder = ""
-        expectedFilename = "FileNameLocalizableKeys.swift"
-        expectedContent = FileHelper.readFile("test/ExpectedEnumContent.txt")
-        expectation = LocalizationFile(expectedFolder, expectedFilename, expectedContent)
-
-        exampleDict = self.helper_createExampleDict()
-        intermediate = Converter().generateIntermediate(exampleDict)
-        result = Converter().generateIOSEnum(intermediate)
-
         self.assertEqual(expectation, result)
 
     def helper_createExampleDict(self):
