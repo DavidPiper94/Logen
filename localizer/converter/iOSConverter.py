@@ -51,11 +51,11 @@ class iOSConverter(Base):
 
         warning = FileHelper.readFile("localizer/templates/template_common_generated_warning.txt")
         formattedWarning = "/*\n{}\n */\n".format(warning)
+        sectionHeaderTemplate = FileHelper.readFile("localizer/templates/template_ios_section_header.txt")
 
         for language in intermediateLocalization.intermediateLanguages:
 
             content = formattedWarning
-            sectionHeaderTemplate = FileHelper.readFile("localizer/templates/template_ios_section_header.txt")
             content += sectionHeaderTemplate.format(intermediateLocalization.localizationIdentifier)
 
             for entry in language.intermediateEntries:

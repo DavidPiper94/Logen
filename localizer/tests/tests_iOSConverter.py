@@ -9,7 +9,6 @@ from localizer.model.IntermediateEntry import IntermediateEntry
 from localizer.model.IntermediateLanguage import IntermediateLanguage
 from localizer.model.IntermediateLocalization import IntermediateLocalization
 from localizer.model.LocalizationFile import LocalizationFile
-from localizer.model.MergeResult import MergeResult
 
 from localizer.converter.iOSConverter import iOSConverter
 
