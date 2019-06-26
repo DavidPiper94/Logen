@@ -9,21 +9,6 @@ from localizer.model.LocalizationFile import LocalizationFile
 
 from localizer.lib import FileHelper
 
-class MergeResult():
-    def __init__(self, mergedIntermediateLocalization, listOfMissingEntries):
-        self.mergedIntermediateLocalization = mergedIntermediateLocalization
-        self.listOfMissingEntries = listOfMissingEntries
-
-    def __eq__(self, other):
-        """Override the default Equals behavior"""
-        return self.mergedIntermediateLocalization == other.mergedIntermediateLocalization and self.listOfMissingEntries == other.listOfMissingEntries
-    
-    def __str__(self):
-        description = "MergeResult of two IntermediateLoclaizations:\n" + str(self.mergedIntermediateLocalization) + "\nMissing Entries:"
-        for entry in self.listOfMissingEntries:
-            description += "{}, ".format(entry)
-        return description
-
 class iOSConverter(Base):
 
     def fileExtension(self): return ".strings"
@@ -60,38 +45,6 @@ class iOSConverter(Base):
         if entry.endswith('\"'):      # Remove trailing quote sign
             entry = entry[:-1]
         return entry
-
-    # There may be cases, where it is useful to merge two intermediate localizations together.
-    # E.g. when using this converter and there is one file de.lproj/File.strings and one en.lproj/File.strings,
-    # Than the end result should be one single intermediate localization with both languages combined.
-    # Another aproach would be to handle this case when importing a folder of multiple *.lproj directorys,
-    # but this would need a special handling on importing. And how should other setups be handled?
-    # Thus it is easier to add this method for merging two intermediate localizations together.
-    # This method returns an instance of MergeResult.
-    def _merge(self, first, second):
-
-        # Make sure, both have the same identifier, else cancel.
-        if first.localizationIdentifier is not second.localizationIdentifier:
-            return None
-
-        languages = first.intermediateLanguages + second.intermediateLanguages
-
-        listOfMissingEntries = []
-        for firstLanguage in first.intermediateLanguages:
-            for secondLanguage in second.intermediateLanguages:
-                listOfMissingEntries += self._compareEntries(firstLanguage.intermediateEntries, secondLanguage.intermediateEntries)
-
-        return MergeResult(IntermediateLocalization(first.localizationIdentifier, languages), listOfMissingEntries)
-
-    def _compareEntries(self, firstList, secondList):
-        for item in firstList:
-            if item in secondList:
-                # Remove items, that are in both lists.
-                firstList.remove(item)
-                secondList.remove(item)
-
-        # Return remainig items, which are only in one of both lists.
-        return firstList + secondList
 
     def fromIntermediate(self, intermediateLocalization):
         listOfLocalizationFiles = []
