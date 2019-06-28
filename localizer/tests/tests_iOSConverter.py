@@ -1,6 +1,4 @@
 import unittest
-import json
-import os
 
 from localizer.lib import FileHelper
 from localizer.lib import JsonHelper
