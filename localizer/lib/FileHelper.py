@@ -16,15 +16,24 @@ def readFile(filepath):
 def readLines(filepath):
     return open(filepath).read().split("\n")
 
+def filename(filepath):
+    return os.path.basename(filepath)
+
+def directoryName(filepath):
+    return os.path.dirname(filepath).split('/')[-1]
+
+def directoryPath(filepath):
+    return os.path.dirname(filepath)
+
 def fileExtension(filepath):
     return os.path.splitext(filepath)[-1].lower()
+
+def exists(filepath):
+    return os.path.exists(filepath)
 
 #--------------------
 # Direcories
 #--------------------
-
-def exists(filepath):
-    return os.path.exists(filepath)
 
 def createDir(filepath):
     os.makedirs(filepath)
