@@ -10,7 +10,9 @@ from localizer.model.LocalizationFile import LocalizationFile
 class TestAndroidConverter(unittest.TestCase):
 
     def test_generateIntermediateFromAndroid(self):
-        pass
+        expectation = self._createExampleIntermediateLanguage()
+        result = AndroidConverter().toIntermediate("localizer/tests/testdata/values-ExampleLanguage/FileName.xml")
+        self.assertEqual(expectation, result)
 
     def test_generateAndroidLocalization(self):
         expectedFilepath = "values-ExampleLanguage/FileName.xml"
