@@ -42,4 +42,4 @@ def createDir(filepath):
     os.makedirs(filepath)
 
 def removeDir(filepath):
-    shutil.rmtree(path)
+    shutil.rmtree(filepath)
