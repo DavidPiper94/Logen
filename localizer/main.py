@@ -76,7 +76,7 @@ def importToIntermediateLocalization(sourceFilepath):
 
 def selectImporterForFileExtension(extension):
     # TODO: Better comparison, e.g. lowercased
-    return filter(lambda x: x.fileExtension() == extension, registeredConverter())[0]
+    return list(filter(lambda x: x.fileExtension() == extension, registeredConverter()))[0]
 
 def exportToLocalizationFile(intermediateLocalization):
     extension = FileHelper.fileExtension(sourceFilepath)
@@ -87,7 +87,7 @@ def exportToLocalizationFile(intermediateLocalization):
 
 def outputConverterForFileExtension(extension):
     # TODO: Better comparison, e.g. lowercased
-    return filter(lambda x: x.fileExtension() != extension, registeredConverter())
+    return list(filter(lambda x: x.fileExtension() != extension, registeredConverter()))
 
 #--------------------
 # Output

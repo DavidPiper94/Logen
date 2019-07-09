@@ -1,6 +1,6 @@
 import os
 
-from ConverterInterface import ConverterInterface as Base
+from localizer.converter.ConverterInterface import ConverterInterface as Base
 
 from localizer.model.IntermediateEntry import IntermediateEntry
 from localizer.model.IntermediateLanguage import IntermediateLanguage
