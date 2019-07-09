@@ -45,8 +45,8 @@ class ConverterInterface:
         for item in firstList[:]:
             if item in secondList:
                 # Remove items, that are in both lists.
-                firstList = filter(lambda x: x is not item, firstList)
-                secondList = filter(lambda x: x is not item, secondList)
+                firstList = list(filter(lambda x: x is not item, firstList))
+                secondList = list(filter(lambda x: x is not item, secondList))
 
         # Return remainig items, which are only in one of both lists.
         return firstList + secondList

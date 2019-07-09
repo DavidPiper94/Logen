@@ -1,4 +1,5 @@
-from ConverterInterface import ConverterInterface as Base
+
+from localizer.converter.ConverterInterface import ConverterInterface as Base
 
 from localizer.model.LocalizationFile import LocalizationFile
 
