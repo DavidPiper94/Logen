@@ -29,7 +29,7 @@ class ConverterInterface:
     def merge(self, first, second):
 
         # Make sure, both have the same identifier, else cancel.
-        if first.localizationIdentifier is not second.localizationIdentifier:
+        if not first.localizationIdentifier == second.localizationIdentifier:
             return None
 
         languages = first.intermediateLanguages + second.intermediateLanguages
