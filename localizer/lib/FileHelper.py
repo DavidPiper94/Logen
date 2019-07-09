@@ -11,10 +11,13 @@ def writeFile(filepath, content):
     textFile.close()
 
 def readFile(filepath):
-    return open(filepath, "r").read()
+    textFile = open(filepath, "r")
+    content = textFile.read()
+    textFile.close()
+    return content
 
 def readLines(filepath):
-    return open(filepath).read().split("\n")
+    return readFile(filepath).split("\n")
 
 def filename(filepath):
     return os.path.basename(filepath)

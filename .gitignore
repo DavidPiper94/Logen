@@ -1,4 +1,5 @@
-/testdata
 /__pycache__
 /lib/__pycache__
 *.pyc
+
+/localizer/tests/bigtests/*
