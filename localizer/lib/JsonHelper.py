@@ -7,8 +7,11 @@ def writeJSON(filepath, data):
 
 def readJSON(filepath):
     with open(filepath) as file:
-        data = json.load(file)
-        return data
+        try:
+            data = json.load(file)
+            return data
+        except:
+            return None
 
 def isJSONFile(filepath):
     ext = os.path.splitext(filepath)[-1].lower()
