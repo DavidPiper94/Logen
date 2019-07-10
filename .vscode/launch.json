@@ -121,6 +121,15 @@
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
             "args": ["fromJSON", "./testdata/localization_src", "./testdata"]
+        },
+        // Starts a debug session for tests
+        {
+            "name": "Debug bigtests",
+            "type": "python",
+            "request": "launch",
+            "module": "localizer.tests.bigtests.tests_bigtests",
+            "console": "integratedTerminal",
+            "args": []
         }
     ]
 }
