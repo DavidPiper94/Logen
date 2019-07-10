@@ -10,8 +10,19 @@ class JSONConverter(Base):
 
     def toIntermediate(self, filepath):
         dict = JsonHelper.readJSON(filepath)
+
+        # JsonHelper could not read json file at given path.
+        if dict is None:
+            return None
+
         for sectionKey, sectionValue in dict.items():
+
             listOfLanguages = []
+
+            # Check for correct format of json.
+            if not type(sectionValue) is type({}):
+                return None
+
             for languageKey, localization in sectionValue.items():
                 listOfEntries = []
                 for key, value in localization.items():
