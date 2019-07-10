@@ -2,6 +2,7 @@ from localizer.converter.ConverterInterface import ConverterInterface as Base
 from localizer.model.IntermediateEntry import IntermediateEntry
 from localizer.model.IntermediateLanguage import IntermediateLanguage
 from localizer.model.IntermediateLocalization import IntermediateLocalization
+from localizer.model.LocalizationFile import LocalizationFile
 from localizer.lib import JsonHelper
 
 class JSONConverter(Base):
@@ -37,4 +38,21 @@ class JSONConverter(Base):
             return IntermediateLocalization(sectionKey, listOfLanguages)
 
     def fromIntermediate(self, intermediateLocalization):
-        pass
+        localizationFiles = []
+
+        localizationDict = {}
+        languageDict = {}
+        for language in intermediateLocalization.intermediateLanguages:
+
+            entryDict = {}
+            for entry in language.intermediateEntries:
+                entryDict[entry.key] = entry.value
+            
+            languageDict[language.languageIdentifier] = entryDict
+            localizationDict[intermediateLocalization.localizationIdentifier] = languageDict
+
+            filename = "{}{}".format(intermediateLocalization.localizationIdentifier, self.fileExtension())
+            localizationFile = LocalizationFile(filename, localizationDict)
+            localizationFiles.append(localizationFile)
+        
+        return localizationFiles
