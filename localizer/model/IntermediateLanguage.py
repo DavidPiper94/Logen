@@ -6,7 +6,12 @@ class IntermediateLanguage:
         
     def __eq__(self, other):
         """Override the default Equals behavior"""
-        return self.languageIdentifier == other.languageIdentifier and self.intermediateEntries.sort(key = lambda x: x.key) == other.intermediateEntries.sort(key = lambda x: x.key)
+        if not type(other) is IntermediateLanguage:
+            return False
+        
+        sameIdentifier = self.languageIdentifier == other.languageIdentifier
+        sameEntries = self.intermediateEntries.sort(key = lambda x: x.key) == other.intermediateEntries.sort(key = lambda x: x.key)
+        return sameIdentifier and sameEntries
 
     def __str__(self):
         description = "IntermediateLanguage:\n   LanguageIdentifier: {}\n".format(self.languageIdentifier)
