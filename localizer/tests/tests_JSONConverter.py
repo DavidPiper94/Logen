@@ -25,12 +25,20 @@ class TestJSONConverter(unittest.TestCase):
 
     def test_toIntermediate(self):
         """Assures equality between converted dict and expected intermediate representation"""
-        expectation = self._createExampleIntermediateLanguage()
+        expectation = self._createExampleIntermediateLocalization()
         result = JSONConverter().toIntermediate("localizer/tests/testdata/ExampleJSON.json")
         self.assertEqual(expectation, result)
 
     def test_fromIntermediate(self):
-        pass
+        expectedFilepath = "FileName.json"
+        expectedContent = JsonHelper.readJSON("localizer/tests/testdata/ExampleJSON.json")
+        expectation = LocalizationFile(expectedFilepath, expectedContent)
+        localization = self._createExampleIntermediateLocalization()
+        result = JSONConverter().fromIntermediate(localization)[0]
+        print(expectation)
+        print("---")
+        print(result)
+        self.assertEqual(expectation, result)
 
     #--------------------------------------------------
     # Private test helper
@@ -47,7 +55,7 @@ class TestJSONConverter(unittest.TestCase):
         fileDict["FileName"] = languageDict
         return fileDict
 
-    def _createExampleIntermediateLanguage(self):
+    def _createExampleIntermediateLocalization(self):
         entry = IntermediateEntry("Key1", "Value1")
         language = IntermediateLanguage("ExampleLanguage", [entry])
         return IntermediateLocalization("FileName", [language])

@@ -17,7 +17,7 @@ class TestiOSConverter(unittest.TestCase):
     #--------------------------------------------------
 
     def test_toIntermediate(self):
-        expectation = self._createExampleIntermediateLanguage()
+        expectation = self._createExampleIntermediateLocalization()
         result = iOSConverter().toIntermediate("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
         self.assertEqual(expectation, result)
 
@@ -36,7 +36,7 @@ class TestiOSConverter(unittest.TestCase):
         expectedFilepath = "ExampleLanguage.lproj/FileName.strings"
         expectedContent = FileHelper.readFile("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
-        intermediate = self._createExampleIntermediateLanguage()
+        intermediate = self._createExampleIntermediateLocalization()
         result = iOSConverter().fromIntermediate(intermediate)[0]
         self.assertEqual(expectation, result)
 
@@ -44,7 +44,7 @@ class TestiOSConverter(unittest.TestCase):
     # Private test helper
     #--------------------------------------------------
 
-    def _createExampleIntermediateLanguage(self):
+    def _createExampleIntermediateLocalization(self):
         entry = IntermediateEntry("Key1", "Value1")
         language = IntermediateLanguage("ExampleLanguage", [entry])
         return IntermediateLocalization("FileName", [language])
