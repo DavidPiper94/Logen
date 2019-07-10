@@ -30,14 +30,12 @@ class TestJSONConverter(unittest.TestCase):
         self.assertEqual(expectation, result)
 
     def test_fromIntermediate(self):
+        """Assures equality between json dict created from intermediate localization and expected content of file."""
         expectedFilepath = "FileName.json"
         expectedContent = JsonHelper.readJSON("localizer/tests/testdata/ExampleJSON.json")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
         localization = self._createExampleIntermediateLocalization()
         result = JSONConverter().fromIntermediate(localization)[0]
-        print(expectation)
-        print("---")
-        print(result)
         self.assertEqual(expectation, result)
 
     #--------------------------------------------------
