@@ -12,7 +12,11 @@ from localizer.converter.iOSConverter import iOSConverter
 
 class TestiOSConverter(unittest.TestCase):
 
-    def test_generateIntermediateFromiOS(self):
+    #--------------------------------------------------
+    # Testcases
+    #--------------------------------------------------
+
+    def test_toIntermediate(self):
         expectation = self._createExampleIntermediateLanguage()
         result = iOSConverter().toIntermediate("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
         self.assertEqual(expectation, result)
@@ -28,14 +32,17 @@ class TestiOSConverter(unittest.TestCase):
         # TODO: Fix this test case:
         #self.assertEqual("This is a \"value\"", iOSConverter()._correctEntry("This is a \"value\""))
 
-    def test_generateIOS(self):
+    def test_fromIntermediate(self):
         expectedFilepath = "ExampleLanguage.lproj/FileName.strings"
         expectedContent = FileHelper.readFile("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
         intermediate = self._createExampleIntermediateLanguage()
         result = iOSConverter().fromIntermediate(intermediate)[0]
-        
         self.assertEqual(expectation, result)
+
+    #--------------------------------------------------
+    # Private test helper
+    #--------------------------------------------------
 
     def _createExampleIntermediateLanguage(self):
         entry = IntermediateEntry("Key1", "Value1")

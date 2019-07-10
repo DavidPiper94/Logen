@@ -9,12 +9,16 @@ from localizer.model.LocalizationFile import LocalizationFile
 
 class TestAndroidConverter(unittest.TestCase):
 
-    def test_generateIntermediateFromAndroid(self):
+    #--------------------------------------------------
+    # Testcases
+    #--------------------------------------------------
+
+    def test_toIntermediate(self):
         expectation = self._createExampleIntermediateLanguage()
         result = AndroidConverter().toIntermediate("localizer/tests/testdata/values-ExampleLanguage/FileName.xml")
         self.assertEqual(expectation, result)
 
-    def test_generateAndroidLocalization(self):
+    def test_fromIntermediate(self):
         expectedFilepath = "values-ExampleLanguage/FileName.xml"
         expectedContent = FileHelper.readFile("localizer/tests/testdata/values-ExampleLanguage/FileName.xml")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
@@ -22,6 +26,10 @@ class TestAndroidConverter(unittest.TestCase):
         result = AndroidConverter().fromIntermediate(intermediate)[0]
         
         self.assertEqual(expectation, result)
+
+    #--------------------------------------------------
+    # Private test helper
+    #--------------------------------------------------
 
     def _createExampleIntermediateLanguage(self):
         entry = IntermediateEntry("Key1", "Value1")
