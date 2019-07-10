@@ -40,10 +40,15 @@ class AndroidConverter(Base):
 
             # Remove name attribute and save it as key.
             key = ""
-            while not line.startswith("\">"): #TODO: Nicht jede zeile endet so...
+            while not line.startswith("\">"):
                 key += line[:1]
                 line = line[1:]
             key = self._correctEntry(key)
+
+            # This converter prefixes any generated android localization key with 'localizationIdentifier.'.
+            # Remove them here to get a valid IntermediateEntry which is comparable and thus mergable.
+            keyPrefix = "{}.".format(localizationIdentifier)
+            key = key.replace(keyPrefix, '')
 
             # Remove end of name tag
             if line.startswith("\">"):
