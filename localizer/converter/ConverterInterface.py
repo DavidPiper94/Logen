@@ -28,6 +28,10 @@ class ConverterInterface:
     # This method returns an instance of MergeResult.
     def merge(self, first, second):
 
+        # Make sure, both are objects of type IntermeditateLocalization.
+        if not type(first) is IntermediateLocalization or not type(second) is IntermediateLocalization:
+            return None
+
         # Make sure, both have the same identifier, else cancel.
         if not first.localizationIdentifier == second.localizationIdentifier:
             return None
@@ -45,8 +49,8 @@ class ConverterInterface:
         for item in firstList[:]:
             if item in secondList:
                 # Remove items, that are in both lists.
-                firstList = list(filter(lambda x: x is not item, firstList))
-                secondList = list(filter(lambda x: x is not item, secondList))
+                firstList = list(filter(lambda x: x != item, firstList))
+                secondList = list(filter(lambda x: x != item, secondList))
 
         # Return remainig items, which are only in one of both lists.
         return firstList + secondList
