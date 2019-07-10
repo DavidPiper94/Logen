@@ -12,59 +12,77 @@ from localizer.lib import FileHelper
 
 class AndroidConverter(Base):
 
+    nameTagOpenStart = "<string name=\""
+    nameTagOpenEnd = "\">"
+    nameTagClose = "</string>"
+    folderNamePrefix = "values-"
+
     def fileExtension(self): return ".xml"
 
     def toIntermediate(self, filepath):
-        filename = os.path.basename(filepath)
-        localizationIdentifier = filename.replace('.xml', '')
+        filename = FileHelper.filename(filepath)
+        localizationIdentifier = filename.replace(self.fileExtension(), '')
 
-        foldername = os.path.dirname(filepath).split('/')[-1]
-        languageIdentifier = foldername.replace('values-', '')
+        foldername = FileHelper.directoryName(filepath)
+        languageIdentifier = foldername.replace(self.folderNamePrefix, '')
 
         lines = FileHelper.readLines(filepath)
         intermediateEntries = []
 
         for line in lines: 
-
-            lineStart = "<string name=\""
-            if not lineStart in line: 
-                continue
-
-            # remove leading whitespace
-            while line.startswith(' '):
-                line = line[1:]
-            
-            # Remove start of name tag.
-            if line.startswith(lineStart):
-                line = line[14:]
-
-            # Remove name attribute and save it as key.
-            key = ""
-            while not line.startswith("\">"):
-                key += line[:1]
-                line = line[1:]
-            key = self._correctEntry(key)
-
-            # This converter prefixes any generated android localization key with 'localizationIdentifier.'.
-            # Remove them here to get a valid IntermediateEntry which is comparable and thus mergable.
-            keyPrefix = "{}.".format(localizationIdentifier)
-            key = key.replace(keyPrefix, '')
-
-            # Remove end of name tag
-            if line.startswith("\">"):
-                line = line[2:]
-
-            # Remove and save value until end of line.
-            value = ""
-            while not line.startswith("</string>"):
-                value += line[:1]
-                line = line[1:]
-            value = self._correctEntry(value)
-            value.replace("\"", "\\\"")
-            intermediateEntries.append(IntermediateEntry(key, value))
+            entry = self._processLine(line, localizationIdentifier)
+            if entry is not None:
+                intermediateEntries.append(entry)
         
         intermediateLanguage = IntermediateLanguage(languageIdentifier, intermediateEntries)
         return IntermediateLocalization(localizationIdentifier, [intermediateLanguage])
+
+    def _processLine(self, line, localizationIdentifier):
+        if not self.nameTagOpenStart in line: 
+            return None
+
+        # remove leading whitespace
+        while line.startswith(' '):
+            line = line[1:]
+
+        (key, line) = self._extractKey(line, localizationIdentifier)
+        (value, line) = self._extractValue(line)
+        
+        return IntermediateEntry(key, value)
+
+    def _extractKey(self, line, localizationIdentifier):
+        # Remove start of name tag.
+        if line.startswith(self.nameTagOpenStart):
+            prefixLength = len(self.nameTagOpenStart)
+            line = line[prefixLength:]
+
+        # Remove name attribute and save it as key.
+        key = ""
+        while not line.startswith(self.nameTagOpenEnd):
+            key += line[:1]
+            line = line[1:]
+        key = self._correctEntry(key)
+
+        # This converter prefixes any generated android localization key with 'localizationIdentifier.'.
+        # Remove them here to get a valid IntermediateEntry which is comparable and thus mergable.
+        keyPrefix = "{}.".format(localizationIdentifier)
+        key = key.replace(keyPrefix, '')
+
+        # Remove end of name tag
+        if line.startswith(self.nameTagOpenEnd):
+            line = line[2:]
+
+        return (key, line)
+
+    def _extractValue(self, line):
+        # Remove and save value until end of line.
+        value = ""
+        while not line.startswith(self.nameTagClose):
+            value += line[:1]
+            line = line[1:]
+        value = self._correctEntry(value)
+        value.replace("\"", "\\\"")
+        return (value, line)
 
     def _correctEntry(self, input):
         entry = input
