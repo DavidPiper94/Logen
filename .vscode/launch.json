@@ -122,12 +122,21 @@
             "console": "integratedTerminal",
             "args": ["fromJSON", "./testdata/localization_src", "./testdata"]
         },
-        // Starts a debug session for tests
+        // Starts a debug session for bigtests
         {
-            "name": "Debug bigtests",
+            "name": "Debug Bigtests",
             "type": "python",
             "request": "launch",
-            "module": "localizer.tests.bigtests.tests_bigtests",
+            "module": "localizer.tests.tests_Bigtests",
+            "console": "integratedTerminal",
+            "args": []
+        }
+        // Starts a debug session for all tests
+        {
+            "name": "Debug all tests",
+            "type": "python",
+            "request": "launch",
+            "module": "localizer.tests.run_all",
             "console": "integratedTerminal",
             "args": []
         }
