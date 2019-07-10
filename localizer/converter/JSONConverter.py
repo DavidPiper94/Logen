@@ -6,6 +6,10 @@ from localizer.lib import JsonHelper
 
 class JSONConverter(Base):
 
+    #--------------------------------------------------
+    # Base class conformance
+    #--------------------------------------------------
+
     def fileExtension(self): return ".json"
 
     def toIntermediate(self, filepath):

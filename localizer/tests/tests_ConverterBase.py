@@ -10,6 +10,10 @@ from localizer.converter.iOSConverter import iOSConverter
 
 class TestJSONConverter(unittest.TestCase):
 
+    #--------------------------------------------------
+    # Testcases
+    #--------------------------------------------------
+
     def test_merge_differentLocalizationIdentifier(self):
         example = IntermediateLocalization("Example", [])
         otherExample = IntermediateLocalization("OtherExample", [])
@@ -43,6 +47,10 @@ class TestJSONConverter(unittest.TestCase):
 
         self.assertEqual(newResult.missingEntries, [IntermediateEntry("FirstNewKey", "FirstNewValue"), IntermediateEntry("SecondNewKey", "SecondNewValue")])
     
+    #--------------------------------------------------
+    # Private test helper
+    #--------------------------------------------------
+
     def _createExampleIntermediateLocalizations(self):
         entry = IntermediateEntry("Key1", "Value1")
         

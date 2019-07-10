@@ -1,15 +1,17 @@
 import os
 
 from localizer.converter.ConverterInterface import ConverterInterface as Base
-
+from localizer.lib import FileHelper
 from localizer.model.IntermediateEntry import IntermediateEntry
 from localizer.model.IntermediateLanguage import IntermediateLanguage
 from localizer.model.IntermediateLocalization import IntermediateLocalization
 from localizer.model.LocalizationFile import LocalizationFile
 
-from localizer.lib import FileHelper
-
 class iOSConverter(Base):
+
+    #--------------------------------------------------
+    # Base class conformance
+    #--------------------------------------------------
 
     def fileExtension(self): return ".strings"
 
@@ -33,19 +35,7 @@ class iOSConverter(Base):
 
         intermediateLanguage = IntermediateLanguage(languageIdentifier, intermediateEntries)
         return IntermediateLocalization(localizationIdentifier, [intermediateLanguage])
-
-    def _correctEntry(self, input):
-        entry = input
-        while entry.startswith(' '):  # Remove leading whitespaces from key
-            entry = entry[1:]
-        if entry.startswith('\"'):    # Remove leading quote sign
-            entry = entry[1:]
-        while entry.endswith(' '):    # Remove trainling whitespaces from key
-            entry = entry[:-1]
-        if entry.endswith('\"'):      # Remove trailing quote sign
-            entry = entry[:-1]
-        return entry
-
+    
     def fromIntermediate(self, intermediateLocalization):
         listOfLocalizationFiles = []
 
@@ -67,3 +57,19 @@ class iOSConverter(Base):
             listOfLocalizationFiles.append(localizationFile)
 
         return listOfLocalizationFiles
+
+    #--------------------------------------------------
+    # Helper methods
+    #--------------------------------------------------
+
+    def _correctEntry(self, input):
+        entry = input
+        while entry.startswith(' '):  # Remove leading whitespaces from key
+            entry = entry[1:]
+        if entry.startswith('\"'):    # Remove leading quote sign
+            entry = entry[1:]
+        while entry.endswith(' '):    # Remove trainling whitespaces from key
+            entry = entry[:-1]
+        if entry.endswith('\"'):      # Remove trailing quote sign
+            entry = entry[:-1]
+        return entry

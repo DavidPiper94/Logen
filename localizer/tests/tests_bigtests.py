@@ -93,8 +93,7 @@ class Bigtests(unittest.TestCase):
                             self.assertEqual([], merged.missingEntries)
                         else:
                             # This is the case for .vscode/settings.json
-                            print("Merged is none")
-                            print(path)
+                            pass
                 
                 if not filename in intermediateLocalizations:
                     intermediateLocalizations[filename] = []
