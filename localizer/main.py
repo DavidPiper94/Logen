@@ -30,7 +30,8 @@ def setupParser():
     parser = argparse.ArgumentParser(description = "Description")
     parser.add_argument("source", help = "Path to source file")
     parser.add_argument("destination", help = "Path at which destination directory will be created")
-    parser.add_argument("converter", help = "Identifier of the converter to be used")
+    parser.add_argument("inputConverter", help = "Identifier of the converter to be used to import content of the given file.")
+    parser.add_argument("outputConverter", help = "Identifier of the converter to be used to export content with a specific format.")
     parser.add_argument("-d", "--dryRun", action = 'store_true', help = "If true, result will be printed to the console and not saved.")
     return parser
 
@@ -39,7 +40,7 @@ def parseArguments(parser):
 
     # select and validate converter for output
     global outputConverterIdentifier
-    outputConverterIdentifier = args.converter
+    outputConverterIdentifier = args.outputConverter
     selectedOutputConverter = list(filter(lambda x: x.identifier() == outputConverterIdentifier, registeredConverter()))
     if len(selectedOutputConverter) == 0:
         handleError("ERROR: Converter with identifier {} not found".format(outputConverterIdentifier))
@@ -52,11 +53,12 @@ def parseArguments(parser):
         
     # select and validate converter for input
     global inputConverterIdentifier
+    inputConverterIdentifier = args.inputConverter
     extension = FileHelper.fileExtension(sourceFilepath)
     # TODO: Better comparison, e.g. lowercased
-    matchingInputConverter = list(filter(lambda x: x.fileExtension() == extension, registeredConverter()))
+    matchingInputConverter = list(filter(lambda x: x.fileExtension() == extension and x.identifier() == inputConverterIdentifier, registeredConverter()))
     if len(matchingInputConverter) == 0:
-        handleError("ERROR: No matching converter found for fileextension {}".format(extension))
+        handleError("ERROR: No matching converter found with identiier {} for fileextension {}".format(inputConverterIdentifier, extension))
     else:
         inputConverterIdentifier = matchingInputConverter[0].identifier()
     
