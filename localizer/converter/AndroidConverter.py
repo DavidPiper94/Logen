@@ -20,6 +20,8 @@ class AndroidConverter(Base):
 
     def fileExtension(self): return ".xml"
 
+    def identifier(self): return "android"
+
     def toIntermediate(self, filepath):
         filename = FileHelper.filename(filepath)
         localizationIdentifier = filename.replace(self.fileExtension(), '')

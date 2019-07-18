@@ -6,6 +6,9 @@ class IntermediateEntry:
 
     def __eq__(self, other):
         """Override the default Equals behavior"""
+        if not type(other) is IntermediateEntry:
+            return False
+
         return self.key == other.key and self.value == other.value
 
     def __str__(self):
