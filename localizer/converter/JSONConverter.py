@@ -13,6 +13,8 @@ class JSONConverter(Base):
 
     def fileExtension(self): return ".json"
 
+    def identifier(self): return "json"
+
     def toIntermediate(self, filepath):
         dict = JsonHelper.readJSON(filepath)
 

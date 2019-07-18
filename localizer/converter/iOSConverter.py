@@ -15,6 +15,8 @@ class iOSConverter(Base):
 
     def fileExtension(self): return ".strings"
 
+    def identifier(self): return "ios"
+
     def toIntermediate(self, filepath):
         filename = os.path.basename(filepath)
         localizationIdentifier = filename.replace('.strings', '')
