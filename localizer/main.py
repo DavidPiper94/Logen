@@ -33,6 +33,7 @@ def setupParser():
     parser.add_argument("inputConverter", help = "Identifier of the converter to be used to import content of the given file.")
     parser.add_argument("outputConverter", help = "Identifier of the converter to be used to export content with a specific format.")
     parser.add_argument("-d", "--dryRun", action = 'store_true', help = "If true, result will be printed to the console and not saved.")
+    parser.add_argument("-v", "--verbose", action = "store_true", help = "If true, additional information will be written to the console.")
     return parser
 
 def parseArguments(parser):
@@ -66,6 +67,8 @@ def parseArguments(parser):
     global dryRun
     dryRun = args.dryRun
     if dryRun:
+        if args.verbose:
+            printSummary(sourceFilepath, "dryRun", inputConverterIdentifier, outputConverterIdentifier)
         # If dryRun is enabled, there is no need to process destination directory.
         return
 
@@ -79,6 +82,19 @@ def parseArguments(parser):
         # TODO: Ask
         #FileHelper.removeDir(destinationDirectory)
         #FileHelper.createDir(destinationDirectory)
+    
+    # At this point everything was validated and nothing can go wrong (hopefully).
+    if args.verbose:
+            printSummary(sourceFilepath, destinationDirectory, inputConverterIdentifier, outputConverterIdentifier)
+
+def printSummary(sourceFilepath, destinationFilepath, inputConverterIdentifier, outputConverterIdentifier):
+    handleInfo(
+        "Summary:\n"
+        + "input: {}\n".format(sourceFilepath)
+        + "output: {}\n".format(destinationFilepath)
+        + "converter for input: {}\n".format(inputConverterIdentifier)
+        + "converter for output: {}".format(outputConverterIdentifier)
+    )
 
 def handleError(errorText):
     print(TerminalStyle.FAIL + errorText + TerminalStyle.ENDC)
@@ -86,6 +102,9 @@ def handleError(errorText):
 
 def handleWarning(warningText):
     print(TerminalStyle.WARNING + warningText + TerminalStyle.ENDC)
+
+def handleInfo(infoText):
+    print(TerminalStyle.GREEN + infoText + TerminalStyle.ENDC)
 
 #--------------------
 # Converting
