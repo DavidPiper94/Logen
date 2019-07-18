@@ -73,7 +73,7 @@ def parseArguments(parser):
     if not FileHelper.exists(destinationDirectory):
         FileHelper.createDir(destinationDirectory)
     else:
-        print("WARNING: Destination directory already exists. Do you want to override it?")
+        handleWarning("WARNING: Destination directory already exists. Do you want to override it?")
         # TODO: Ask
         #FileHelper.removeDir(destinationDirectory)
         #FileHelper.createDir(destinationDirectory)
@@ -81,6 +81,9 @@ def parseArguments(parser):
 def handleError(errorText):
     print(TerminalStyle.FAIL + errorText + TerminalStyle.ENDC)
     sys.exit()
+
+def handleWarning(warningText):
+    print(TerminalStyle.WARNING + warningText + TerminalStyle.ENDC)
 
 #--------------------
 # Converting
