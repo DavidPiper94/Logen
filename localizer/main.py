@@ -6,6 +6,7 @@ from localizer.converter.JSONConverter import JSONConverter
 from localizer.converter.iOSConverter import iOSConverter
 
 from localizer.lib import FileHelper
+from localizer.lib import TerminalStyle
 
 #--------------------
 # Global vars
@@ -41,8 +42,7 @@ def parseArguments(parser):
     outputConverterIdentifier = args.converter
     selectedOutputConverter = list(filter(lambda x: x.identifier() == outputConverterIdentifier, registeredConverter()))
     if len(selectedOutputConverter) == 0:
-        print("ERROR: Converter with identifier {} not found".format(outputConverterIdentifier))
-        sys.exit()
+        handleError("ERROR: Converter with identifier {} not found".format(outputConverterIdentifier))
 
     # validate source filepath
     global sourceFilepath
@@ -78,9 +78,9 @@ def parseArguments(parser):
         #FileHelper.removeDir(destinationDirectory)
         #FileHelper.createDir(destinationDirectory)
 
-    def handleError(errorText):
-        print(errorText)
-        sys.exit()
+def handleError(errorText):
+    print(TerminalStyle.FAIL + errorText + TerminalStyle.ENDC)
+    sys.exit()
 
 #--------------------
 # Converting
