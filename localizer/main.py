@@ -18,26 +18,55 @@ inputConverterIdentifier = ""
 outputConverterIdentifier = ""
 dryRun = False
 
-#--------------------
-# Parsing of arguments
-#--------------------
+def registeredConverter():
+    return [
+        iOSConverter(),
+        AndroidConverter(),
+        JSONConverter()
+    ]
 
-def handleArguments():
-    parser = setupParser()
-    parseArguments(parser)
+#--------------------
+# Setup of main and subparsers
+#--------------------
 
 def setupParser():
     parser = argparse.ArgumentParser(description = "Description")
-    parser.add_argument("source", help = "Path to source file")
-    parser.add_argument("destination", help = "Path at which destination directory will be created")
-    parser.add_argument("inputConverter", help = "Identifier of the converter to be used to import content of the given file.")
-    parser.add_argument("outputConverter", help = "Identifier of the converter to be used to export content with a specific format.")
-    parser.add_argument("-d", "--dryRun", action = 'store_true', help = "If true, result will be printed to the console and not saved.")
-    parser.add_argument("-v", "--verbose", action = "store_true", help = "If true, additional information will be written to the console.")
+    subparsers = parser.add_subparsers(help = "Subparser")
+
+    parser_convert = subparsers.add_parser("convert", help = "Lists all available converter.")
+    parser_convert.add_argument("source", help = "Path to source file")
+    parser_convert.add_argument("destination", help = "Path at which destination directory will be created")
+    parser_convert.add_argument("inputConverter", help = "Identifier of the converter to be used to import content of the given file.")
+    parser_convert.add_argument("outputConverter", help = "Identifier of the converter to be used to export content with a specific format.")
+    parser_convert.add_argument("-d", "--dryRun", action = 'store_true', help = "If true, result will be printed to the console and not saved.")
+    parser_convert.add_argument("-v", "--verbose", action = "store_true", help = "If true, additional information will be written to the console.")
+    parser_convert.set_defaults(func = startConverting)
+
+    parser_list = subparsers.add_parser("list", help = "Lists all available converter.")
+    parser_list.set_defaults(func = listConverter)
+
     return parser
 
-def parseArguments(parser):
-    args = parser.parse_args()
+#--------------------
+# Subcommand list
+#--------------------
+
+def listConverter(args):
+    print(list(map(lambda x: describe(x), registeredConverter())))
+
+def describe(converter):
+    return converter.identifier()
+
+#--------------------
+# Subcommand convert
+#--------------------
+
+def startConverting(args):
+    parseArgsForConverting(args)
+    intermediate = importToIntermediateLocalization(sourceFilepath)
+    exportToLocalizationFile(intermediate)
+
+def parseArgsForConverting(args):
 
     # select and validate converter for output
     global outputConverterIdentifier
@@ -87,36 +116,6 @@ def parseArguments(parser):
     if args.verbose:
             printSummary(sourceFilepath, destinationDirectory, inputConverterIdentifier, outputConverterIdentifier)
 
-def printSummary(sourceFilepath, destinationFilepath, inputConverterIdentifier, outputConverterIdentifier):
-    handleInfo(
-        "Summary:\n"
-        + "input: {}\n".format(sourceFilepath)
-        + "output: {}\n".format(destinationFilepath)
-        + "converter for input: {}\n".format(inputConverterIdentifier)
-        + "converter for output: {}".format(outputConverterIdentifier)
-    )
-
-def handleError(errorText):
-    print(TerminalStyle.FAIL + errorText + TerminalStyle.ENDC)
-    sys.exit()
-
-def handleWarning(warningText):
-    print(TerminalStyle.WARNING + warningText + TerminalStyle.ENDC)
-
-def handleInfo(infoText):
-    print(TerminalStyle.GREEN + infoText + TerminalStyle.ENDC)
-
-#--------------------
-# Converting
-#--------------------
-
-def registeredConverter():
-    return [
-        iOSConverter(),
-        AndroidConverter(),
-        JSONConverter()
-    ]
-
 def importToIntermediateLocalization(sourceFilepath):
     importer = list(filter(lambda x: x.identifier() == inputConverterIdentifier, registeredConverter()))
     return importer[0].toIntermediate(sourceFilepath)
@@ -124,12 +123,8 @@ def importToIntermediateLocalization(sourceFilepath):
 def exportToLocalizationFile(intermediateLocalization):
     outputConverter = list(filter(lambda x: x.identifier() == outputConverterIdentifier, registeredConverter()))
     for output in outputConverter:
-        for file in output.fromIntermediate(intermediate):
+        for file in output.fromIntermediate(intermediateLocalization):
             handleLocalizationFile(file)
-
-#--------------------
-# Output
-#--------------------
 
 def handleLocalizationFile(localizationFile):
     global dryRun
@@ -150,11 +145,34 @@ def writeFile(path, content):
         FileHelper.writeFile(path, content)
 
 #--------------------
+# cli output
+#--------------------
+
+def printSummary(sourceFilepath, destinationFilepath, inputConverterIdentifier, outputConverterIdentifier):
+    handleInfo(
+        "Summary:\n"
+        + "input: {}\n".format(sourceFilepath)
+        + "output: {}\n".format(destinationFilepath)
+        + "converter for input: {}\n".format(inputConverterIdentifier)
+        + "converter for output: {}".format(outputConverterIdentifier)
+    )
+
+def handleError(errorText):
+    print(TerminalStyle.FAIL + errorText + TerminalStyle.ENDC)
+    sys.exit()
+
+def handleWarning(warningText):
+    print(TerminalStyle.WARNING + warningText + TerminalStyle.ENDC)
+
+def handleInfo(infoText):
+    print(TerminalStyle.GREEN + infoText + TerminalStyle.ENDC)
+
+#--------------------
 # Main
 #--------------------
 
 if __name__ == '__main__':
-    handleArguments()
-    intermediate = importToIntermediateLocalization(sourceFilepath)
-    exportToLocalizationFile(intermediate)
+    parser = setupParser()
+    args = parser.parse_args()
+    args.func(args)
     
