@@ -14,8 +14,8 @@ from localizer.lib import TerminalStyle
 
 sourceFilepath = ""
 destinationDirectory = ""
-inputConverterIdentifier = ""
-outputConverterIdentifier = ""
+importConverterIdentifier = ""
+exportConverterIdentifier = ""
 dryRun = False
 
 def registeredConverter():
@@ -36,8 +36,8 @@ def setupParser():
     parser_convert = subparsers.add_parser("convert", help = "Lists all available converter.")
     parser_convert.add_argument("source", help = "Path to source file")
     parser_convert.add_argument("destination", help = "Path at which destination directory will be created")
-    parser_convert.add_argument("inputConverter", help = "Identifier of the converter to be used to import content of the given file.")
-    parser_convert.add_argument("outputConverter", help = "Identifier of the converter to be used to export content with a specific format.")
+    parser_convert.add_argument("importConverter", help = "Identifier of the converter to be used to import content of the given file.")
+    parser_convert.add_argument("exportConverter", help = "Identifier of the converter to be used to export content with a specific format.")
     parser_convert.add_argument("-d", "--dryRun", action = 'store_true', help = "If true, result will be printed to the console and not saved.")
     parser_convert.add_argument("-v", "--verbose", action = "store_true", help = "If true, additional information will be written to the console.")
     parser_convert.set_defaults(func = startConverting)
@@ -68,12 +68,12 @@ def startConverting(args):
 
 def parseArgsForConverting(args):
 
-    # select and validate converter for output
-    global outputConverterIdentifier
-    outputConverterIdentifier = args.outputConverter
-    selectedOutputConverter = list(filter(lambda x: x.identifier() == outputConverterIdentifier, registeredConverter()))
-    if len(selectedOutputConverter) == 0:
-        handleError("ERROR: Converter with identifier {} not found".format(outputConverterIdentifier))
+    # select and validate converter for export
+    global exportConverterIdentifier
+    exportConverterIdentifier = args.exportConverter
+    selectedExportConverter = list(filter(lambda x: x.identifier() == exportConverterIdentifier, registeredConverter()))
+    if len(selectedExportConverter) == 0:
+        handleError("ERROR: Converter with identifier {} not found".format(exportConverterIdentifier))
 
     # validate source filepath
     global sourceFilepath
@@ -81,23 +81,23 @@ def parseArgsForConverting(args):
     if not FileHelper.exists(sourceFilepath):
         handleError("ERROR: Source does not exists")
         
-    # select and validate converter for input
-    global inputConverterIdentifier
-    inputConverterIdentifier = args.inputConverter
+    # select and validate converter for import
+    global importConverterIdentifier
+    importConverterIdentifier = args.importConverter
     extension = FileHelper.fileExtension(sourceFilepath)
     # TODO: Better comparison, e.g. lowercased
-    matchingInputConverter = list(filter(lambda x: x.fileExtension() == extension and x.identifier() == inputConverterIdentifier, registeredConverter()))
-    if len(matchingInputConverter) == 0:
-        handleError("ERROR: No matching converter found with identiier {} for fileextension {}".format(inputConverterIdentifier, extension))
+    matchingImportConverter = list(filter(lambda x: x.fileExtension() == extension and x.identifier() == importConverterIdentifier, registeredConverter()))
+    if len(matchingImportConverter) == 0:
+        handleError("ERROR: No matching converter found with identiier {} for fileextension {}".format(importConverterIdentifier, extension))
     else:
-        inputConverterIdentifier = matchingInputConverter[0].identifier()
+        importConverterIdentifier = matchingImportConverter[0].identifier()
     
     # save and handle dryRun argument
     global dryRun
     dryRun = args.dryRun
     if dryRun:
         if args.verbose:
-            printSummary(sourceFilepath, "dryRun", inputConverterIdentifier, outputConverterIdentifier)
+            printSummary(sourceFilepath, "dryRun", importConverterIdentifier, exportConverterIdentifier)
         # If dryRun is enabled, there is no need to process destination directory.
         return
 
@@ -114,16 +114,16 @@ def parseArgsForConverting(args):
     
     # At this point everything was validated and nothing can go wrong (hopefully).
     if args.verbose:
-            printSummary(sourceFilepath, destinationDirectory, inputConverterIdentifier, outputConverterIdentifier)
+            printSummary(sourceFilepath, destinationDirectory, importConverterIdentifier, exportConverterIdentifier)
 
 def importToIntermediateLocalization(sourceFilepath):
-    importer = list(filter(lambda x: x.identifier() == inputConverterIdentifier, registeredConverter()))
+    importer = list(filter(lambda x: x.identifier() == importConverterIdentifier, registeredConverter()))
     return importer[0].toIntermediate(sourceFilepath)
 
 def exportToLocalizationFile(intermediateLocalization):
-    outputConverter = list(filter(lambda x: x.identifier() == outputConverterIdentifier, registeredConverter()))
-    for output in outputConverter:
-        for file in output.fromIntermediate(intermediateLocalization):
+    exportConverter = list(filter(lambda x: x.identifier() == exportConverterIdentifier, registeredConverter()))
+    for exporter in exportConverter:
+        for file in exporter.fromIntermediate(intermediateLocalization):
             handleLocalizationFile(file)
 
 def handleLocalizationFile(localizationFile):
@@ -148,13 +148,13 @@ def writeFile(path, content):
 # cli output
 #--------------------
 
-def printSummary(sourceFilepath, destinationFilepath, inputConverterIdentifier, outputConverterIdentifier):
+def printSummary(sourceFilepath, destinationFilepath, importConverterIdentifier, exportConverterIdentifier):
     handleInfo(
         "Summary:\n"
         + "input: {}\n".format(sourceFilepath)
-        + "output: {}\n".format(destinationFilepath)
-        + "converter for input: {}\n".format(inputConverterIdentifier)
-        + "converter for output: {}".format(outputConverterIdentifier)
+        + "destination: {}\n".format(destinationFilepath)
+        + "converter for import: {}\n".format(importConverterIdentifier)
+        + "converter for export: {}".format(exportConverterIdentifier)
     )
 
 def handleError(errorText):
