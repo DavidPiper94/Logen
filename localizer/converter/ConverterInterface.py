@@ -16,6 +16,12 @@ class ConverterInterface:
     @abc.abstractproperty
     def identifier(self): raise NotImplementedError
 
+    @abc.abstractproperty
+    def importDescription(self): raise NotImplementedError
+
+    @abc.abstractproperty
+    def exportDescription(self): raise NotImplementedError
+
     @abc.abstractmethod
     def toIntermediate(self, filepath: str) -> IntermediateLocalization:
         """Reads content of file at given filepath and converts it to an IntermediateLocalization.

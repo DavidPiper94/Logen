@@ -17,6 +17,10 @@ class iOSConverter(Base):
 
     def identifier(self): return "ios"
 
+    def importDescription(self): return "Imports a '.strings' file containing the localization of an iOS app and converts it to an intermediate localization. Ignores all lines exept lines with a key-value-pair."
+
+    def exportDescription(self): return "Exports the content of an intermediate localization to a '.strings' file for an iOS app."
+
     def toIntermediate(self, filepath):
         filename = os.path.basename(filepath)
         localizationIdentifier = filename.replace('.strings', '')
