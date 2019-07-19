@@ -15,6 +15,10 @@ class JSONConverter(Base):
 
     def identifier(self): return "json"
 
+    def importDescription(self): return ""
+
+    def exportDescription(self): return ""
+
     def toIntermediate(self, filepath):
         dict = JsonHelper.readJSON(filepath)
 
