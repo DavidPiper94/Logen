@@ -15,9 +15,11 @@ class JSONConverter(Base):
 
     def identifier(self): return "json"
 
-    def importDescription(self): return ""
+    def importDescription(self): return "Takes a json file with the format '{}' and converts it into an intermediate localization.".format(self._commonFormatDescription())
 
-    def exportDescription(self): return ""
+    def exportDescription(self): return "Converts an intermediate localization into the format '{}' and exports it as a json file.".format(self._commonFormatDescription())
+
+    def _commonFormatDescription(self): return "{ filename: { language: { key: value } } }"
 
     def toIntermediate(self, filepath):
         dict = JsonHelper.readJSON(filepath)

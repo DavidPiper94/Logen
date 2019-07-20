@@ -22,16 +22,16 @@ class AndroidConverter(Base):
 
     def identifier(self): return "android" 
 
-    def importDescription(self): return ""
+    def importDescription(self): return "Parses the given '.xml' file and creates an intermediate localization. All lines which don't contain a localized string, are ignored."
 
-    def exportDescription(self): return ""
+    def exportDescription(self): return "Writes the content of an intermediate localization to a '.xml' file for an Android app. It prefixes all keys with the identifier of the file for easier autocompletion on Android side."
 
     def toIntermediate(self, filepath):
         filename = FileHelper.filename(filepath)
-        localizationIdentifier = filename.replace(self.fileExtension(), '')
+        localizationIdentifier = filename.replace(self.fileExtension(), "")
 
         foldername = FileHelper.directoryName(filepath)
-        languageIdentifier = foldername.replace(self.folderNamePrefix, '')
+        languageIdentifier = foldername.replace(self.folderNamePrefix, "")
 
         lines = FileHelper.readLines(filepath)
         intermediateEntries = []
@@ -70,7 +70,7 @@ class AndroidConverter(Base):
             return None
 
         # remove leading whitespace
-        while line.startswith(' '):
+        while line.startswith(" "):
             line = line[1:]
 
         (key, line) = self._extractKey(line, localizationIdentifier)
@@ -91,10 +91,10 @@ class AndroidConverter(Base):
             line = line[1:]
         key = self._correctEntry(key)
 
-        # This converter prefixes any generated android localization key with 'localizationIdentifier.'.
+        # This converter prefixes any generated android localization key with "localizationIdentifier.".
         # Remove them here to get a valid IntermediateEntry which is comparable and thus mergable.
         keyPrefix = "{}.".format(localizationIdentifier)
-        key = key.replace(keyPrefix, '')
+        key = key.replace(keyPrefix, "")
 
         # Remove end of name tag
         if line.startswith(self.nameTagOpenEnd):
@@ -114,13 +114,13 @@ class AndroidConverter(Base):
 
     def _correctEntry(self, input):
         entry = input
-        while entry.startswith(' '):  # Remove leading whitespaces from key
+        while entry.startswith(" "):  # Remove leading whitespaces from key
             entry = entry[1:]
-        if entry.startswith('\"'):    # Remove leading quote sign
+        if entry.startswith("\""):    # Remove leading quote sign
             entry = entry[1:]
-        while entry.endswith(' '):    # Remove trainling whitespaces from key
+        while entry.endswith(" "):    # Remove trainling whitespaces from key
             entry = entry[:-1]
-        if entry.endswith('\"'):      # Remove trailing quote sign
+        if entry.endswith("\""):      # Remove trailing quote sign
             entry = entry[:-1]
         return entry
 

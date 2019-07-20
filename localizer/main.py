@@ -38,7 +38,7 @@ def setupParser():
     parser_convert.add_argument("destination", help = "Path at which destination directory will be created")
     parser_convert.add_argument("importConverter", help = "Identifier of the converter to be used to import content of the given file.")
     parser_convert.add_argument("exportConverter", help = "Identifier of the converter to be used to export content with a specific format.")
-    parser_convert.add_argument("-d", "--dryRun", action = 'store_true', help = "If true, result will be printed to the console and not saved.")
+    parser_convert.add_argument("-d", "--dryRun", action = "store_true", help = "If true, result will be printed to the console and not saved.")
     parser_convert.add_argument("-v", "--verbose", action = "store_true", help = "If true, additional information will be written to the console.")
     parser_convert.set_defaults(func = startConverting)
 
@@ -178,7 +178,7 @@ def handleInfo(infoText):
 # Main
 #--------------------
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = setupParser()
     args = parser.parse_args()
     args.func(args)
