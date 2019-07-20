@@ -32,11 +32,8 @@ class iOSConverter(Base):
         intermediateEntries = []
         for line in lines:
             if line.startswith("\""):
-                key = line.split("=")[0]    # Split line between key and value TODO: This will not work, if there is a "="" in the Key!
-                key = self._correctEntry(key)
-                value = line.split("=", 1)[1][:-1] # Split string on first occurence of =, take second part and cut out last character (;)
-                value = self._correctEntry(value)
-                value.replace("\"", "\\\"")
+                key = self._extractKeyFromLine(line)
+                value = self._extractValueFromLine(line)
                 intermediateEntries.append(IntermediateEntry(key, value))
 
         intermediateLanguage = IntermediateLanguage(languageIdentifier, intermediateEntries)
@@ -67,6 +64,17 @@ class iOSConverter(Base):
     #--------------------------------------------------
     # Helper methods
     #--------------------------------------------------
+
+    def _extractKeyFromLine(self, line):
+        key = line.split("=")[0]    # Split line between key and value TODO: This will not work, if there is a "="" in the Key!
+        key = self._correctEntry(key)
+        return key
+
+    def _extractValueFromLine(self, line):
+        value = line.split("=", 1)[1][:-1] # Split string on first occurence of =, take second part and cut out last character (;)
+        value = self._correctEntry(value)
+        value.replace("\"", "\\\"")
+        return value
 
     def _correctEntry(self, input):
         entry = input

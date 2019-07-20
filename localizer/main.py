@@ -9,7 +9,7 @@ from localizer import main_subcommand_convert
 from localizer import main_subcommand_list
 
 #--------------------
-# variables
+# properties
 #--------------------
 
 registeredConverter = [

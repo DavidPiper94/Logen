@@ -3,16 +3,28 @@ import sys
 from localizer.lib import FileHelper
 from localizer.lib import TerminalStyle
 
+#--------------------
+# properties
+#--------------------
+
 sourceFilepath = ""
 destinationDirectory = ""
 importConverterIdentifier = ""
 exportConverterIdentifier = ""
 dryRun = False
 
+#--------------------
+# Starting point
+#--------------------
+
 def start(args, converter):
     _parseArgsForConverting(args, converter)
     intermediate = _importToIntermediateLocalization(sourceFilepath, converter)
     _exportToLocalizationFile(intermediate, converter)
+
+#--------------------
+# private helper
+#--------------------
 
 def _parseArgsForConverting(args, converter):
 
