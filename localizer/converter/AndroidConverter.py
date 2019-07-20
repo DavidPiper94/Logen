@@ -78,7 +78,7 @@ class AndroidConverter(Base):
             line = line[1:]
 
         (key, line) = self._extractKey(line, localizationIdentifier)
-        (value, line) = self._extractValue(line)
+        (value, _) = self._extractValue(line)
         
         return IntermediateEntry(key, value)
 

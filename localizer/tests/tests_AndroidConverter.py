@@ -10,7 +10,7 @@ from localizer.model.LocalizationFile import LocalizationFile
 class TestAndroidConverter(unittest.TestCase):
 
     #--------------------------------------------------
-    # Testcases
+    # Testcases for main functionality
     #--------------------------------------------------
 
     def test_toIntermediate(self):
@@ -26,6 +26,22 @@ class TestAndroidConverter(unittest.TestCase):
         result = AndroidConverter().fromIntermediate(intermediate)[0]
         
         self.assertEqual(expectation, result)
+
+    #--------------------------------------------------
+    # Testcases for helper methods
+    #--------------------------------------------------
+
+    def test_extractKey(self):
+        line = "<string name=\"FileName.Key\">Value</string>"
+        localizationIdentifier = "FileName"
+        (key, _) = AndroidConverter()._extractKey(line, localizationIdentifier)
+        self.assertEqual("Key", key)
+
+    # TODO: Fix this test case.
+    def test_extractValue(self):
+        line = "<string name=\"FileName.Key\">Value</string>"
+        (value, _) = AndroidConverter()._extractValue(line)
+        self.assertEqual("Value", value)
 
     #--------------------------------------------------
     # Private test helper

@@ -13,24 +13,13 @@ from localizer.converter.iOSConverter import iOSConverter
 class TestiOSConverter(unittest.TestCase):
 
     #--------------------------------------------------
-    # Testcases
+    # Testcases for main functionality
     #--------------------------------------------------
 
     def test_toIntermediate(self):
         expectation = self._createExampleIntermediateLocalization()
         result = iOSConverter().toIntermediate("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
         self.assertEqual(expectation, result)
-
-    def test_correctInput(self):
-        self.assertEqual("key", iOSConverter()._correctEntry("key"))
-        self.assertEqual("key", iOSConverter()._correctEntry("   key"))
-        self.assertEqual("key", iOSConverter()._correctEntry("key   "))
-        self.assertEqual("key", iOSConverter()._correctEntry("\"key\""))
-        self.assertEqual("key", iOSConverter()._correctEntry("   \"key\""))
-        self.assertEqual("key", iOSConverter()._correctEntry("\"key\"   "))
-        self.assertEqual("key", iOSConverter()._correctEntry("   \"key\"   "))
-        # TODO: Fix this test case:
-        #self.assertEqual("This is a \"value\"", iOSConverter()._correctEntry("This is a \"value\""))
 
     def test_fromIntermediate(self):
         expectedFilepath = "ExampleLanguage.lproj/FileName.strings"
@@ -39,6 +28,29 @@ class TestiOSConverter(unittest.TestCase):
         intermediate = self._createExampleIntermediateLocalization()
         result = iOSConverter().fromIntermediate(intermediate)[0]
         self.assertEqual(expectation, result)
+
+    #--------------------------------------------------
+    # Testcases for helper methods
+    #--------------------------------------------------
+
+    def test_extractKeyFromLine(self):
+        line = "\"someKey\" = \"someValue\";"
+        key = iOSConverter()._extractKeyFromLine(line)
+        self.assertEqual("someKey", key)
+
+    def test_correctKey(self):
+        self.assertEqual("key", iOSConverter()._correctEntry("key"))
+        self.assertEqual("key", iOSConverter()._correctEntry("   key"))
+        self.assertEqual("key", iOSConverter()._correctEntry("key   "))
+        self.assertEqual("key", iOSConverter()._correctEntry("\"key\""))
+        self.assertEqual("key", iOSConverter()._correctEntry("   \"key\""))
+        self.assertEqual("key", iOSConverter()._correctEntry("\"key\"   "))
+        self.assertEqual("key", iOSConverter()._correctEntry("   \"key\"   "))
+
+    def test_extractValueFromLine(self):
+        line = "\"someKey\" = \"someValue\";"
+        value = iOSConverter()._extractValueFromLine(line)
+        self.assertEqual("someValue", value)
 
     #--------------------------------------------------
     # Private test helper
