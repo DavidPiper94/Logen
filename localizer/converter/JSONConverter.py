@@ -19,8 +19,6 @@ class JSONConverter(Base):
 
     def exportDescription(self): return "Converts an intermediate localization into the format '{}' and exports it as a json file.".format(self._commonFormatDescription())
 
-    def _commonFormatDescription(self): return "{ filename: { language: { key: value } } }"
-
     def toIntermediate(self, filepath):
         dict = JsonHelper.readJSON(filepath)
 
@@ -64,3 +62,9 @@ class JSONConverter(Base):
             localizationFiles.append(localizationFile)
         
         return localizationFiles
+
+    #--------------------------------------------------
+    # Helper methods
+    #--------------------------------------------------
+
+    def _commonFormatDescription(self): return "{ filename: { language: { key: value } } }"

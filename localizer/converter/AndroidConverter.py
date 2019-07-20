@@ -9,10 +9,14 @@ from localizer.model.LocalizationFile import LocalizationFile
 
 class AndroidConverter(Base):
 
-    nameTagOpenStart = "<string name=\""
-    nameTagOpenEnd = "\">"
-    nameTagClose = "</string>"
-    folderNamePrefix = "values-"
+    #--------------------------------------------------
+    # private properties
+    #--------------------------------------------------
+
+    _nameTagOpenStart = "<string name=\""
+    _nameTagOpenEnd = "\">"
+    _nameTagClose = "</string>"
+    _folderNamePrefix = "values-"
 
     #--------------------------------------------------
     # Base class conformance
@@ -31,7 +35,7 @@ class AndroidConverter(Base):
         localizationIdentifier = filename.replace(self.fileExtension(), "")
 
         foldername = FileHelper.directoryName(filepath)
-        languageIdentifier = foldername.replace(self.folderNamePrefix, "")
+        languageIdentifier = foldername.replace(self._folderNamePrefix, "")
 
         lines = FileHelper.readLines(filepath)
         intermediateEntries = []
@@ -66,7 +70,7 @@ class AndroidConverter(Base):
     #--------------------------------------------------
 
     def _processLine(self, line, localizationIdentifier):
-        if not self.nameTagOpenStart in line: 
+        if not self._nameTagOpenStart in line: 
             return None
 
         # remove leading whitespace
@@ -80,13 +84,13 @@ class AndroidConverter(Base):
 
     def _extractKey(self, line, localizationIdentifier):
         # Remove start of name tag.
-        if line.startswith(self.nameTagOpenStart):
-            prefixLength = len(self.nameTagOpenStart)
+        if line.startswith(self._nameTagOpenStart):
+            prefixLength = len(self._nameTagOpenStart)
             line = line[prefixLength:]
 
         # Remove name attribute and save it as key.
         key = ""
-        while not line.startswith(self.nameTagOpenEnd):
+        while not line.startswith(self._nameTagOpenEnd):
             key += line[:1]
             line = line[1:]
         key = self._correctEntry(key)
@@ -97,7 +101,7 @@ class AndroidConverter(Base):
         key = key.replace(keyPrefix, "")
 
         # Remove end of name tag
-        if line.startswith(self.nameTagOpenEnd):
+        if line.startswith(self._nameTagOpenEnd):
             line = line[2:]
 
         return (key, line)
@@ -105,7 +109,7 @@ class AndroidConverter(Base):
     def _extractValue(self, line):
         # Remove and save value until end of line.
         value = ""
-        while not line.startswith(self.nameTagClose):
+        while not line.startswith(self._nameTagClose):
             value += line[:1]
             line = line[1:]
         value = self._correctEntry(value)
