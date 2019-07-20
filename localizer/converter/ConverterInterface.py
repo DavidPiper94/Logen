@@ -7,6 +7,10 @@ from localizer.model.LocalizationFile import LocalizationFile
 from localizer.model.MergeResult import MergeResult
 
 class ConverterInterface:
+    """
+    Used as a base for all converter. 
+    Defines some methods that need to be implemented by conforming converter and some common methods for all converter.
+    """
 
     __metaclass__ = abc.ABCMeta
 
@@ -112,25 +116,30 @@ class ConverterInterface:
         """
         raise NotImplementedError
 
-    # There may be cases, where it is useful to merge two intermediate localizations together.
-    # E.g. when using the ios converter and there is one file 'de.lproj/File.strings' and one 'en.lproj/File.strings',
-    # than the end result should be one single intermediate localization with both languages combined.
-    # Another aproach would be to handle this case when importing a folder of multiple '*.lproj' directorys,
-    # but this would need a special handling on importing. And how should other setups be handled?
-    # Thus it is easier to add this method for merging two intermediate localizations together.
+   
     def merge(self, first: IntermediateLocalization, second: IntermediateLocalization) -> MergeResult:
-        """
+        """Merges the two given intermediate localizations together into one.
+
+        There may be cases, where it is useful to merge two intermediate localizations together.
+        E.g. when using the ios converter and there is one file 'de.lproj/File.strings' and one 'en.lproj/File.strings',
+        than the end result should be one single intermediate localization with both languages combined.
+        Another aproach would be to handle this case when importing a folder of multiple '*.lproj' directorys,
+        but this would need a special handling on importing. And how should other setups be handled?
+        Thus it is easier to add this method for merging two intermediate localizations together.
         
         Parameters
         ----------
         first: IntermediateLocalization
+            The first intermediate localization to be merged with the other one.
         
         second: IntermediateLocalization
+            The second intermediate localization to be merged with the other one
 
         Returns
         -------
         MergeResult:
-            
+            An instance of MergeResult encapsulating the new merged intermediate localization as well as a list of intermediate entries that were only contained by one of the two original intermediate localizations.
+            May also return None, when the two given intermediate localizations don't have the same localizationIdentifier.
         """
 
         # Make sure, both are objects of type IntermeditateLocalization.
