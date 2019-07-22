@@ -11,7 +11,7 @@ from localizer.converter.iOSConverter import iOSConverter
 class TestJSONConverter(unittest.TestCase):
 
     #--------------------------------------------------
-    # Testcases
+    # Testcases for main functionality
     #--------------------------------------------------
 
     def test_merge_differentLocalizationIdentifier(self):
@@ -47,6 +47,20 @@ class TestJSONConverter(unittest.TestCase):
 
         self.assertEqual(newResult.missingEntries, [IntermediateEntry("FirstNewKey", "FirstNewValue"), IntermediateEntry("SecondNewKey", "SecondNewValue")])
     
+    #--------------------------------------------------
+    # Testcases for helper methods
+    #--------------------------------------------------
+
+    def test_compareEntries(self):
+        firstList = [1, 2, 3]
+        secondList = [1, 2, 4]
+
+        # Using an abritary converter class to test common functionality.
+        result = iOSConverter()._findUniqueEntries(firstList, secondList)
+        expectation = [3, 4]
+
+        self.assertEqual(expectation, result)
+
     #--------------------------------------------------
     # Private test helper
     #--------------------------------------------------

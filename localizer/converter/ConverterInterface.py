@@ -155,11 +155,11 @@ class ConverterInterface:
         listOfMissingEntries = []
         for firstLanguage in first.intermediateLanguages:
             for secondLanguage in second.intermediateLanguages:
-                listOfMissingEntries += self._compareEntries(firstLanguage.intermediateEntries, secondLanguage.intermediateEntries)
+                listOfMissingEntries += self._findUniqueEntries(firstLanguage.intermediateEntries, secondLanguage.intermediateEntries)
 
         return MergeResult(IntermediateLocalization(first.localizationIdentifier, languages), listOfMissingEntries)
 
-    def _compareEntries(self, firstList, secondList):
+    def _findUniqueEntries(self, firstList: list, secondList: list) -> list:
         for item in firstList[:]:
             if item in secondList:
                 # Remove items, that are in both lists.
