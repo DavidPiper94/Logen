@@ -69,8 +69,8 @@ class AndroidConverter(Base):
     # Helper methods
     #--------------------------------------------------
 
-    def _processLine(self, line, localizationIdentifier):
-        if not self._nameTagOpenStart in line: 
+    def _processLine(self, line: str, localizationIdentifier: str):
+        if not self._validLine(line):
             return None
 
         # remove leading whitespace
@@ -81,6 +81,9 @@ class AndroidConverter(Base):
         (value, _) = self._extractValue(line)
         
         return IntermediateEntry(key, value)
+
+    def _validLine(self, line: str) -> bool:
+        return self._nameTagOpenStart in line and self._nameTagClose in line
 
     def _extractKey(self, line, localizationIdentifier):
         # Remove start of name tag.
