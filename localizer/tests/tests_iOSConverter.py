@@ -33,6 +33,18 @@ class TestiOSConverter(unittest.TestCase):
     # Testcases for helper methods
     #--------------------------------------------------
 
+    def test_localizationIdentifierFromFilepath(self):
+        filepath = "/some/filepath/de.lproj/TestIdentifier.strings"
+        result = iOSConverter()._localizationIdentifierFromFilepath(filepath)
+        expectation = "TestIdentifier"
+        self.assertEqual(expectation, result)
+
+    def test_languageIdentifierFromFilepath(self):
+        filepath = "/some/filepath/de.lproj/TestIdentifier.strings"
+        result = iOSConverter()._languageIdentifierFromFilepath(filepath)
+        expectation = "de"
+        self.assertEqual(expectation, result)
+
     def test_extractKeyFromLine(self):
         line = "\"someKey\" = \"someValue\";"
         key = iOSConverter()._extractKeyFromLine(line)
@@ -51,6 +63,12 @@ class TestiOSConverter(unittest.TestCase):
         line = "\"someKey\" = \"someValue\";"
         value = iOSConverter()._extractValueFromLine(line)
         self.assertEqual("someValue", value)
+
+    def test__lineFromIntermediateEntry(self):
+        entry = IntermediateEntry("Key1", "Value1")
+        expectation = "\"Key1\" = \"Value1\";\n"
+        result = iOSConverter()._lineFromIntermediateEntry(entry)
+        self.assertEqual(expectation, result)
 
     #--------------------------------------------------
     # Private test helper

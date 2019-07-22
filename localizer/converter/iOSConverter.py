@@ -22,11 +22,8 @@ class iOSConverter(Base):
     def exportDescription(self): return "Exports the content of an intermediate localization to a '.strings' file for an iOS app."
 
     def toIntermediate(self, filepath):
-        filename = os.path.basename(filepath)
-        localizationIdentifier = filename.replace(".strings", "")
-
-        foldername = os.path.dirname(filepath).split("/")[-1]
-        languageIdentifier = foldername.replace(".lproj", "")
+        localizationIdentifier = self._localizationIdentifierFromFilepath(filepath)
+        languageIdentifier = self._languageIdentifierFromFilepath(filepath)
 
         lines = FileHelper.readLines(filepath)
         intermediateEntries = []
@@ -38,22 +35,19 @@ class iOSConverter(Base):
 
         intermediateLanguage = IntermediateLanguage(languageIdentifier, intermediateEntries)
         return IntermediateLocalization(localizationIdentifier, [intermediateLanguage])
-    
+
     def fromIntermediate(self, intermediateLocalization):
         listOfLocalizationFiles = []
 
-        warning = FileHelper.readFile("localizer/templates/template_common_generated_warning.txt")
-        formattedWarning = "/*\n{}\n */\n".format(warning)
+        content = self._makeiOSGeneratedWarning()
         sectionHeaderTemplate = FileHelper.readFile("localizer/templates/template_ios_section_header.txt")
 
         for language in intermediateLocalization.intermediateLanguages:
 
-            content = formattedWarning
             content += sectionHeaderTemplate.format(intermediateLocalization.localizationIdentifier)
 
             for entry in language.intermediateEntries:
-                value = entry.value.replace("\"", "\\\"").replace("'", "\\'")
-                content += "\"{}\" = \"{}\";\n".format(entry.key, value)
+                content += self._lineFromIntermediateEntry(entry)
 
             filename = "{}.lproj/{}.strings".format(language.languageIdentifier, intermediateLocalization.localizationIdentifier)
             localizationFile = LocalizationFile(filename, content)
@@ -64,6 +58,14 @@ class iOSConverter(Base):
     #--------------------------------------------------
     # Helper methods
     #--------------------------------------------------
+    
+    def _localizationIdentifierFromFilepath(self, filepath: str) -> str:
+        filename = os.path.basename(filepath)
+        return filename.replace(".strings", "")
+
+    def _languageIdentifierFromFilepath(self, filepath: str) -> str:
+        foldername = os.path.dirname(filepath).split("/")[-1]
+        return foldername.replace(".lproj", "")
 
     def _extractKeyFromLine(self, line):
         key = line.split("=")[0]    # Split line between key and value TODO: This will not work, if there is a "="" in the Key!
@@ -87,3 +89,11 @@ class iOSConverter(Base):
         if entry.endswith("\""):      # Remove trailing quote sign
             entry = entry[:-1]
         return entry
+
+    def _makeiOSGeneratedWarning(self):
+        warning = FileHelper.readFile("localizer/templates/template_common_generated_warning.txt")
+        return "/*\n{}\n */\n".format(warning)
+
+    def _lineFromIntermediateEntry(self, entry: IntermediateEntry) -> str:
+        value = entry.value.replace("\"", "\\\"").replace("'", "\\'")
+        return "\"{}\" = \"{}\";\n".format(entry.key, value)
