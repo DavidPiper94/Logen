@@ -31,15 +31,51 @@ class TestAndroidConverter(unittest.TestCase):
     # Testcases for helper methods
     #--------------------------------------------------
 
+    def test_processLine_validLine(self):
+        line = "<string name=\"FileName.Key\">Value</string>"
+        expectation = IntermediateEntry("Key", "Value")
+        localizationIdentifier = "FileName"
+        result = AndroidConverter()._processLine(line, localizationIdentifier)
+        self.assertEqual(expectation, result)
+
+    def test_processLine_validLine_leadingWhitespaces(self):
+        expectation = IntermediateEntry("Key", "Value")
+        line = "      <string name=\"FileName.Key\">Value</string>"
+        localizationIdentifier = "FileName"
+        result = AndroidConverter()._processLine(line, localizationIdentifier)
+        self.assertEqual(expectation, result)
+        
+    def test_processLine_invalidLine(self):
+        expectation = None
+        line = "\"FileName.Key\"Value"
+        localizationIdentifier = "FileName"
+        result = AndroidConverter()._processLine(line, localizationIdentifier)
+        self.assertEqual(expectation, result)
+
+    def test_validLine(self):
+        line = "<string name=\"FileName.Key\">Value</string>"
+        self.assertTrue(AndroidConverter()._validLine(line))
+
+    def test_validLine_missingStart(self):
+        line = "\"FileName.Key\">Value</string>"
+        self.assertFalse(AndroidConverter()._validLine(line))
+
+    def test_validLine_missingEnd(self):
+        line = "<string name=\"FileName.Key\">Value"
+        self.assertFalse(AndroidConverter()._validLine(line))
+
     def test_extractKey(self):
         line = "<string name=\"FileName.Key\">Value</string>"
         localizationIdentifier = "FileName"
         (key, _) = AndroidConverter()._extractKey(line, localizationIdentifier)
         self.assertEqual("Key", key)
 
-    # TODO: Fix this test case.
     def test_extractValue(self):
         line = "<string name=\"FileName.Key\">Value</string>"
+        localizationIdentifier = "FileName"
+        # Method _extractKey consumes start of line.
+        # Thus this method needs to be called before the value can be extracted.
+        (_, line) = AndroidConverter()._extractKey(line, localizationIdentifier)
         (value, _) = AndroidConverter()._extractValue(line)
         self.assertEqual("Value", value)
 
