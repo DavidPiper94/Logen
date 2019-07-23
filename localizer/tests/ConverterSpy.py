@@ -48,6 +48,10 @@ class ConverterSpy(Base):
 
     def exportDescription(self): raise NotImplementedError
 
-    def toIntermediate(self, filepath): self._didImport = True
+    def toIntermediate(self, filepath: str) -> IntermediateLocalization: 
+        self._didImport = True
+        return None
         
-    def fromIntermediate(self, intermediateLocalization): self._didExport = True
+    def fromIntermediate(self, intermediateLocalization: IntermediateLocalization) -> [LocalizationFile]: 
+        self._didExport = True
+        return []
