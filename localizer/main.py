@@ -4,6 +4,7 @@ import sys
 from localizer.converter.AndroidConverter import AndroidConverter
 from localizer.converter.JSONConverter import JSONConverter
 from localizer.converter.iOSConverter import iOSConverter
+from localizer.converter.iOSEnumConverter import iOSEnumConverter
 
 from localizer import main_subcommand_convert
 from localizer import main_subcommand_list
@@ -14,6 +15,7 @@ from localizer import main_subcommand_list
 
 registeredConverter = [
         iOSConverter(),
+        iOSEnumConverter(),
         AndroidConverter(),
         JSONConverter()
 ]
