@@ -6,22 +6,36 @@ from localizer import main
 
 class SubcommandConvertTests(unittest.TestCase):
 
-    spy = ConverterSpy()
+    def test_start(self):
 
-    # def test_parseArgsForConverting(self):
-    #     self.spy.changeFileExtensionTo("json")
-    #     self.spy.changeIdentifierTo("spy")
-    #     testArgs = [
-    #         "convert", 
-    #         "localizer/tests/bigtests/localization_Src/information.json", 
-    #         "/", 
-    #         "spy",
-    #         "spy",
-    #         "--dryRun",
-    #         "--verbose"
-    #     ]
-    #     parsedTestArgs = main.parse(testArgs)
-    #     main_subcommand_convert._parseArgsForConverting(parsedTestArgs, [self.spy])
+        # setup spy for import
+        importSpy = ConverterSpy()
+        importSpy.changeIdentifierTo("import")
+        importSpy.changeFileExtensionTo(".json")
+
+        # setup spy for export
+        exportSpy = ConverterSpy()
+        exportSpy.changeIdentifierTo("export")
+
+        # setup arguments
+        testArgs = [
+            "convert", 
+            "localizer/tests/bigtests/localization_Src/information.json",
+            "just/some/path",
+            "import",
+            "export",
+            "--dryRun"
+        ]
+        parsedTestArgs = main.parse(testArgs)
+
+        # execute 
+        main_subcommand_convert.start(parsedTestArgs, [importSpy, exportSpy])
+
+        # validate
+        self.assertTrue(importSpy.didImport())
+        self.assertFalse(importSpy.didExport())
+        self.assertTrue(exportSpy.didExport())
+        self.assertFalse(exportSpy.didImport())
     
     def test_importToIntermediateLocalization(self):
         """Assures that given a converter with correct identifier, the converter is used correctly."""
@@ -30,15 +44,16 @@ class SubcommandConvertTests(unittest.TestCase):
         main_subcommand_convert.importConverterIdentifier = "spy"
 
         # setup spy
-        self.spy.changeIdentifierTo("spy")
+        spy = ConverterSpy()
+        spy.changeIdentifierTo("spy")
 
         # define test parameter
         testSourcePath = ""
-        converter = [self.spy]
+        converter = [spy]
 
         # execute and validate
         main_subcommand_convert._importToIntermediateLocalization(testSourcePath, converter)        
-        self.assertTrue(self.spy.didImport)
+        self.assertTrue(spy.didImport)
 
 if __name__ == '__main__':
     unittest.main()

@@ -48,7 +48,7 @@ def _parseArgsForConverting(args, converter):
     # TODO: Better comparison, e.g. lowercased
     matchingImportConverter = list(filter(lambda x: x.fileExtension() == extension and x.identifier() == importConverterIdentifier, converter))
     if len(matchingImportConverter) == 0:
-        _handleError("ERROR: No matching converter found with identiier {} for fileextension {}".format(importConverterIdentifier, extension))
+        _handleError("ERROR: No matching converter found with identifier {} for fileextension {}".format(importConverterIdentifier, extension))
     else:
         importConverterIdentifier = matchingImportConverter[0].identifier()
     
