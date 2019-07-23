@@ -6,9 +6,13 @@ from localizer.model.IntermediateLocalization import IntermediateLocalization
 from localizer.model.LocalizationFile import LocalizationFile
 from localizer.model.MergeResult import MergeResult
 
-from localizer.converter.iOSConverter import iOSConverter
+from localizer.converter.AndroidConverter import AndroidConverter
 
 class TestJSONConverter(unittest.TestCase):
+
+    # common subject under test for all test cases
+    # Using an abritary converter class to test common merge functionality.
+    sut = AndroidConverter()
 
     #--------------------------------------------------
     # Testcases for main functionality
@@ -17,17 +21,13 @@ class TestJSONConverter(unittest.TestCase):
     def test_merge_differentLocalizationIdentifier(self):
         example = IntermediateLocalization("Example", [])
         otherExample = IntermediateLocalization("OtherExample", [])
-
-        # Using an abritary converter class to test common merge functionality.
-        result = iOSConverter().merge(example, otherExample)
+        result = self.sut.merge(example, otherExample)
 
         self.assertEqual(result, None)
 
     def test_merge_equalEntries(self):
         (example, otherExample) = self._createExampleIntermediateLocalizations()
-
-        # Using an abritary converter class to test common merge functionality.
-        merged = iOSConverter().merge(example, otherExample)
+        merged = self.sut.merge(example, otherExample)
 
         listOfLanguageIdentifier = []
         for intermediateLanguage in merged.result.intermediateLanguages:
@@ -38,13 +38,9 @@ class TestJSONConverter(unittest.TestCase):
 
     def test_merge_unequalEntries(self):
         example, otherExample = self._createExampleIntermediateLocalizations()
-
         example.intermediateLanguages[0].intermediateEntries.append(IntermediateEntry("FirstNewKey", "FirstNewValue"))
         otherExample.intermediateLanguages[0].intermediateEntries.append(IntermediateEntry("SecondNewKey", "SecondNewValue"))
-
-        # Using an abritary converter class to test common merge functionality.
-        newResult = iOSConverter().merge(example, otherExample)
-
+        newResult = self.sut.merge(example, otherExample)
         self.assertEqual(newResult.missingEntries, [IntermediateEntry("FirstNewKey", "FirstNewValue"), IntermediateEntry("SecondNewKey", "SecondNewValue")])
     
     #--------------------------------------------------
@@ -54,9 +50,7 @@ class TestJSONConverter(unittest.TestCase):
     def test_compareEntries(self):
         firstList = [1, 2, 3]
         secondList = [1, 2, 4]
-
-        # Using an abritary converter class to test common functionality.
-        result = iOSConverter()._findUniqueEntries(firstList, secondList)
+        result = self.sut._findUniqueEntries(firstList, secondList)
         expectation = [3, 4]
 
         self.assertEqual(expectation, result)

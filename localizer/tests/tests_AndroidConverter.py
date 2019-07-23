@@ -9,13 +9,16 @@ from localizer.model.LocalizationFile import LocalizationFile
 
 class TestAndroidConverter(unittest.TestCase):
 
+    # common subject under test for all test cases
+    sut = AndroidConverter()
+
     #--------------------------------------------------
     # Testcases for main functionality
     #--------------------------------------------------
 
     def test_toIntermediate(self):
         expectation = self._createExampleIntermediateLanguage()
-        result = AndroidConverter().toIntermediate("localizer/tests/testdata/values-ExampleLanguage/FileName.xml")
+        result = self.sut.toIntermediate("localizer/tests/testdata/values-ExampleLanguage/FileName.xml")
         self.assertEqual(expectation, result)
 
     def test_fromIntermediate(self):
@@ -23,7 +26,7 @@ class TestAndroidConverter(unittest.TestCase):
         expectedContent = FileHelper.readFile("localizer/tests/testdata/values-ExampleLanguage/FileName.xml")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
         intermediate = self._createExampleIntermediateLanguage()
-        result = AndroidConverter().fromIntermediate(intermediate)[0]
+        result = self.sut.fromIntermediate(intermediate)[0]
         
         self.assertEqual(expectation, result)
 
@@ -35,39 +38,39 @@ class TestAndroidConverter(unittest.TestCase):
         line = "<string name=\"FileName.Key\">Value</string>"
         expectation = IntermediateEntry("Key", "Value")
         localizationIdentifier = "FileName"
-        result = AndroidConverter()._processLine(line, localizationIdentifier)
+        result = self.sut._processLine(line, localizationIdentifier)
         self.assertEqual(expectation, result)
 
     def test_processLine_validLine_leadingWhitespaces(self):
         expectation = IntermediateEntry("Key", "Value")
         line = "      <string name=\"FileName.Key\">Value</string>"
         localizationIdentifier = "FileName"
-        result = AndroidConverter()._processLine(line, localizationIdentifier)
+        result = self.sut._processLine(line, localizationIdentifier)
         self.assertEqual(expectation, result)
         
     def test_processLine_invalidLine(self):
         expectation = None
         line = "\"FileName.Key\"Value"
         localizationIdentifier = "FileName"
-        result = AndroidConverter()._processLine(line, localizationIdentifier)
+        result = self.sut._processLine(line, localizationIdentifier)
         self.assertEqual(expectation, result)
 
     def test_validLine(self):
         line = "<string name=\"FileName.Key\">Value</string>"
-        self.assertTrue(AndroidConverter()._validLine(line))
+        self.assertTrue(self.sut._validLine(line))
 
     def test_validLine_missingStart(self):
         line = "\"FileName.Key\">Value</string>"
-        self.assertFalse(AndroidConverter()._validLine(line))
+        self.assertFalse(self.sut._validLine(line))
 
     def test_validLine_missingEnd(self):
         line = "<string name=\"FileName.Key\">Value"
-        self.assertFalse(AndroidConverter()._validLine(line))
+        self.assertFalse(self.sut._validLine(line))
 
     def test_extractKey(self):
         line = "<string name=\"FileName.Key\">Value</string>"
         localizationIdentifier = "FileName"
-        (key, _) = AndroidConverter()._extractKey(line, localizationIdentifier)
+        (key, _) = self.sut._extractKey(line, localizationIdentifier)
         self.assertEqual("Key", key)
 
     def test_extractValue(self):
@@ -75,8 +78,8 @@ class TestAndroidConverter(unittest.TestCase):
         localizationIdentifier = "FileName"
         # Method _extractKey consumes start of line.
         # Thus this method needs to be called before the value can be extracted.
-        (_, line) = AndroidConverter()._extractKey(line, localizationIdentifier)
-        (value, _) = AndroidConverter()._extractValue(line)
+        (_, line) = self.sut._extractKey(line, localizationIdentifier)
+        (value, _) = self.sut._extractValue(line)
         self.assertEqual("Value", value)
 
     #--------------------------------------------------

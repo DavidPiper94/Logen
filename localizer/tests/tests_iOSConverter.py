@@ -12,13 +12,16 @@ from localizer.converter.iOSConverter import iOSConverter
 
 class TestiOSConverter(unittest.TestCase):
 
+    # common subject under test for all test cases
+    sut = iOSConverter()
+
     #--------------------------------------------------
     # Testcases for main functionality
     #--------------------------------------------------
 
     def test_toIntermediate(self):
         expectation = self._createExampleIntermediateLocalization()
-        result = iOSConverter().toIntermediate("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
+        result = self.sut.toIntermediate("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
         self.assertEqual(expectation, result)
 
     def test_fromIntermediate(self):
@@ -26,7 +29,7 @@ class TestiOSConverter(unittest.TestCase):
         expectedContent = FileHelper.readFile("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
         intermediate = self._createExampleIntermediateLocalization()
-        result = iOSConverter().fromIntermediate(intermediate)[0]
+        result = self.sut.fromIntermediate(intermediate)[0]
         self.assertEqual(expectation, result)
 
     #--------------------------------------------------
@@ -35,39 +38,39 @@ class TestiOSConverter(unittest.TestCase):
 
     def test_localizationIdentifierFromFilepath(self):
         filepath = "/some/filepath/de.lproj/TestIdentifier.strings"
-        result = iOSConverter()._localizationIdentifierFromFilepath(filepath)
+        result = self.sut._localizationIdentifierFromFilepath(filepath)
         expectation = "TestIdentifier"
         self.assertEqual(expectation, result)
 
     def test_languageIdentifierFromFilepath(self):
         filepath = "/some/filepath/de.lproj/TestIdentifier.strings"
-        result = iOSConverter()._languageIdentifierFromFilepath(filepath)
+        result = self.sut._languageIdentifierFromFilepath(filepath)
         expectation = "de"
         self.assertEqual(expectation, result)
 
     def test_extractKeyFromLine(self):
         line = "\"someKey\" = \"someValue\";"
-        key = iOSConverter()._extractKeyFromLine(line)
+        key = self.sut._extractKeyFromLine(line)
         self.assertEqual("someKey", key)
 
     def test_correctKey(self):
-        self.assertEqual("key", iOSConverter()._correctEntry("key"))
-        self.assertEqual("key", iOSConverter()._correctEntry("   key"))
-        self.assertEqual("key", iOSConverter()._correctEntry("key   "))
-        self.assertEqual("key", iOSConverter()._correctEntry("\"key\""))
-        self.assertEqual("key", iOSConverter()._correctEntry("   \"key\""))
-        self.assertEqual("key", iOSConverter()._correctEntry("\"key\"   "))
-        self.assertEqual("key", iOSConverter()._correctEntry("   \"key\"   "))
+        self.assertEqual("key", self.sut._correctEntry("key"))
+        self.assertEqual("key", self.sut._correctEntry("   key"))
+        self.assertEqual("key", self.sut._correctEntry("key   "))
+        self.assertEqual("key", self.sut._correctEntry("\"key\""))
+        self.assertEqual("key", self.sut._correctEntry("   \"key\""))
+        self.assertEqual("key", self.sut._correctEntry("\"key\"   "))
+        self.assertEqual("key", self.sut._correctEntry("   \"key\"   "))
 
     def test_extractValueFromLine(self):
         line = "\"someKey\" = \"someValue\";"
-        value = iOSConverter()._extractValueFromLine(line)
+        value = self.sut._extractValueFromLine(line)
         self.assertEqual("someValue", value)
 
     def test__lineFromIntermediateEntry(self):
         entry = IntermediateEntry("Key1", "Value1")
         expectation = "\"Key1\" = \"Value1\";\n"
-        result = iOSConverter()._lineFromIntermediateEntry(entry)
+        result = self.sut._lineFromIntermediateEntry(entry)
         self.assertEqual(expectation, result)
 
     #--------------------------------------------------

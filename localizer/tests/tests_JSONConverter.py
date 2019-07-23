@@ -9,6 +9,9 @@ from localizer.model.LocalizationFile import LocalizationFile
 
 class TestJSONConverter(unittest.TestCase):
 
+    # common subject under test for all test cases
+    sut = JSONConverter()
+
     #--------------------------------------------------
     # Testcases
     #--------------------------------------------------
@@ -26,7 +29,7 @@ class TestJSONConverter(unittest.TestCase):
     def test_toIntermediate(self):
         """Assures equality between converted dict and expected intermediate representation"""
         expectation = self._createExampleIntermediateLocalization()
-        result = JSONConverter().toIntermediate("localizer/tests/testdata/ExampleJSON.json")
+        result = self.sut.toIntermediate("localizer/tests/testdata/ExampleJSON.json")
         self.assertEqual(expectation, result)
 
     def test_fromIntermediate(self):
@@ -35,7 +38,7 @@ class TestJSONConverter(unittest.TestCase):
         expectedContent = JsonHelper.readJSON("localizer/tests/testdata/ExampleJSON.json")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
         localization = self._createExampleIntermediateLocalization()
-        result = JSONConverter().fromIntermediate(localization)[0]
+        result = self.sut.fromIntermediate(localization)[0]
         self.assertEqual(expectation, result)
 
     #--------------------------------------------------
