@@ -22,7 +22,7 @@ registeredConverter = [
 # Setup CLI
 #--------------------
 
-def parse(args):
+def createParser():
     parser = argparse.ArgumentParser(description = "Description")
     subparsers = parser.add_subparsers(help = "Subparser")
 
@@ -37,9 +37,12 @@ def parse(args):
 
     parser_list = subparsers.add_parser("list", help = "Lists all available converter.")
     parser_list.set_defaults(func = subcommandList)
+    return parser
 
+def parse(args):
+    parser = createParser()
     parsedArgs = parser.parse_args(args)
-    parsedArgs.func(parsedArgs)
+    return parsedArgs
 
 def subcommandList(args):
     main_subcommand_list.start(args, registeredConverter)
@@ -52,5 +55,6 @@ def subcommandConvert(args):
 #--------------------
 
 if __name__ == "__main__":
-    parse(sys.argv[1:])
+    parsedArgs = parse(sys.argv[1:])
+    parsedArgs.func(parsedArgs)
     
