@@ -22,7 +22,6 @@ class TestJSONConverter(unittest.TestCase):
         example = IntermediateLocalization("Example", [])
         otherExample = IntermediateLocalization("OtherExample", [])
         result = self.sut.merge(example, otherExample)
-
         self.assertEqual(result, None)
 
     def test_merge_equalEntries(self):
@@ -52,7 +51,6 @@ class TestJSONConverter(unittest.TestCase):
         secondList = [1, 2, 4]
         result = self.sut._findUniqueEntries(firstList, secondList)
         expectation = [3, 4]
-
         self.assertEqual(expectation, result)
 
     #--------------------------------------------------
