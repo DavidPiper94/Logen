@@ -30,10 +30,6 @@ class TestiOSEnumConverter(unittest.TestCase):
         self.assertEqual(expectation.filepath, result.filepath)
 
     #--------------------------------------------------
-    # Testcases for helper methods
-    #--------------------------------------------------
-
-    #--------------------------------------------------
     # Private test helper
     #--------------------------------------------------
 
