@@ -1,8 +1,9 @@
 class IntermediateEntry:
 
-    def __init__(self, key, value):
+    def __init__(self, key: str, value: str, comment = ""):
         self.key = key
         self.value = value
+        self.comment = comment
 
     def __eq__(self, other):
         """Override the default Equals behavior"""

@@ -1,0 +1,9 @@
+{
+    "FileNameWithComments": {
+        "ExampleLanguage": {
+            "key": "Key1",
+            "value": "Value1",
+            "comment": "This is just a nonsence example."
+        }
+    }
+}

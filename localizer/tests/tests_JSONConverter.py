@@ -18,7 +18,7 @@ class TestJSONConverter(unittest.TestCase):
 
     def test_assertJSONStructure(self):
         """Assures equality between json and dict representation"""
-        dict = JsonHelper.readJSON("localizer/tests/testdata/ExampleJSON.json")
+        dict = JsonHelper.readJSON("localizer/tests/testdata/ExampleJSON_noComments.json")
         expectation = JsonHelper.dictToJSONString(dict).replace('\n', '').replace(' ', '')
 
         exampleDict = self._createExampleDict()
@@ -29,13 +29,13 @@ class TestJSONConverter(unittest.TestCase):
     def test_toIntermediate(self):
         """Assures equality between converted dict and expected intermediate representation"""
         expectation = self._createExampleIntermediateLocalization()
-        result = self.sut.toIntermediate("localizer/tests/testdata/ExampleJSON.json")
+        result = self.sut.toIntermediate("localizer/tests/testdata/ExampleJSON_noComments.json")
         self.assertEqual(expectation, result)
 
     def test_fromIntermediate(self):
         """Assures equality between json dict created from intermediate localization and expected content of file."""
         expectedFilepath = "FileName.json"
-        expectedContent = JsonHelper.readJSON("localizer/tests/testdata/ExampleJSON.json")
+        expectedContent = JsonHelper.readJSON("localizer/tests/testdata/ExampleJSON_noComments.json")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
         localization = self._createExampleIntermediateLocalization()
         result = self.sut.fromIntermediate(localization)[0]

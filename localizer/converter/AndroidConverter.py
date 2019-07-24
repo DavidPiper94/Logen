@@ -40,8 +40,16 @@ class AndroidConverter(Base):
         lines = FileHelper.readLines(filepath)
         intermediateEntries = []
 
+        # A line may or may not contain a comment. Start with an empty string as default.
+        comment = ""
+
         for line in lines: 
-            entry = self._processLine(line, localizationIdentifier)
+            if "<!--" in line and "-->" in line:
+                # The next line may containe a entry with a comment.
+                comment = self._extractComment(line)
+                continue
+
+            entry = self._processLine(line, localizationIdentifier, comment)
             if entry is not None:
                 intermediateEntries.append(entry)
         
@@ -57,7 +65,7 @@ class AndroidConverter(Base):
             content = "\n    <!-- {} --> \n\n".format(identifier)
             for entry in language.intermediateEntries:
                 androidKey = "{}.{}".format(identifier, entry.key)
-                content += self._makeAndroidEntry(androidKey, entry.value)
+                content += self._makeAndroidEntry(androidKey, entry.value, entry.comment)
 
             filecontent = self._makeAndroidGeneratedWarning() + FileHelper.readFile("localizer/templates/template_android_resource_file.txt").format(content)
             localizationFile = LocalizationFile(filename, filecontent)
@@ -69,7 +77,7 @@ class AndroidConverter(Base):
     # Helper methods
     #--------------------------------------------------
 
-    def _processLine(self, line: str, localizationIdentifier: str):
+    def _processLine(self, line: str, localizationIdentifier: str, comment: str = ""):
         if not self._validLine(line):
             return None
 
@@ -80,10 +88,38 @@ class AndroidConverter(Base):
         (key, line) = self._extractKey(line, localizationIdentifier)
         (value, _) = self._extractValue(line)
         
-        return IntermediateEntry(key, value)
+        return IntermediateEntry(key, value, comment)
 
     def _validLine(self, line: str) -> bool:
         return self._nameTagOpenStart in line and self._nameTagClose in line
+
+    def _extractComment(self, line):
+        comment = line
+
+        # remove leading whitespaces before comment tag
+        while comment.startswith(" "):
+            comment = comment[1:]
+
+        # remove trailing whitespaces after comment tag
+        while comment.endswith(" "):
+            comment = comment[:len(comment) - 1]
+
+        # remove start of comment tag
+        if comment.startswith("<!--"):
+            comment = comment.replace("<!--", "")
+
+        # remove end of comment tag
+        if comment.endswith("-->"):
+            comment = comment.replace("-->", "")
+        
+        # remove leading whitespaces before comment
+        while comment.startswith(" "):
+            comment = comment[1:]
+        
+        # remove trailing whitespaces after comment
+        while comment.endswith(" "):
+            comment = comment[:len(comment) - 1]
+        return comment
 
     def _extractKey(self, line, localizationIdentifier):
         # Remove start of name tag.
@@ -135,7 +171,7 @@ class AndroidConverter(Base):
         warning = FileHelper.readFile("localizer/templates/template_common_generated_warning.txt")
         return "<!-- \n{} \n-->\n\n".format(warning)
 
-    def _makeAndroidEntry(self, key, value):
+    def _makeAndroidEntry(self, key, value, comment):
         value = value.replace("\"", "\\\"")
         value = value.replace("'", "\\'")
-        return "    <string name=\"{}\">{}</string>\n".format(key, value)
+        return "    <!-- {} -->\n    <string name=\"{}\">{}</string>\n".format(comment, key, value)
