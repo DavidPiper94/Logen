@@ -12,6 +12,7 @@
 
     <!-- FileName --> 
 
+    <!-- This is just a nonsence example. -->
     <string name="FileName.Key1">Value1</string>
 
 </resources>

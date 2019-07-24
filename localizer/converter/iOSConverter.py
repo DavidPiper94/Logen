@@ -27,11 +27,23 @@ class iOSConverter(Base):
 
         lines = FileHelper.readLines(filepath)
         intermediateEntries = []
+
+        # A line may or may not contain a comment. Start with an empty string as default.
+        comment = ""
+
         for line in lines:
+            if line.startswith("//") or (line.startswith("/*") and line.endswith("*/")):
+                # The next line may containe a entry with a comment.
+                comment = self._extractCommentFromLine(line)
+                continue
+
             if line.startswith("\""):
                 key = self._extractKeyFromLine(line)
                 value = self._extractValueFromLine(line)
-                intermediateEntries.append(IntermediateEntry(key, value))
+                intermediateEntries.append(IntermediateEntry(key, value, comment))
+
+                # Reset value of comment for next line.
+                comment = ""
 
         intermediateLanguage = IntermediateLanguage(languageIdentifier, intermediateEntries)
         return IntermediateLocalization(localizationIdentifier, [intermediateLanguage])
@@ -67,6 +79,12 @@ class iOSConverter(Base):
         foldername = os.path.dirname(filepath).split("/")[-1]
         return foldername.replace(".lproj", "")
 
+    def _extractCommentFromLine(self, line: str) -> str:
+        comment = self._correctEntry(line)
+        # TODO:
+        comment = "This is just a nonsence example."
+        return comment
+
     def _extractKeyFromLine(self, line):
         key = line.split("=")[0]    # Split line between key and value TODO: This will not work, if there is a "="" in the Key!
         key = self._correctEntry(key)
@@ -95,5 +113,10 @@ class iOSConverter(Base):
         return "/*\n{}\n */\n".format(warning)
 
     def _lineFromIntermediateEntry(self, entry: IntermediateEntry) -> str:
+        # add comment
+        line = ""
+        if entry.comment != "":
+            line += "/* {} */\n".format(entry.comment)
         value = entry.value.replace("\"", "\\\"").replace("'", "\\'")
-        return "\"{}\" = \"{}\";\n".format(entry.key, value)
+        line += "\"{}\" = \"{}\";\n".format(entry.key, value)
+        return line

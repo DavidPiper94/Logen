@@ -27,7 +27,6 @@ class TestAndroidConverter(unittest.TestCase):
         expectation = LocalizationFile(expectedFilepath, expectedContent)
         intermediate = self._createExampleIntermediateLanguage()
         result = self.sut.fromIntermediate(intermediate)[0]
-        
         self.assertEqual(expectation, result)
 
     #--------------------------------------------------
@@ -67,6 +66,12 @@ class TestAndroidConverter(unittest.TestCase):
         line = "<string name=\"FileName.Key\">Value"
         self.assertFalse(self.sut._validLine(line))
 
+    def test_extractComment(self):
+        line = "<!-- Comment -->"
+        result = self.sut._extractComment(line)
+        expectation = "Comment"
+        self.assertEqual(expectation, result)
+
     def test_extractKey(self):
         line = "<string name=\"FileName.Key\">Value</string>"
         localizationIdentifier = "FileName"
@@ -87,7 +92,7 @@ class TestAndroidConverter(unittest.TestCase):
     #--------------------------------------------------
 
     def _createExampleIntermediateLanguage(self):
-        entry = IntermediateEntry("Key1", "Value1")
+        entry = IntermediateEntry("Key1", "Value1", "This is just a nonsence example.")
         language = IntermediateLanguage("ExampleLanguage", [entry])
         return IntermediateLocalization("FileName", [language])
 

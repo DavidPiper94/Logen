@@ -67,7 +67,13 @@ class TestiOSConverter(unittest.TestCase):
         value = self.sut._extractValueFromLine(line)
         self.assertEqual("someValue", value)
 
-    def test__lineFromIntermediateEntry(self):
+    def test__lineFromIntermediateEntry_WithComment(self):
+        entry = IntermediateEntry("Key1", "Value1", "This is just a nonsence example.")
+        expectation = "/* This is just a nonsence example. */\n\"Key1\" = \"Value1\";\n"
+        result = self.sut._lineFromIntermediateEntry(entry)
+        self.assertEqual(expectation, result)
+
+    def test__lineFromIntermediateEntry_WithoutComment(self):
         entry = IntermediateEntry("Key1", "Value1")
         expectation = "\"Key1\" = \"Value1\";\n"
         result = self.sut._lineFromIntermediateEntry(entry)
@@ -78,7 +84,7 @@ class TestiOSConverter(unittest.TestCase):
     #--------------------------------------------------
 
     def _createExampleIntermediateLocalization(self):
-        entry = IntermediateEntry("Key1", "Value1")
+        entry = IntermediateEntry("Key1", "Value1", "This is just a nonsence example.")
         language = IntermediateLanguage("ExampleLanguage", [entry])
         return IntermediateLocalization("FileName", [language])
 
