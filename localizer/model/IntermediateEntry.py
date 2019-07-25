@@ -10,7 +10,10 @@ class IntermediateEntry:
         if not type(other) is IntermediateEntry:
             return False
 
-        return self.key == other.key and self.value == other.value
+        return self.key == other.key and self.value == other.value and self.comment == other.comment
+
+    def __hash__(self):
+        return (self.key + self.value).__hash__()
 
     def __str__(self):
         return "   IntermediateEntry: " + self.key + ": " + self.value
