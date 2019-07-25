@@ -7,6 +7,8 @@ from localizer.model.IntermediateLanguage import IntermediateLanguage
 from localizer.model.IntermediateLocalization import IntermediateLocalization
 from localizer.model.LocalizationFile import LocalizationFile
 
+from localizer.tests import TestHelper
+
 class TestAndroidConverter(unittest.TestCase):
 
     # common subject under test for all test cases
@@ -17,17 +19,17 @@ class TestAndroidConverter(unittest.TestCase):
     #--------------------------------------------------
 
     def test_toIntermediate(self):
-        expectation = self._createExampleIntermediateLanguage()
+        expectation = TestHelper.createExampleIntermediateLocalization(addComment = False)
         result = self.sut.toIntermediate("localizer/tests/testdata/values-ExampleLanguage/FileName.xml")
-        self.assertEqual(expectation, result)
+        self.assertEqual(expectation, result, msg = TestHelper.errorMessageForIntermediateLocalization(expectation, result))
 
     def test_fromIntermediate(self):
         expectedFilepath = "values-ExampleLanguage/FileName.xml"
         expectedContent = FileHelper.readFile("localizer/tests/testdata/values-ExampleLanguage/FileName.xml")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
-        intermediate = self._createExampleIntermediateLanguage()
+        intermediate = TestHelper.createExampleIntermediateLocalization(addComment = True)
         result = self.sut.fromIntermediate(intermediate)[0]
-        self.assertEqual(expectation, result)
+        self.assertEqual(expectation, result, msg = TestHelper.errorMessageForLocalizationFile(expectation, result))
 
     #--------------------------------------------------
     # Testcases for helper methods
@@ -86,15 +88,6 @@ class TestAndroidConverter(unittest.TestCase):
         (_, line) = self.sut._extractKey(line, localizationIdentifier)
         (value, _) = self.sut._extractValue(line)
         self.assertEqual("Value", value)
-
-    #--------------------------------------------------
-    # Private test helper
-    #--------------------------------------------------
-
-    def _createExampleIntermediateLanguage(self):
-        entry = IntermediateEntry("Key1", "Value1", "This is just a nonsence example.")
-        language = IntermediateLanguage("ExampleLanguage", [entry])
-        return IntermediateLocalization("FileName", [language])
 
 if __name__ == '__main__':
     unittest.main()
