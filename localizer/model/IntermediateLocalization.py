@@ -10,7 +10,10 @@ class IntermediateLocalization:
             return False
 
         sameIdentifier = self.localizationIdentifier == other.localizationIdentifier
-        sameLanguages = sorted(self.intermediateLanguages, key = lambda x: x.languageIdentifier) == sorted(other.intermediateLanguages, key = lambda x: x.languageIdentifier)
+        sortedOwnLanguages = sorted(self.intermediateLanguages, key = lambda x: x.languageIdentifier)
+        sortedOtherLanguages = sorted(other.intermediateLanguages, key = lambda x: x.languageIdentifier)
+        sameLanguages = sortedOwnLanguages == sortedOtherLanguages
+
         return sameIdentifier and sameLanguages
 
     def __str__(self):

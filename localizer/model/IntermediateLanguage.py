@@ -10,9 +10,13 @@ class IntermediateLanguage:
             return False
         
         sameIdentifier = self.languageIdentifier == other.languageIdentifier
-        sameEntries = sorted(self.intermediateEntries, key = lambda x: x.key) == sorted(other.intermediateEntries, key = lambda x: x.key)
-        return sameIdentifier and sameEntries
 
+        sortedOwnEntries = sorted(self.intermediateEntries, key = lambda x: x.key)
+        sortedOtherEntries = sorted(other.intermediateEntries, key = lambda x: x.key)
+        sameEntries = sortedOwnEntries == sortedOtherEntries
+
+        return sameIdentifier and sameEntries
+        
     def __str__(self):
         description = "IntermediateLanguage:\n   LanguageIdentifier: {}\n".format(self.languageIdentifier)
         for entry in self.intermediateEntries:
