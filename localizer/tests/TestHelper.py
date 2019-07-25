@@ -18,11 +18,11 @@ def errorMessageForLocalizationFile(
     if expectation.filepath != actual.filepath:
         errorMessage += "Different filepath\n"
         errorMessage += "\t- expectation: {}\n".format(expectation.filepath)
-        errorMessage += "\t- actual: {}\n".format(actual.filepath)
+        errorMessage += "\t- actual:      {}\n".format(actual.filepath)
     if expectation.filecontent != actual.filecontent:
         errorMessage += "Different filecontent\n"
         errorMessage += "\t- expectation: {}\n".format(expectation.filecontent)
-        errorMessage += "\t- actual: {}\n".format(actual.filecontent)
+        errorMessage += "\t- actual:      {}\n".format(actual.filecontent)
     return errorMessage
 
 def errorMessageForIntermediateLocalization( 
@@ -32,12 +32,12 @@ def errorMessageForIntermediateLocalization(
     if expectation.localizationIdentifier != actual.localizationIdentifier:
         errorMessage += "Different localizationIdentifier\n"
         errorMessage += "\t- expectation: {}\n".format(expectation.localizationIdentifier)
-        errorMessage += "\t- actual: {}\n".format(actual.localizationIdentifier)
+        errorMessage += "\t- actual:      {}\n".format(actual.localizationIdentifier)
     if expectation.intermediateLanguages != actual.intermediateLanguages:
         if len(expectation.intermediateLanguages) != len(actual.intermediateLanguages):
             errorMessage += "Different length of intermediate languages:\n"
             errorMessage += "\t- expectation: {}\n".format(len(expectation.intermediateLanguages))
-            errorMessage += "\t- actual: {}\n".format(len(actual.intermediateLanguages))
+            errorMessage += "\t- actual:      {}\n".format(len(actual.intermediateLanguages))
         for index in range(0, min(len(expectation.intermediateLanguages), len(actual.intermediateLanguages))):
             errorMessage += errorMessageForIntermediateLanguage(expectation.intermediateLanguages[index], actual.intermediateLanguages[index])
     return errorMessage
@@ -49,12 +49,12 @@ def errorMessageForIntermediateLanguage(
     if expectation.languageIdentifier != actual.languageIdentifier:
         errorMessage += "Different languageIdentifier\n"
         errorMessage += "\t- expectation: {}\n".format(expectation.languageIdentifier)
-        errorMessage += "\t- actual: {}\n".format(actual.languageIdentifier)
+        errorMessage += "\t- actual:      {}\n".format(actual.languageIdentifier)
     if expectation.intermediateEntries != actual.intermediateEntries:
         if len(expectation.intermediateEntries) != len(actual.intermediateEntries):
             errorMessage += "Different length of intermediateEntries:\n"
             errorMessage += "\t- expectation: {}\n".format(len(expectation.intermediateEntries))
-            errorMessage += "\t- actual: {}\n".format(len(actual.intermediateEntries))
+            errorMessage += "\t- actual:      {}\n".format(len(actual.intermediateEntries))
         for index in range(0, min(len(expectation.intermediateEntries), len(actual.intermediateEntries))):
             errorMessage += errorMessageForIntermediateEntry(expectation.intermediateEntries[index], actual.intermediateEntries[index])
     return errorMessage
@@ -66,9 +66,13 @@ def errorMessageForIntermediateEntry(
     if expectation.key != actual.key:
         errorMessage += "Different key\n"
         errorMessage += "\t- expectation: {}\n".format(expectation.key)
-        errorMessage += "\t- actual: {}\n".format(actual.key)
+        errorMessage += "\t- actual:      {}\n".format(actual.key)
     if expectation.value != actual.value:
         errorMessage += "Different value\n"
         errorMessage += "\t- expectation: {}\n".format(expectation.value)
-        errorMessage += "\t- actual: {}\n".format(actual.value)
+        errorMessage += "\t- actual:      {}\n".format(actual.value)
+    if expectation.comment != actual.comment:
+        errorMessage += "Different comment\n"
+        errorMessage += "\t- expectation: {}\n".format(expectation.comment)
+        errorMessage += "\t- actual:      {}\n".format(actual.comment)
     return errorMessage
