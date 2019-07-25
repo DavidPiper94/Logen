@@ -20,17 +20,25 @@ class TestiOSConverter(unittest.TestCase):
     #--------------------------------------------------
 
     def test_toIntermediate(self):
-        expectation = self._createExampleIntermediateLocalization()
+        expectation = self._createExampleIntermediateLocalization(addComment = False)
         result = self.sut.toIntermediate("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
-        self.assertEqual(expectation, result)
+        self.assertEqual(expectation, result, msg = self._errorMessageForIntermediateLocalization(expectation, result))
 
     def test_fromIntermediate(self):
         expectedFilepath = "ExampleLanguage.lproj/FileName.strings"
         expectedContent = FileHelper.readFile("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
-        intermediate = self._createExampleIntermediateLocalization()
+        intermediate = self._createExampleIntermediateLocalization(addComment = True)
         result = self.sut.fromIntermediate(intermediate)[0]
         self.assertEqual(expectation, result)
+
+    # def test_fromIntermediate_noComments(self):
+    #     expectedFilepath = "ExampleLanguage.lproj/FileName.strings"
+    #     expectedContent = FileHelper.readFile("localizer/tests/testdata/ExampleLanguage.lproj/FileName_noComments.strings")
+    #     expectation = LocalizationFile(expectedFilepath, expectedContent)
+    #     intermediate = self._createExampleIntermediateLocalization(addComment = False)
+    #     result = self.sut.fromIntermediate(intermediate)[0]
+    #     self.assertEqual(expectation, result, msg = self._errorMessageForLocalizationFile(expectation, result))
 
     #--------------------------------------------------
     # Testcases for helper methods
@@ -83,10 +91,75 @@ class TestiOSConverter(unittest.TestCase):
     # Private test helper
     #--------------------------------------------------
 
-    def _createExampleIntermediateLocalization(self):
-        entry = IntermediateEntry("Key1", "Value1", "This is just a nonsence example.")
+    def _createExampleIntermediateLocalization(self, addComment: bool):
+        if addComment:
+            entry = IntermediateEntry("Key1", "Value1", "This is just a nonsence example.")
+        else: 
+            entry = IntermediateEntry("Key1", "Value1")
         language = IntermediateLanguage("ExampleLanguage", [entry])
         return IntermediateLocalization("FileName", [language])
+
+    def _errorMessageForLocalizationFile(self, 
+            expectation: LocalizationFile,
+            actual: LocalizationFile) -> str:
+        errorMessage = ""
+        if expectation.filepath != actual.filepath:
+            errorMessage += "Different filepath\n"
+            errorMessage += "\t- expectation: {}\n".format(expectation.filepath)
+            errorMessage += "\t- actual: {}\n".format(actual.filepath)
+        if expectation.filecontent != actual.filecontent:
+            errorMessage += "Different filecontent\n"
+            errorMessage += "\t- expectation: {}\n".format(expectation.filecontent)
+            errorMessage += "\t- actual: {}\n".format(actual.filecontent)
+        return errorMessage
+
+    def _errorMessageForIntermediateLocalization(self, 
+            expectation: IntermediateLocalization, 
+            actual: IntermediateLocalization) -> str:
+        errorMessage = ""
+        if expectation.localizationIdentifier != actual.localizationIdentifier:
+            errorMessage += "Different localizationIdentifier\n"
+            errorMessage += "\t- expectation: {}\n".format(expectation.localizationIdentifier)
+            errorMessage += "\t- actual: {}\n".format(actual.localizationIdentifier)
+        if expectation.intermediateLanguages != actual.intermediateLanguages:
+            if len(expectation.intermediateLanguages) != len(actual.intermediateLanguages):
+                errorMessage += "Different length of intermediate languages:\n"
+                errorMessage += "\t- expectation: {}\n".format(len(expectation.intermediateLanguages))
+                errorMessage += "\t- actual: {}\n".format(len(actual.intermediateLanguages))
+            for index in range(0, min(len(expectation.intermediateLanguages), len(actual.intermediateLanguages))):
+                errorMessage += self._errorMessageForIntermediateLanguage(expectation.intermediateLanguages[index], actual.intermediateLanguages[index])
+        return errorMessage
+
+    def _errorMessageForIntermediateLanguage(self, 
+            expectation: IntermediateLanguage, 
+            actual: IntermediateLanguage) -> str:
+        errorMessage = ""
+        if expectation.languageIdentifier != actual.languageIdentifier:
+            errorMessage += "Different languageIdentifier\n"
+            errorMessage += "\t- expectation: {}\n".format(expectation.languageIdentifier)
+            errorMessage += "\t- actual: {}\n".format(actual.languageIdentifier)
+        if expectation.intermediateEntries != actual.intermediateEntries:
+            if len(expectation.intermediateEntries) != len(actual.intermediateEntries):
+                errorMessage += "Different length of intermediateEntries:\n"
+                errorMessage += "\t- expectation: {}\n".format(len(expectation.intermediateEntries))
+                errorMessage += "\t- actual: {}\n".format(len(actual.intermediateEntries))
+            for index in range(0, min(len(expectation.intermediateEntries), len(actual.intermediateEntries))):
+                errorMessage += self._errorMessageForIntermediateEntry(expectation.intermediateEntries[index], actual.intermediateEntries[index])
+        return errorMessage
+    
+    def _errorMessageForIntermediateEntry(self, 
+            expectation: IntermediateEntry, 
+            actual: IntermediateEntry) -> str:
+        errorMessage = ""
+        if expectation.key != actual.key:
+            errorMessage += "Different key\n"
+            errorMessage += "\t- expectation: {}\n".format(expectation.key)
+            errorMessage += "\t- actual: {}\n".format(actual.key)
+        if expectation.value != actual.value:
+            errorMessage += "Different value\n"
+            errorMessage += "\t- expectation: {}\n".format(expectation.value)
+            errorMessage += "\t- actual: {}\n".format(actual.value)
+        return errorMessage
 
 if __name__ == '__main__':
     unittest.main()
