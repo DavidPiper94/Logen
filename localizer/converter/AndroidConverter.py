@@ -1,4 +1,5 @@
 import os
+from typing import List, Optional
 
 from localizer.converter.ConverterInterface import ConverterInterface as Base
 from localizer.lib import FileHelper
@@ -22,15 +23,22 @@ class AndroidConverter(Base):
     # Base class conformance
     #--------------------------------------------------
 
-    def fileExtension(self): return ".xml"
+    def fileExtension(self) -> str:
+        return ".xml"
 
-    def identifier(self): return "android" 
+    def identifier(self) -> str: 
+        return "android" 
 
-    def importDescription(self): return "Parses the given '.xml' file and creates an intermediate localization. All lines which don't contain a localized string, are ignored."
+    def importDescription(self) -> str: 
+        return "Parses the given '.xml' file and creates an intermediate localization. All lines which don't contain a localized string, are ignored."
 
-    def exportDescription(self): return "Writes the content of an intermediate localization to a '.xml' file for an Android app. It prefixes all keys with the identifier of the file for easier autocompletion on Android side."
+    def exportDescription(self) -> str: 
+        return "Writes the content of an intermediate localization to a '.xml' file for an Android app. It prefixes all keys with the identifier of the file for easier autocompletion on Android side."
 
-    def toIntermediate(self, filepath):
+    def toIntermediate(
+        self,
+        filepath: str
+    ) -> IntermediateLocalization:
         filename = FileHelper.filename(filepath)
         localizationIdentifier = filename.replace(self.fileExtension(), "")
 
@@ -59,7 +67,10 @@ class AndroidConverter(Base):
         intermediateLanguage = IntermediateLanguage(languageIdentifier, intermediateEntries)
         return IntermediateLocalization(localizationIdentifier, [intermediateLanguage])
 
-    def fromIntermediate(self, intermediateLocalization):
+    def fromIntermediate(
+        self,
+        intermediateLocalization: IntermediateLocalization
+    ) -> List[LocalizationFile]:
         identifier = intermediateLocalization.localizationIdentifier
         languages = intermediateLocalization.intermediateLanguages
         listOfLocalizationFiles = []
@@ -80,7 +91,13 @@ class AndroidConverter(Base):
     # Helper methods
     #--------------------------------------------------
 
-    def _processLine(self, line: str, localizationIdentifier: str, comment: str = ""):
+    def _processLine(
+        self, 
+        line: str, 
+        localizationIdentifier: str, 
+        comment: str = ""
+    ) -> Optional[IntermediateEntry]:
+
         if not self._validLine(line):
             return None
 
@@ -93,10 +110,17 @@ class AndroidConverter(Base):
         
         return IntermediateEntry(key, value, comment)
 
-    def _validLine(self, line: str) -> bool:
+    def _validLine(
+        self, 
+        line: str
+    ) -> bool:
         return self._nameTagOpenStart in line and self._nameTagClose in line
 
-    def _extractComment(self, line):
+    def _extractComment(
+        self, 
+        line: str
+    ) -> str:
+
         comment = line
 
         # remove leading whitespaces before comment tag
@@ -174,7 +198,13 @@ class AndroidConverter(Base):
         warning = FileHelper.readFile("localizer/templates/template_common_generated_warning.txt")
         return "<!-- \n{} \n-->\n\n".format(warning)
 
-    def _makeAndroidEntry(self, key, value, comment):
+    def _makeAndroidEntry(
+        self, 
+        key: str, 
+        value: str, 
+        comment: str
+    ) -> str:
+    
         value = value.replace("\"", "\\\"")
         value = value.replace("'", "\\'")
         return "    <!-- {} -->\n    <string name=\"{}\">{}</string>\n".format(comment, key, value)
