@@ -10,6 +10,9 @@ from localizer.model.IntermediateLanguage import IntermediateLanguage
 from localizer.model.IntermediateLocalization import IntermediateLocalization
 from localizer.model.LocalizationFile import LocalizationFile
 
+from localizer.tests import TestHelper
+
+# TODO: Fix this test after correct compare.
 class Bigtests(unittest.TestCase):
 
     def test_vsCode(self):
@@ -38,8 +41,12 @@ class Bigtests(unittest.TestCase):
             androidBaseIntermediate = AndroidConverter().toIntermediate(androidBaseFilepath)
             androidIntermediate = AndroidConverter().merge(androidDeIntermediate, androidBaseIntermediate).result
 
-            self.assertEqual(jsonIntermediate, iosIntermediate)
-            self.assertEqual(jsonIntermediate, androidIntermediate)
+            self.assertEqual(jsonIntermediate, 
+                    iosIntermediate, 
+                    msg = TestHelper.errorMessageForIntermediateLocalization(jsonIntermediate, iosIntermediate) + "at file: {}".format(currentFile))
+            self.assertEqual(jsonIntermediate, 
+                    androidIntermediate, 
+                    msg = TestHelper.errorMessageForIntermediateLocalization(jsonIntermediate, androidIntermediate))
 
     def test_neu(self):
         # Define all registers and extract processable extensions.
@@ -49,7 +56,8 @@ class Bigtests(unittest.TestCase):
         # Find all files with an extension which can be processed by any converter.
         convertableFilepaths = []
         for extension in extensions:
-            for path in pathlib.Path(".").rglob("*{}".format(extension)):
+            bigtestPath = "./localizer/tests/bigtests"
+            for path in pathlib.Path(bigtestPath).rglob("*{}".format(extension)):
                 convertableFilepaths.append(str(path))
             
         # 1. alle mit gleicher extension finden
@@ -104,7 +112,11 @@ class Bigtests(unittest.TestCase):
         for filename, listOfLocalizations in intermediateLocalizations.items():
             for localization in listOfLocalizations:
                 # Assure all are the same by comparing all items to the first localization in the list.
-                self.assertEqual(localization, listOfLocalizations[0])
+                expectation = localization
+                actual = listOfLocalizations[0]
+                self.assertEqual(expectation, 
+                    actual, 
+                    msg = TestHelper.errorMessageForIntermediateLocalization(expectation, actual) + "at file: {}".format(filename))
                 
     def _filenameFor(self, path):
         ext = FileHelper.fileExtension(path)

@@ -32,7 +32,7 @@ class iOSConverter(Base):
         comment = ""
 
         for line in lines:
-            if line.startswith("//") or (line.startswith("/*") and line.endswith("*/")):
+            if ("//" in line) or ("/*" in line and "*/" in line):
                 # The next line may containe a entry with a comment.
                 comment = self._extractCommentFromLine(line)
                 continue
@@ -42,8 +42,8 @@ class iOSConverter(Base):
                 value = self._extractValueFromLine(line)
                 intermediateEntries.append(IntermediateEntry(key, value, comment))
 
-                # Reset value of comment for next line.
-                comment = ""
+            # Reset value of comment for next line.
+            comment = ""
 
         intermediateLanguage = IntermediateLanguage(languageIdentifier, intermediateEntries)
         return IntermediateLocalization(localizationIdentifier, [intermediateLanguage])
@@ -79,10 +79,17 @@ class iOSConverter(Base):
         foldername = os.path.dirname(filepath).split("/")[-1]
         return foldername.replace(".lproj", "")
 
+    # Currently just sopports one line commands.
     def _extractCommentFromLine(self, line: str) -> str:
         comment = self._correctEntry(line)
-        # TODO:
-        comment = "This is just a nonsence example."
+        if comment.startswith("//"):
+            comment = comment[2:]
+        if (comment.startswith("/*") and comment.endswith("*/")):
+            comment = comment[2:-2]
+        while comment.startswith(" "):
+            comment = comment[1:]
+        while comment.endswith(" "):
+            comment = comment[:-1]
         return comment
 
     def _extractKeyFromLine(self, line):

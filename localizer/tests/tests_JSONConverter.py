@@ -7,6 +7,8 @@ from localizer.model.IntermediateLanguage import IntermediateLanguage
 from localizer.model.IntermediateLocalization import IntermediateLocalization
 from localizer.model.LocalizationFile import LocalizationFile
 
+from localizer.tests import TestHelper
+
 class TestJSONConverter(unittest.TestCase):
 
     # common subject under test for all test cases
@@ -28,7 +30,7 @@ class TestJSONConverter(unittest.TestCase):
 
     def test_toIntermediate(self):
         """Assures equality between converted dict and expected intermediate representation"""
-        expectation = self._createExampleIntermediateLocalization()
+        expectation = TestHelper.createExampleIntermediateLocalization(addComment = False)
         result = self.sut.toIntermediate("localizer/tests/testdata/ExampleJSON_noComments.json")
         self.assertEqual(expectation, result)
 
@@ -37,7 +39,7 @@ class TestJSONConverter(unittest.TestCase):
         expectedFilepath = "FileName.json"
         expectedContent = JsonHelper.readJSON("localizer/tests/testdata/ExampleJSON_noComments.json")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
-        localization = self._createExampleIntermediateLocalization()
+        localization = TestHelper.createExampleIntermediateLocalization(addComment = False)
         result = self.sut.fromIntermediate(localization)[0]
         self.assertEqual(expectation, result)
 
@@ -55,11 +57,6 @@ class TestJSONConverter(unittest.TestCase):
         fileDict = {}
         fileDict["FileName"] = languageDict
         return fileDict
-
-    def _createExampleIntermediateLocalization(self):
-        entry = IntermediateEntry("Key1", "Value1")
-        language = IntermediateLanguage("ExampleLanguage", [entry])
-        return IntermediateLocalization("FileName", [language])
 
 if __name__ == '__main__':
     unittest.main()

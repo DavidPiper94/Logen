@@ -19,7 +19,7 @@ class TestAndroidConverter(unittest.TestCase):
     #--------------------------------------------------
 
     def test_toIntermediate(self):
-        expectation = TestHelper.createExampleIntermediateLocalization(addComment = False)
+        expectation = TestHelper.createExampleIntermediateLocalization(addComment = True)
         result = self.sut.toIntermediate("localizer/tests/testdata/values-ExampleLanguage/FileName.xml")
         self.assertEqual(expectation, result, msg = TestHelper.errorMessageForIntermediateLocalization(expectation, result))
 
