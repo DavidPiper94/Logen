@@ -1,4 +1,5 @@
 import difflib
+from typing import List
 
 from localizer.model.IntermediateEntry import IntermediateEntry
 from localizer.model.IntermediateLanguage import IntermediateLanguage
@@ -6,8 +7,9 @@ from localizer.model.IntermediateLocalization import IntermediateLocalization
 from localizer.model.LocalizationFile import LocalizationFile
 
 def createExampleIntermediateLocalization(
-        addComment: bool,
-        localizationId: str = "FileName") -> IntermediateLocalization:
+    addComment: bool,
+    localizationId: str = "FileName"
+) -> IntermediateLocalization:
 
     if addComment:
         entry = IntermediateEntry("Key1", "Value1", "This is just a nonsence example.")
@@ -17,8 +19,10 @@ def createExampleIntermediateLocalization(
     return IntermediateLocalization(localizationId, [language])
 
 def errorMessageForLocalizationFile( 
-        expectation: LocalizationFile,
-        actual: LocalizationFile) -> str:
+    expectation: LocalizationFile,
+    actual: LocalizationFile
+) -> str:
+
     errorMessage = ""
     if expectation.filepath != actual.filepath:
         errorMessage += "Different filepath\n"
@@ -31,8 +35,10 @@ def errorMessageForLocalizationFile(
     return errorMessage
 
 def errorMessageForIntermediateLocalization( 
-        expectation: IntermediateLocalization, 
-        actual: IntermediateLocalization) -> str:
+    expectation: IntermediateLocalization, 
+    actual: IntermediateLocalization
+) -> str:
+
     errorMessage = ""
     if expectation.localizationIdentifier != actual.localizationIdentifier:
         errorMessage += "Different localizationIdentifier\n"
@@ -48,8 +54,10 @@ def errorMessageForIntermediateLocalization(
     return errorMessage
 
 def errorMessageForIntermediateLanguage( 
-        expectation: IntermediateLanguage, 
-        actual: IntermediateLanguage) -> str:
+    expectation: IntermediateLanguage, 
+    actual: IntermediateLanguage
+) -> str:
+
     errorMessage = ""
     if expectation.languageIdentifier != actual.languageIdentifier:
         errorMessage += "Different languageIdentifier\n"
@@ -65,8 +73,9 @@ def errorMessageForIntermediateLanguage(
     return errorMessage
 
 def errorMessageForIntermediateEntry( 
-        expectation: IntermediateEntry, 
-        actual: IntermediateEntry) -> str:
+    expectation: IntermediateEntry, 
+    actual: IntermediateEntry
+) -> str:
     errorMessage = ""
     if expectation.key != actual.key:
         errorMessage += "Different key\n"
@@ -84,9 +93,9 @@ def errorMessageForIntermediateEntry(
         errorMessage += "Diff: {} at {}\n".format(diff_content(expectation.comment, actual.comment), diff_positions(expectation.comment, actual.comment))
     return errorMessage
 
-def diff_content(a, b):
+def diff_content(a: str, b: str) -> List[str]:
     return [li for li in difflib.ndiff(a, b) if li[0] != ' ']
 
-def diff_positions(a, b):
+def diff_positions(a: str, b: str) -> List[int]:
     minimumLength = min(len(a), len(b))
     [i for i in range(0, minimumLength) if a[i] != b[i]]

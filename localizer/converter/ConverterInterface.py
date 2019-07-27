@@ -1,4 +1,5 @@
 import abc
+from typing import List, Optional
 
 from localizer.model.IntermediateEntry import IntermediateEntry
 from localizer.model.IntermediateLanguage import IntermediateLanguage
@@ -15,7 +16,7 @@ class ConverterInterface:
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractproperty
-    def fileExtension(self): 
+    def fileExtension(self) -> str: 
         """A string which defines the extensions of files that can be processed by the specific subclass of converter.
 
         Returns
@@ -30,7 +31,7 @@ class ConverterInterface:
         raise NotImplementedError
 
     @abc.abstractproperty
-    def identifier(self): 
+    def identifier(self) -> str: 
         """A string which identifies a specific subclass of converter to select it in the subcommand 'convert'.
 
         Returns
@@ -45,7 +46,7 @@ class ConverterInterface:
         raise NotImplementedError
 
     @abc.abstractproperty
-    def importDescription(self): 
+    def importDescription(self) -> str: 
         """Contains a description of the import function of a specific converter which will be shown by the 'list' subcommand.
 
         Returns
@@ -60,7 +61,7 @@ class ConverterInterface:
         raise NotImplementedError
 
     @abc.abstractproperty
-    def exportDescription(self): 
+    def exportDescription(self) -> str: 
         """Contains a description of the export function of a specific converter which will be shown by the 'list' subcommand.
 
         Returns
@@ -75,7 +76,10 @@ class ConverterInterface:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def toIntermediate(self, filepath: str) -> IntermediateLocalization:
+    def toIntermediate(
+        self,
+        filepath: str
+    ) -> Optional[IntermediateLocalization]:
         """Reads content of file at given filepath and converts it to an IntermediateLocalization.
         
         Parameters
@@ -96,7 +100,10 @@ class ConverterInterface:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def fromIntermediate(self, intermediateLocalization: IntermediateLocalization) -> [LocalizationFile]: 
+    def fromIntermediate(
+        self, 
+        intermediateLocalization: IntermediateLocalization
+    ) -> List[LocalizationFile]: 
         """Converts intermediate localization to specific format.
         
         Parameters
@@ -116,8 +123,12 @@ class ConverterInterface:
         """
         raise NotImplementedError
 
-   
-    def merge(self, first: IntermediateLocalization, second: IntermediateLocalization) -> MergeResult:
+
+    def merge(
+        self, 
+        first: IntermediateLocalization, 
+        second: IntermediateLocalization
+    ) -> Optional[MergeResult]:
         """Merges the two given intermediate localizations together into one.
 
         There may be cases, where it is useful to merge two intermediate localizations together.
@@ -152,14 +163,18 @@ class ConverterInterface:
 
         languages = first.intermediateLanguages + second.intermediateLanguages
 
-        listOfMissingEntries = []
+        listOfMissingEntries: List[IntermediateEntry] = []
         for firstLanguage in first.intermediateLanguages:
             for secondLanguage in second.intermediateLanguages:
                 listOfMissingEntries += self._findUniqueEntries(firstLanguage.intermediateEntries, secondLanguage.intermediateEntries)
 
         return MergeResult(IntermediateLocalization(first.localizationIdentifier, languages), listOfMissingEntries)
 
-    def _findUniqueEntries(self, firstList: list, secondList: list) -> list:
+    def _findUniqueEntries(
+        self, 
+        firstList: list,
+        secondList: list
+    ) -> list:
         for item in firstList[:]:
             if item in secondList:
                 # Remove items, that are in both lists.

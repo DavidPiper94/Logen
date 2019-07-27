@@ -1,3 +1,5 @@
+from typing import List, Optional
+
 from localizer.converter.ConverterInterface import ConverterInterface as Base
 from localizer.model.IntermediateEntry import IntermediateEntry
 from localizer.model.IntermediateLanguage import IntermediateLanguage
@@ -20,10 +22,10 @@ class ConverterSpy(Base):
     # Methods to change functionality
     #--------------------------------------------------
 
-    def changeFileExtensionTo(self, newFileExtension):
+    def changeFileExtensionTo(self, newFileExtension: str):
         self._fileExtension = newFileExtension
 
-    def changeIdentifierTo(self, newIdentifier):
+    def changeIdentifierTo(self, newIdentifier: str):
         self._identifier = newIdentifier
 
     #--------------------------------------------------
@@ -48,10 +50,18 @@ class ConverterSpy(Base):
 
     def exportDescription(self): raise NotImplementedError
 
-    def toIntermediate(self, filepath: str) -> IntermediateLocalization: 
+    def toIntermediate(
+        self, 
+        filepath: str
+    ) -> Optional[IntermediateLocalization]: 
+
         self._didImport = True
         return None
         
-    def fromIntermediate(self, intermediateLocalization: IntermediateLocalization) -> [LocalizationFile]: 
+    def fromIntermediate(
+        self, 
+        intermediateLocalization: IntermediateLocalization
+    ) -> List[LocalizationFile]: 
+
         self._didExport = True
         return []
