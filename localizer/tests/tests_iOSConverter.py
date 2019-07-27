@@ -26,6 +26,18 @@ class TestiOSConverter(unittest.TestCase):
         result = self.sut.toIntermediate("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
         self.assertEqual(expectation, result, msg = TestHelper.errorMessageForIntermediateLocalization(expectation, result))
 
+    def test_toIntermediate_noComments(self):
+        # Create an expectation without comments.
+        # The default localizationIdentifier needs to be changed, because it is constructed from the input filepath. 
+        # Thus it will be "FileName_noComments" and not "FileName".
+        expectation = TestHelper.createExampleIntermediateLocalization(
+            addComment = False,
+            localizationId = "FileName_noComments"
+        )
+        
+        result = self.sut.toIntermediate("localizer/tests/testdata/ExampleLanguage.lproj/FileName_noComments.strings")
+        self.assertEqual(expectation, result, msg = TestHelper.errorMessageForIntermediateLocalization(expectation, result))
+
     def test_fromIntermediate(self):
         expectedFilepath = "ExampleLanguage.lproj/FileName.strings"
         expectedContent = FileHelper.readFile("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
