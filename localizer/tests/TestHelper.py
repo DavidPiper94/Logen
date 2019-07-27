@@ -5,13 +5,16 @@ from localizer.model.IntermediateLanguage import IntermediateLanguage
 from localizer.model.IntermediateLocalization import IntermediateLocalization
 from localizer.model.LocalizationFile import LocalizationFile
 
-def createExampleIntermediateLocalization(addComment: bool):
+def createExampleIntermediateLocalization(
+        addComment: bool,
+        localizationId: str = "FileName") -> IntermediateLocalization:
+
     if addComment:
         entry = IntermediateEntry("Key1", "Value1", "This is just a nonsence example.")
     else: 
         entry = IntermediateEntry("Key1", "Value1")
     language = IntermediateLanguage("ExampleLanguage", [entry])
-    return IntermediateLocalization("FileName", [language])
+    return IntermediateLocalization(localizationId, [language])
 
 def errorMessageForLocalizationFile( 
         expectation: LocalizationFile,
@@ -86,4 +89,4 @@ def diff_content(a, b):
 
 def diff_positions(a, b):
     minimumLength = min(len(a), len(b))
-    [i for i in range(minimumLength) if a[i] != b[i]]
+    [i for i in range(0, minimumLength) if a[i] != b[i]]
