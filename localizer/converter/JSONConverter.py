@@ -37,7 +37,10 @@ class JSONConverter(Base):
             for languageKey, localization in sectionValue.items():
                 listOfEntries = []
                 for key, value in localization.items():
-                    entry = IntermediateEntry(key, value)
+                    # Even when "-signs are escaped in json, they are no longer escaped when converted to a dict.
+                    # Thus escape them here again.
+                    correctedValue = value.replace("\"", "\\\"")
+                    entry = IntermediateEntry(key, correctedValue)
                     listOfEntries.append(entry)
                 language = IntermediateLanguage(languageKey, listOfEntries)
                 listOfLanguages.append(language)

@@ -52,6 +52,9 @@ class AndroidConverter(Base):
             entry = self._processLine(line, localizationIdentifier, comment)
             if entry is not None:
                 intermediateEntries.append(entry)
+
+            # Reset value of comment for next line.
+            comment = ""
         
         intermediateLanguage = IntermediateLanguage(languageIdentifier, intermediateEntries)
         return IntermediateLocalization(localizationIdentifier, [intermediateLanguage])

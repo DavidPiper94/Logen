@@ -22,7 +22,7 @@ class TestiOSConverter(unittest.TestCase):
     #--------------------------------------------------
 
     def test_toIntermediate(self):
-        expectation = TestHelper.createExampleIntermediateLocalization(addComment = False)
+        expectation = TestHelper.createExampleIntermediateLocalization(addComment = True)
         result = self.sut.toIntermediate("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
         self.assertEqual(expectation, result, msg = TestHelper.errorMessageForIntermediateLocalization(expectation, result))
 
@@ -34,13 +34,13 @@ class TestiOSConverter(unittest.TestCase):
         result = self.sut.fromIntermediate(intermediate)[0]
         self.assertEqual(expectation, result)
 
-    # def test_fromIntermediate_noComments(self):
-    #     expectedFilepath = "ExampleLanguage.lproj/FileName.strings"
-    #     expectedContent = FileHelper.readFile("localizer/tests/testdata/ExampleLanguage.lproj/FileName_noComments.strings")
-    #     expectation = LocalizationFile(expectedFilepath, expectedContent)
-    #     intermediate = self._createExampleIntermediateLocalization(addComment = False)
-    #     result = self.sut.fromIntermediate(intermediate)[0]
-    #     self.assertEqual(expectation, result, msg = self._errorMessageForLocalizationFile(expectation, result))
+    def test_fromIntermediate_noComments(self):
+        expectedFilepath = "ExampleLanguage.lproj/FileName.strings"
+        expectedContent = FileHelper.readFile("localizer/tests/testdata/ExampleLanguage.lproj/FileName_noComments.strings")
+        expectation = LocalizationFile(expectedFilepath, expectedContent)
+        intermediate = TestHelper.createExampleIntermediateLocalization(addComment = False)
+        result = self.sut.fromIntermediate(intermediate)[0]
+        self.assertEqual(expectation, result, msg = TestHelper.errorMessageForLocalizationFile(expectation, result))
 
     #--------------------------------------------------
     # Testcases for helper methods

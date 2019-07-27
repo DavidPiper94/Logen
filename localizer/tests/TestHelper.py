@@ -1,3 +1,5 @@
+import difflib
+
 from localizer.model.IntermediateEntry import IntermediateEntry
 from localizer.model.IntermediateLanguage import IntermediateLanguage
 from localizer.model.IntermediateLocalization import IntermediateLocalization
@@ -68,11 +70,20 @@ def errorMessageForIntermediateEntry(
         errorMessage += "\t- expectation: {}\n".format(expectation.key)
         errorMessage += "\t- actual:      {}\n".format(actual.key)
     if expectation.value != actual.value:
-        errorMessage += "Different value\n"
+        errorMessage += "Different value for entry with key: {}\n".format(expectation.key)
         errorMessage += "\t- expectation: {}\n".format(expectation.value)
         errorMessage += "\t- actual:      {}\n".format(actual.value)
+        errorMessage += "Diff: {} at {}\n".format(diff_content(expectation.value, actual.value), diff_positions(expectation.value, actual.value))
     if expectation.comment != actual.comment:
-        errorMessage += "Different comment\n"
+        errorMessage += "Different comment for entry with key: {}\n".format(expectation.key)
         errorMessage += "\t- expectation: {}\n".format(expectation.comment)
         errorMessage += "\t- actual:      {}\n".format(actual.comment)
+        errorMessage += "Diff: {} at {}\n".format(diff_content(expectation.comment, actual.comment), diff_positions(expectation.comment, actual.comment))
     return errorMessage
+
+def diff_content(a, b):
+    return [li for li in difflib.ndiff(a, b) if li[0] != ' ']
+
+def diff_positions(a, b):
+    minimumLength = min(len(a), len(b))
+    [i for i in range(minimumLength) if a[i] != b[i]]
