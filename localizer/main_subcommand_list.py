@@ -1,8 +1,12 @@
+from typing import List
+
+from localizer.converter.ConverterInterface import ConverterInterface
+
 #--------------------
 # Starting point
 #--------------------
 
-def start(args, converter):
+def start(args, converter: List[ConverterInterface]):
     print("Available converter:\n")
     descriptions = list(map(lambda x: _describe(x), converter))
     for description in descriptions:
@@ -12,9 +16,9 @@ def start(args, converter):
 # private helper
 #--------------------
 
-def _describe(converter):
-    content = "Identifier: {}\n".format(converter.identifier()) 
-    content += "file extension: {}\n".format(converter.fileExtension())
-    content += "import description: {}\n".format(converter.importDescription())
-    content += "export description: {}\n".format(converter.exportDescription())
+def _describe(converter: ConverterInterface) -> str:
+    content = "Identifier: {}\n".format(converter.identifier) 
+    content += "file extension: {}\n".format(converter.fileExtension)
+    content += "import description: {}\n".format(converter.importDescription)
+    content += "export description: {}\n".format(converter.exportDescription)
     return content
