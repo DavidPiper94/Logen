@@ -1,3 +1,5 @@
+from typing import List, Optional
+
 from localizer.converter.ConverterInterface import ConverterInterface as Base
 from localizer.model.IntermediateEntry import IntermediateEntry
 from localizer.model.IntermediateLanguage import IntermediateLanguage
@@ -11,15 +13,15 @@ class JSONConverter(Base):
     # Base class conformance
     #--------------------------------------------------
 
-    def fileExtension(self): return ".json"
+    def fileExtension(self) -> str: return ".json"
 
-    def identifier(self): return "json"
+    def identifier(self) -> str: return "json"
 
-    def importDescription(self): return "Takes a json file with the format '{}' and converts it into an intermediate localization.".format(self._commonFormatDescription())
+    def importDescription(self) -> str: return "Takes a json file with the format '{}' and converts it into an intermediate localization.".format(self._commonFormatDescription())
 
-    def exportDescription(self): return "Converts an intermediate localization into the format '{}' and exports it as a json file.".format(self._commonFormatDescription())
+    def exportDescription(self) -> str: return "Converts an intermediate localization into the format '{}' and exports it as a json file.".format(self._commonFormatDescription())
 
-    def toIntermediate(self, filepath):
+    def toIntermediate(self, filepath: str) -> Optional[IntermediateLocalization]:
         dict = JsonHelper.readJSON(filepath)
 
         # JsonHelper could not read json file at given path.
@@ -46,7 +48,7 @@ class JSONConverter(Base):
                 listOfLanguages.append(language)
             return IntermediateLocalization(sectionKey, listOfLanguages)
 
-    def fromIntermediate(self, intermediateLocalization):
+    def fromIntermediate(self, intermediateLocalization: IntermediateLocalization) -> List[LocalizationFile]:
         localizationFiles = []
 
         localizationDict = {}
@@ -70,4 +72,4 @@ class JSONConverter(Base):
     # Helper methods
     #--------------------------------------------------
 
-    def _commonFormatDescription(self): return "{ filename: { language: { key: value } } }"
+    def _commonFormatDescription(self) -> str: return "{ filename: { language: { key: value } } }"

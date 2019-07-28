@@ -1,4 +1,5 @@
 import os
+from typing import List, Optional
 
 from localizer.converter.ConverterInterface import ConverterInterface as Base
 from localizer.lib import FileHelper
@@ -13,17 +14,17 @@ class iOSEnumConverter(Base):
     # Base class conformance
     #--------------------------------------------------
 
-    def fileExtension(self): return ".swift"
+    def fileExtension(self) -> str: return ".swift"
 
-    def identifier(self): return "ios_enum"
+    def identifier(self) -> str: return "ios_enum"
 
-    def importDescription(self): return "No import possible."
+    def importDescription(self) -> str: return "No import possible."
 
-    def exportDescription(self): return "Exports the content of an intermediate localization to a swift enum providing easy and convenience access to the keys."
+    def exportDescription(self) -> str: return "Exports the content of an intermediate localization to a swift enum providing easy and convenience access to the keys."
 
-    def toIntermediate(self, filepath): raise NotImplementedError
+    def toIntermediate(self, filepath: str) -> Optional[IntermediateLocalization]: raise NotImplementedError
         
-    def fromIntermediate(self, intermediateLocalization):
+    def fromIntermediate(self, intermediateLocalization: IntermediateLocalization) -> List[LocalizationFile]:
         listOfLocalizationFiles = []
 
         content = self._makeiOSGeneratedWarning()
@@ -50,7 +51,7 @@ class iOSEnumConverter(Base):
     # Helper methods
     #--------------------------------------------------
 
-    def _makeiOSGeneratedWarning(self):
+    def _makeiOSGeneratedWarning(self) -> str:
         warning = FileHelper.readFile("localizer/templates/template_common_generated_warning.txt")
         return "/*\n{}\n */\n".format(warning)
 
@@ -61,6 +62,6 @@ class iOSEnumConverter(Base):
         sectionName = ' '.join(word[0].upper() + word[1:] for word in sectionKey.split())
         return "{}LocalizableKeys.swift".format(sectionName)
 
-    def _makeIOSEnumEntry(self, key):
+    def _makeIOSEnumEntry(self, key: str) -> str:
         newKey = key.replace(".", "_")
         return "        case {} = \"{}\"\n".format(newKey, key)

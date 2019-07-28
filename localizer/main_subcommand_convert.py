@@ -1,7 +1,13 @@
 import sys
+from typing import List, Optional
 
 from localizer.lib import FileHelper
 from localizer.lib import TerminalStyle
+
+from localizer.converter.ConverterInterface import ConverterInterface
+
+from localizer.model.IntermediateLocalization import IntermediateLocalization
+from localizer.model.LocalizationFile import LocalizationFile
 
 #--------------------
 # properties
@@ -17,7 +23,7 @@ dryRun = False
 # Starting point
 #--------------------
 
-def start(args, converter):
+def start(args, converter: List[ConverterInterface]):
     _parseArgsForConverting(args, converter)
     intermediate = _importToIntermediateLocalization(sourceFilepath, converter)
     _exportToLocalizationFile(intermediate, converter)
@@ -26,7 +32,7 @@ def start(args, converter):
 # private helper
 #--------------------
 
-def _parseArgsForConverting(args, converter):
+def _parseArgsForConverting(args, converter: List[ConverterInterface]):
 
     # select and validate converter for export
     global exportConverterIdentifier
@@ -76,17 +82,23 @@ def _parseArgsForConverting(args, converter):
     if args.verbose:
         _printSummary(sourceFilepath, destinationDirectory, importConverterIdentifier, exportConverterIdentifier)
 
-def _importToIntermediateLocalization(sourceFilepath, converter):
+def _importToIntermediateLocalization(
+    sourceFilepath: str, 
+    converter: List[ConverterInterface]
+) -> Optional[IntermediateLocalization]:
     importer = list(filter(lambda x: x.identifier() == importConverterIdentifier, converter))
     return importer[0].toIntermediate(sourceFilepath)
 
-def _exportToLocalizationFile(intermediateLocalization, converter):
+def _exportToLocalizationFile(
+    intermediateLocalization: IntermediateLocalization, 
+    converter: List[ConverterInterface]
+):
     exportConverter = list(filter(lambda x: x.identifier() == exportConverterIdentifier, converter))
     for exporter in exportConverter:
         for file in exporter.fromIntermediate(intermediateLocalization):
             _handleLocalizationFile(file)
 
-def _handleLocalizationFile(localizationFile):
+def _handleLocalizationFile(localizationFile: LocalizationFile):
     global dryRun
     if dryRun:
         print(localizationFile.filecontent)
@@ -94,7 +106,7 @@ def _handleLocalizationFile(localizationFile):
         destination = destinationDirectory + "/" + localizationFile.filepath
         _writeFile(destination, localizationFile.filecontent)
 
-def _writeFile(path, content):
+def _writeFile(path: str, content: str):
     directoryPath = FileHelper.directoryPath(path)
 
     if FileHelper.exists(path):
@@ -108,7 +120,12 @@ def _writeFile(path, content):
 # cli output
 #--------------------
 
-def _printSummary(sourceFilepath, destinationFilepath, importConverterIdentifier, exportConverterIdentifier):
+def _printSummary(
+    sourceFilepath: str, 
+    destinationFilepath: str, 
+    importConverterIdentifier: str, 
+    exportConverterIdentifier: str
+):
     _handleInfo(
         "Summary:\n"
         + "input: {}\n".format(sourceFilepath)
@@ -117,12 +134,12 @@ def _printSummary(sourceFilepath, destinationFilepath, importConverterIdentifier
         + "converter for export: {}".format(exportConverterIdentifier)
     )
 
-def _handleError(errorText):
+def _handleError(errorText: str):
     print(TerminalStyle.FAIL + errorText + TerminalStyle.ENDC)
     sys.exit()
 
-def _handleWarning(warningText):
+def _handleWarning(warningText: str):
     print(TerminalStyle.WARNING + warningText + TerminalStyle.ENDC)
 
-def _handleInfo(infoText):
+def _handleInfo(infoText: str):
     print(TerminalStyle.GREEN + infoText + TerminalStyle.ENDC)

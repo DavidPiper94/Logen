@@ -1,13 +1,16 @@
+from typing import List
+
+from localizer.model.IntermediateEntry import IntermediateEntry
+
 class IntermediateLanguage: 
 
-    def __init__(self, languageIdentifier, intermediateEntries):
+    def __init__(self, languageIdentifier: str, intermediateEntries: List[IntermediateEntry]):
         self.languageIdentifier = languageIdentifier
         self.intermediateEntries = intermediateEntries
         
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         """Override the default Equals behavior"""
-        if not type(other) is IntermediateLanguage:
-            return False
+        if not isinstance(other, IntermediateLanguage): return NotImplemented
         
         sameIdentifier = self.languageIdentifier == other.languageIdentifier
 
@@ -17,7 +20,7 @@ class IntermediateLanguage:
 
         return sameIdentifier and sameEntries
         
-    def __str__(self):
+    def __str__(self) -> str:
         description = "IntermediateLanguage:\n   LanguageIdentifier: {}\n".format(self.languageIdentifier)
         for entry in self.intermediateEntries:
             description += str(entry) + "\n"

@@ -1,5 +1,5 @@
 import os
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from localizer.converter.ConverterInterface import ConverterInterface as Base
 from localizer.lib import FileHelper
@@ -110,17 +110,10 @@ class AndroidConverter(Base):
         
         return IntermediateEntry(key, value, comment)
 
-    def _validLine(
-        self, 
-        line: str
-    ) -> bool:
+    def _validLine(self, line: str) -> bool:
         return self._nameTagOpenStart in line and self._nameTagClose in line
 
-    def _extractComment(
-        self, 
-        line: str
-    ) -> str:
-
+    def _extractComment(self, line: str) -> str:
         comment = line
 
         # remove leading whitespaces before comment tag
@@ -148,7 +141,7 @@ class AndroidConverter(Base):
             comment = comment[:len(comment) - 1]
         return comment
 
-    def _extractKey(self, line, localizationIdentifier):
+    def _extractKey(self, line: str, localizationIdentifier: str) -> Tuple[str, str]:
         # Remove start of name tag.
         if line.startswith(self._nameTagOpenStart):
             prefixLength = len(self._nameTagOpenStart)
@@ -172,7 +165,7 @@ class AndroidConverter(Base):
 
         return (key, line)
 
-    def _extractValue(self, line):
+    def _extractValue(self, line: str) -> Tuple[str, str]:
         # Remove and save value until end of line.
         value = ""
         while not line.startswith(self._nameTagClose):
@@ -182,7 +175,7 @@ class AndroidConverter(Base):
         value.replace("\"", "\\\"")
         return (value, line)
 
-    def _correctEntry(self, input):
+    def _correctEntry(self, input: str) -> str:
         entry = input
         while entry.startswith(" "):  # Remove leading whitespaces from key
             entry = entry[1:]
@@ -194,7 +187,7 @@ class AndroidConverter(Base):
             entry = entry[:-1]
         return entry
 
-    def _makeAndroidGeneratedWarning(self):
+    def _makeAndroidGeneratedWarning(self) -> str:
         warning = FileHelper.readFile("localizer/templates/template_common_generated_warning.txt")
         return "<!-- \n{} \n-->\n\n".format(warning)
 
@@ -204,7 +197,6 @@ class AndroidConverter(Base):
         value: str, 
         comment: str
     ) -> str:
-    
         value = value.replace("\"", "\\\"")
         value = value.replace("'", "\\'")
         return "    <!-- {} -->\n    <string name=\"{}\">{}</string>\n".format(comment, key, value)

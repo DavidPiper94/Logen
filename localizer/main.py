@@ -1,6 +1,8 @@
 import argparse
 import sys
 
+from typing import List
+
 from localizer.converter.AndroidConverter import AndroidConverter
 from localizer.converter.JSONConverter import JSONConverter
 from localizer.converter.iOSConverter import iOSConverter
@@ -24,7 +26,7 @@ registeredConverter = [
 # Setup CLI
 #--------------------
 
-def createParser():
+def createParser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description = "Description")
     subparsers = parser.add_subparsers(help = "Subparser")
 
@@ -41,15 +43,15 @@ def createParser():
     parser_list.set_defaults(func = subcommandList)
     return parser
 
-def parse(args):
+def parse(args: List[str]) -> argparse.Namespace:
     parser = createParser()
     parsedArgs = parser.parse_args(args)
     return parsedArgs
 
-def subcommandList(args):
+def subcommandList(args: argparse.Namespace):
     main_subcommand_list.start(args, registeredConverter)
 
-def subcommandConvert(args):
+def subcommandConvert(args: argparse.Namespace):
     main_subcommand_convert.start(args, registeredConverter)
 
 #--------------------
@@ -59,4 +61,3 @@ def subcommandConvert(args):
 if __name__ == "__main__":
     parsedArgs = parse(sys.argv[1:])
     parsedArgs.func(parsedArgs)
-    
