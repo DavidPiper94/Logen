@@ -1,11 +1,11 @@
 import abc
 from typing import List, Optional
 
-from Logen.model.IntermediateEntry import IntermediateEntry
-from Logen.model.IntermediateLanguage import IntermediateLanguage
-from Logen.model.IntermediateLocalization import IntermediateLocalization
-from Logen.model.LocalizationFile import LocalizationFile
-from Logen.model.MergeResult import MergeResult
+from ..model.IntermediateEntry import IntermediateEntry
+from ..model.IntermediateLanguage import IntermediateLanguage
+from ..model.IntermediateLocalization import IntermediateLocalization
+from ..model.LocalizationFile import LocalizationFile
+from ..model.MergeResult import MergeResult
 
 class ConverterInterface:
     """

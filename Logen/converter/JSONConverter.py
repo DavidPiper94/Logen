@@ -1,11 +1,11 @@
 from typing import List, Optional
 
-from Logen.converter.ConverterInterface import ConverterInterface as Base
-from Logen.model.IntermediateEntry import IntermediateEntry
-from Logen.model.IntermediateLanguage import IntermediateLanguage
-from Logen.model.IntermediateLocalization import IntermediateLocalization
-from Logen.model.LocalizationFile import LocalizationFile
-from Logen.lib import JsonHelper
+from ..converter.ConverterInterface import ConverterInterface as Base
+from ..model.IntermediateEntry import IntermediateEntry
+from ..model.IntermediateLanguage import IntermediateLanguage
+from ..model.IntermediateLocalization import IntermediateLocalization
+from ..model.LocalizationFile import LocalizationFile
+from ..lib import JsonHelper
 
 class JSONConverter(Base):
 

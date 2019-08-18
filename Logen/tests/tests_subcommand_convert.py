@@ -1,8 +1,8 @@
 import unittest
 
-from Logen.tests.ConverterSpy import ConverterSpy
-from Logen import main_subcommand_convert
-from Logen import main
+from .ConverterSpy import ConverterSpy
+from .. import main_subcommand_convert
+from .. import main
 
 class SubcommandConvertTests(unittest.TestCase):
 

@@ -1,16 +1,16 @@
 import unittest
 import pathlib
 
-from Logen.converter.AndroidConverter import AndroidConverter
-from Logen.converter.JSONConverter import JSONConverter
-from Logen.converter.iOSConverter import iOSConverter
-from Logen.lib import FileHelper
-from Logen.model.IntermediateEntry import IntermediateEntry
-from Logen.model.IntermediateLanguage import IntermediateLanguage
-from Logen.model.IntermediateLocalization import IntermediateLocalization
-from Logen.model.LocalizationFile import LocalizationFile
+from ..converter.AndroidConverter import AndroidConverter
+from ..converter.JSONConverter import JSONConverter
+from ..converter.iOSConverter import iOSConverter
+from ..lib import FileHelper
+from ..model.IntermediateEntry import IntermediateEntry
+from ..model.IntermediateLanguage import IntermediateLanguage
+from ..model.IntermediateLocalization import IntermediateLocalization
+from ..model.LocalizationFile import LocalizationFile
 
-from Logen.tests import TestHelper
+from ..tests import TestHelper
 
 class Bigtests(unittest.TestCase):
 

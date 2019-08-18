@@ -1,6 +1,6 @@
 from typing import List
 
-from Logen.model.IntermediateLanguage import IntermediateLanguage
+from ..model.IntermediateLanguage import IntermediateLanguage
 
 class IntermediateLocalization:
 
