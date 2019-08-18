@@ -94,7 +94,9 @@ class iOSConverter(Base):
         return comment
 
     def _extractKeyFromLine(self, line: str) -> str:
-        key = line.split("=")[0]    # Split line between key and value TODO: This will not work, if there is a "="" in the Key!
+        # Split line between key and value.
+        # This will not work, if there is a "=" in the key!
+        key = line.split("=")[0]
         key = self._correctEntry(key)
         return key
 
