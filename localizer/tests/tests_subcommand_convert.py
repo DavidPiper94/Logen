@@ -20,7 +20,7 @@ class SubcommandConvertTests(unittest.TestCase):
         # setup arguments
         testArgs = [
             "convert", 
-            "localizer/tests/bigtests/localization_Src/information.json",
+            "localizer/tests/testdata/ExampleJSON_comments.json",
             "just/some/path",
             "import",
             "export",
