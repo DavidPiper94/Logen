@@ -1,4 +1,5 @@
 import os
+from typing import List, Optional
 
 from localizer.converter.ConverterInterface import ConverterInterface as Base
 from localizer.lib import FileHelper
@@ -13,15 +14,15 @@ class iOSConverter(Base):
     # Base class conformance
     #--------------------------------------------------
 
-    def fileExtension(self): return ".strings"
+    def fileExtension(self) -> str: return ".strings"
 
-    def identifier(self): return "ios"
+    def identifier(self) -> str: return "ios"
 
-    def importDescription(self): return "Imports a '.strings' file containing the localization of an iOS app and converts it to an intermediate localization. Ignores all lines exept lines with a key-value-pair."
+    def importDescription(self) -> str: return "Imports a '.strings' file containing the localization of an iOS app and converts it to an intermediate localization. Ignores all lines exept lines with a key-value-pair."
 
-    def exportDescription(self): return "Exports the content of an intermediate localization to a '.strings' file for an iOS app."
+    def exportDescription(self) -> str: return "Exports the content of an intermediate localization to a '.strings' file for an iOS app."
 
-    def toIntermediate(self, filepath):
+    def toIntermediate(self, filepath: str) -> Optional[IntermediateLocalization]:
         localizationIdentifier = self._localizationIdentifierFromFilepath(filepath)
         languageIdentifier = self._languageIdentifierFromFilepath(filepath)
 
@@ -48,7 +49,7 @@ class iOSConverter(Base):
         intermediateLanguage = IntermediateLanguage(languageIdentifier, intermediateEntries)
         return IntermediateLocalization(localizationIdentifier, [intermediateLanguage])
 
-    def fromIntermediate(self, intermediateLocalization):
+    def fromIntermediate(self, intermediateLocalization: IntermediateLocalization) -> List[LocalizationFile]:
         listOfLocalizationFiles = []
 
         content = self._makeiOSGeneratedWarning()
@@ -92,18 +93,18 @@ class iOSConverter(Base):
             comment = comment[:-1]
         return comment
 
-    def _extractKeyFromLine(self, line):
+    def _extractKeyFromLine(self, line: str) -> str:
         key = line.split("=")[0]    # Split line between key and value TODO: This will not work, if there is a "="" in the Key!
         key = self._correctEntry(key)
         return key
 
-    def _extractValueFromLine(self, line):
+    def _extractValueFromLine(self, line: str) -> str:
         value = line.split("=", 1)[1][:-1] # Split string on first occurence of =, take second part and cut out last character (;)
         value = self._correctEntry(value)
         value.replace("\"", "\\\"")
         return value
 
-    def _correctEntry(self, input):
+    def _correctEntry(self, input: str) -> str:
         entry = input
         while entry.startswith(" "):  # Remove leading whitespaces from key
             entry = entry[1:]
@@ -115,7 +116,7 @@ class iOSConverter(Base):
             entry = entry[:-1]
         return entry
 
-    def _makeiOSGeneratedWarning(self):
+    def _makeiOSGeneratedWarning(self) -> str:
         warning = FileHelper.readFile("localizer/templates/template_common_generated_warning.txt")
         return "/*\n{}\n */\n".format(warning)
 

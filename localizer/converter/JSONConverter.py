@@ -47,6 +47,9 @@ class JSONConverter(Base):
                 language = IntermediateLanguage(languageKey, listOfEntries)
                 listOfLanguages.append(language)
             return IntermediateLocalization(sectionKey, listOfLanguages)
+        
+        # Default return, if json could not be converted.
+        return None
 
     def fromIntermediate(self, intermediateLocalization: IntermediateLocalization) -> List[LocalizationFile]:
         localizationFiles = []
@@ -61,9 +64,10 @@ class JSONConverter(Base):
             
             languageDict[language.languageIdentifier] = entryDict
             localizationDict[intermediateLocalization.localizationIdentifier] = languageDict
+            localizationContent = JsonHelper.dictToJSONString(localizationDict)
 
             filename = "{}{}".format(intermediateLocalization.localizationIdentifier, self.fileExtension())
-            localizationFile = LocalizationFile(filename, localizationDict)
+            localizationFile = LocalizationFile(filename, localizationContent)
             localizationFiles.append(localizationFile)
         
         return localizationFiles

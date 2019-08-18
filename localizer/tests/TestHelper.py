@@ -98,4 +98,4 @@ def diff_content(a: str, b: str) -> List[str]:
 
 def diff_positions(a: str, b: str) -> List[int]:
     minimumLength = min(len(a), len(b))
-    [i for i in range(0, minimumLength) if a[i] != b[i]]
+    return [i for i in range(0, minimumLength) if a[i] != b[i]]

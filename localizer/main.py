@@ -48,10 +48,10 @@ def parse(args: List[str]) -> argparse.Namespace:
     parsedArgs = parser.parse_args(args)
     return parsedArgs
 
-def subcommandList(args: argparse.Namespace):
+def subcommandList(args: argparse.Namespace) -> None:
     main_subcommand_list.start(args, registeredConverter)
 
-def subcommandConvert(args: argparse.Namespace):
+def subcommandConvert(args: argparse.Namespace) -> None:
     main_subcommand_convert.start(args, registeredConverter)
 
 #--------------------
