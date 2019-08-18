@@ -1,7 +1,7 @@
 from typing import List
 
-from localizer.model.IntermediateEntry import IntermediateEntry
-from localizer.model.IntermediateLocalization import IntermediateLocalization
+from Logen.model.IntermediateEntry import IntermediateEntry
+from Logen.model.IntermediateLocalization import IntermediateLocalization
 
 class MergeResult():
     

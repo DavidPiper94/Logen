@@ -1,16 +1,16 @@
 import unittest
 
-from localizer.lib import FileHelper
-from localizer.lib import JsonHelper
+from Logen.lib import FileHelper
+from Logen.lib import JsonHelper
 
-from localizer.model.IntermediateEntry import IntermediateEntry
-from localizer.model.IntermediateLanguage import IntermediateLanguage
-from localizer.model.IntermediateLocalization import IntermediateLocalization
-from localizer.model.LocalizationFile import LocalizationFile
+from Logen.model.IntermediateEntry import IntermediateEntry
+from Logen.model.IntermediateLanguage import IntermediateLanguage
+from Logen.model.IntermediateLocalization import IntermediateLocalization
+from Logen.model.LocalizationFile import LocalizationFile
 
-from localizer.converter.iOSConverter import iOSConverter
+from Logen.converter.iOSConverter import iOSConverter
 
-from localizer.tests import TestHelper
+from Logen.tests import TestHelper
 
 class TestiOSConverter(unittest.TestCase):
 
@@ -23,7 +23,7 @@ class TestiOSConverter(unittest.TestCase):
 
     def test_toIntermediate(self):
         expectation = TestHelper.createExampleIntermediateLocalization(addComment = True)
-        result = self.sut.toIntermediate("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
+        result = self.sut.toIntermediate("Logen/tests/testdata/ExampleLanguage.lproj/FileName.strings")
         self.assertEqual(expectation, result, msg = TestHelper.errorMessageForIntermediateLocalization(expectation, result))
 
     def test_toIntermediate_noComments(self):
@@ -35,12 +35,12 @@ class TestiOSConverter(unittest.TestCase):
             localizationId = "FileName_noComments"
         )
         
-        result = self.sut.toIntermediate("localizer/tests/testdata/ExampleLanguage.lproj/FileName_noComments.strings")
+        result = self.sut.toIntermediate("Logen/tests/testdata/ExampleLanguage.lproj/FileName_noComments.strings")
         self.assertEqual(expectation, result, msg = TestHelper.errorMessageForIntermediateLocalization(expectation, result))
 
     def test_fromIntermediate(self):
         expectedFilepath = "ExampleLanguage.lproj/FileName.strings"
-        expectedContent = FileHelper.readFile("localizer/tests/testdata/ExampleLanguage.lproj/FileName.strings")
+        expectedContent = FileHelper.readFile("Logen/tests/testdata/ExampleLanguage.lproj/FileName.strings")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
         intermediate = TestHelper.createExampleIntermediateLocalization(addComment = True)
         result = self.sut.fromIntermediate(intermediate)[0]
@@ -48,7 +48,7 @@ class TestiOSConverter(unittest.TestCase):
 
     def test_fromIntermediate_noComments(self):
         expectedFilepath = "ExampleLanguage.lproj/FileName.strings"
-        expectedContent = FileHelper.readFile("localizer/tests/testdata/ExampleLanguage.lproj/FileName_noComments.strings")
+        expectedContent = FileHelper.readFile("Logen/tests/testdata/ExampleLanguage.lproj/FileName_noComments.strings")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
         intermediate = TestHelper.createExampleIntermediateLocalization(addComment = False)
         result = self.sut.fromIntermediate(intermediate)[0]

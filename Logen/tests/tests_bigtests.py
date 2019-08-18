@@ -1,16 +1,16 @@
 import unittest
 import pathlib
 
-from localizer.converter.AndroidConverter import AndroidConverter
-from localizer.converter.JSONConverter import JSONConverter
-from localizer.converter.iOSConverter import iOSConverter
-from localizer.lib import FileHelper
-from localizer.model.IntermediateEntry import IntermediateEntry
-from localizer.model.IntermediateLanguage import IntermediateLanguage
-from localizer.model.IntermediateLocalization import IntermediateLocalization
-from localizer.model.LocalizationFile import LocalizationFile
+from Logen.converter.AndroidConverter import AndroidConverter
+from Logen.converter.JSONConverter import JSONConverter
+from Logen.converter.iOSConverter import iOSConverter
+from Logen.lib import FileHelper
+from Logen.model.IntermediateEntry import IntermediateEntry
+from Logen.model.IntermediateLanguage import IntermediateLanguage
+from Logen.model.IntermediateLocalization import IntermediateLocalization
+from Logen.model.LocalizationFile import LocalizationFile
 
-from localizer.tests import TestHelper
+from Logen.tests import TestHelper
 
 class Bigtests(unittest.TestCase):
 
@@ -20,7 +20,7 @@ class Bigtests(unittest.TestCase):
         self.assertIsNone(jsonIntermediate)
 
     def test(self):
-        bigtestPath = "./localizer/tests/bigtests"
+        bigtestPath = "./Logen/tests/bigtests"
 
         # Only execute tests if bigtests folder exists
         if not FileHelper.exists(bigtestPath):

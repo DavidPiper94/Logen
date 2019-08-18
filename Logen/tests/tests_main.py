@@ -1,6 +1,6 @@
 import unittest
 
-from localizer import main
+from Logen import main
 
 class MainTests(unittest.TestCase):
     

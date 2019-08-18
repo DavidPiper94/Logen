@@ -1,8 +1,8 @@
 import unittest
 
-from localizer.tests.ConverterSpy import ConverterSpy
-from localizer import main_subcommand_convert
-from localizer import main
+from Logen.tests.ConverterSpy import ConverterSpy
+from Logen import main_subcommand_convert
+from Logen import main
 
 class SubcommandConvertTests(unittest.TestCase):
 
@@ -20,7 +20,7 @@ class SubcommandConvertTests(unittest.TestCase):
         # setup arguments
         testArgs = [
             "convert", 
-            "localizer/tests/testdata/ExampleJSON_comments.json",
+            "Logen/tests/testdata/ExampleJSON_comments.json",
             "just/some/path",
             "import",
             "export",
