@@ -1,12 +1,12 @@
 import os
 from typing import List, Optional, Tuple
 
-from Logen.converter.ConverterInterface import ConverterInterface as Base
-from Logen.lib import FileHelper
-from Logen.model.IntermediateEntry import IntermediateEntry
-from Logen.model.IntermediateLanguage import IntermediateLanguage
-from Logen.model.IntermediateLocalization import IntermediateLocalization
-from Logen.model.LocalizationFile import LocalizationFile
+from ..converter.ConverterInterface import ConverterInterface as Base
+from ..lib import FileHelper
+from ..model.IntermediateEntry import IntermediateEntry
+from ..model.IntermediateLanguage import IntermediateLanguage
+from ..model.IntermediateLocalization import IntermediateLocalization
+from ..model.LocalizationFile import LocalizationFile
 
 class AndroidConverter(Base):
 

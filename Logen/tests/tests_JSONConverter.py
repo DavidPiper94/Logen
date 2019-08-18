@@ -1,13 +1,13 @@
 import unittest
 
-from Logen.converter.JSONConverter import JSONConverter
-from Logen.lib import FileHelper, JsonHelper
-from Logen.model.IntermediateEntry import IntermediateEntry
-from Logen.model.IntermediateLanguage import IntermediateLanguage
-from Logen.model.IntermediateLocalization import IntermediateLocalization
-from Logen.model.LocalizationFile import LocalizationFile
+from ..converter.JSONConverter import JSONConverter
+from ..lib import FileHelper, JsonHelper
+from ..model.IntermediateEntry import IntermediateEntry
+from ..model.IntermediateLanguage import IntermediateLanguage
+from ..model.IntermediateLocalization import IntermediateLocalization
+from ..model.LocalizationFile import LocalizationFile
 
-from Logen.tests import TestHelper
+from ..tests import TestHelper
 
 class TestJSONConverter(unittest.TestCase):
 

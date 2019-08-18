@@ -1,6 +1,6 @@
 import unittest
 
-from Logen import main
+from .. import main
 
 class MainTests(unittest.TestCase):
     

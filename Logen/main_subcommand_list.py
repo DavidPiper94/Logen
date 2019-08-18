@@ -1,7 +1,7 @@
 import argparse
 from typing import List
 
-from Logen.converter.ConverterInterface import ConverterInterface
+from .converter.ConverterInterface import ConverterInterface
 
 #--------------------
 # Starting point

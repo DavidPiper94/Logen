@@ -1,14 +1,14 @@
 import unittest
 
-from Logen.lib import FileHelper
-from Logen.lib import JsonHelper
+from ..lib import FileHelper
+from ..lib import JsonHelper
 
-from Logen.model.IntermediateEntry import IntermediateEntry
-from Logen.model.IntermediateLanguage import IntermediateLanguage
-from Logen.model.IntermediateLocalization import IntermediateLocalization
-from Logen.model.LocalizationFile import LocalizationFile
+from ..model.IntermediateEntry import IntermediateEntry
+from ..model.IntermediateLanguage import IntermediateLanguage
+from ..model.IntermediateLocalization import IntermediateLocalization
+from ..model.LocalizationFile import LocalizationFile
 
-from Logen.converter.iOSEnumConverter import iOSEnumConverter
+from ..converter.iOSEnumConverter import iOSEnumConverter
 
 class TestiOSEnumConverter(unittest.TestCase):
 

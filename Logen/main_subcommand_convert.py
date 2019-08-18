@@ -2,13 +2,13 @@ import sys
 import argparse
 from typing import List, Optional
 
-from Logen.lib import FileHelper
-from Logen.lib import TerminalStyle
+from .lib import FileHelper
+from .lib import TerminalStyle
 
-from Logen.converter.ConverterInterface import ConverterInterface
+from .converter.ConverterInterface import ConverterInterface
 
-from Logen.model.IntermediateLocalization import IntermediateLocalization
-from Logen.model.LocalizationFile import LocalizationFile
+from .model.IntermediateLocalization import IntermediateLocalization
+from .model.LocalizationFile import LocalizationFile
 
 #--------------------
 # properties
