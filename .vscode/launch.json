@@ -115,12 +115,19 @@
         },
         // Starts a debug session for this project with predefined arguments.
         {
-            "name": "Debug generate_localization",
+            "name": "Debug convert",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/main.py",
+            "module": "localizer.main",
             "console": "integratedTerminal",
-            "args": ["fromJSON", "./testdata/localization_src", "./testdata"]
+            "args": [
+                "convert",                                                      // subcommand
+                "localizer/tests/bigtests/localization_src/information.json",   // source
+                "~/Desktop/test/localization_gen",                              // destination
+                "json",                                                         // import converter
+                "ios",                                                          // export converter
+                "--dryRun"                                                      // additional flags
+            ]
         },
         // Starts a debug session for bigtests
         {
