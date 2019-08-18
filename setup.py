@@ -5,7 +5,7 @@ setup(
   entry_points = {
       "console_scripts": ["logen = Logen.main"]
   },
-  version = "0.1.0",
+  version = "0.1.1",
   license = "MIT",
   description = "Generates and converts between various localization formats.",
   long_description = "Generates and converts between various localization formats.",
