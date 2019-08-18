@@ -59,6 +59,10 @@ def subcommandConvert(args: argparse.Namespace) -> None:
 # Main
 #--------------------
 
-if __name__ == "__main__":
+def main():
     parsedArgs = parse(sys.argv[1:])
     parsedArgs.func(parsedArgs)
+
+
+if __name__ == "__main__":
+    main()
