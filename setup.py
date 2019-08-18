@@ -8,14 +8,14 @@ setup(
   entry_points = {
       "console_scripts": ["logen = Logen.main:main"]
   },
-  version = "1.0.0",
+  version = "1.0.1",
   license = "MIT",
   description = "Generates and converts between various localization formats.",
-  long_description = "Generates and converts between various localization formats.",
+  long_description = "Logen generates and converts between various localization formats so you don't need to remember how to do that!",
   author = "David Piper",
   author_email = "david@dpiper.de",
   url = "https://github.com/DavidPiper94",     # Provide either the link to your github or to your website
-  download_url = "https://github.com/DavidPiper94/Logen/archive/v_1.0.0.tar.gz",
+  download_url = "https://github.com/DavidPiper94/Logen/archive/v_1.0.1.tar.gz",
   keywords = [
       "localization",
       "converter",

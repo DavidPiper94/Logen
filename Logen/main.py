@@ -27,10 +27,10 @@ registeredConverter = [
 #--------------------
 
 def createParser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description = "Description")
-    subparsers = parser.add_subparsers(help = "Subparser")
+    parser = argparse.ArgumentParser(description = "Logen generates and converts between various localization formats so you don't need to remember how to do that!")
+    subparsers = parser.add_subparsers(help = "These are available subcommands. For more information see corresponding help.")
 
-    parser_convert = subparsers.add_parser("convert", help = "Lists all available converter.")
+    parser_convert = subparsers.add_parser("convert", help = "Converts one localization format to another.")
     parser_convert.add_argument("source", help = "Path to source file")
     parser_convert.add_argument("destination", help = "Path at which destination directory will be created")
     parser_convert.add_argument("importConverter", help = "Identifier of the converter to be used to import content of the given file.")
