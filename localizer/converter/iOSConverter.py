@@ -52,11 +52,11 @@ class iOSConverter(Base):
     def fromIntermediate(self, intermediateLocalization: IntermediateLocalization) -> List[LocalizationFile]:
         listOfLocalizationFiles = []
 
-        content = self._makeiOSGeneratedWarning()
         sectionHeaderTemplate = FileHelper.readFile("localizer/templates/template_ios_section_header.txt")
 
         for language in intermediateLocalization.intermediateLanguages:
 
+            content = self._makeiOSGeneratedWarning()
             content += sectionHeaderTemplate.format(intermediateLocalization.localizationIdentifier)
 
             for entry in language.intermediateEntries:
