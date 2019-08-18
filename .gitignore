@@ -1,6 +1,10 @@
+# Python
 /__pycache__
 /lib/__pycache__
 *.pyc
-/.mypy_cache
 
+# mypy
+.mypy_cache/
+
+# testdata
 /localizer/tests/bigtests/*
