@@ -7,4 +7,4 @@
 .mypy_cache/
 
 # testdata
-/localizer/tests/bigtests/*
+/Logen/tests/bigtests/*

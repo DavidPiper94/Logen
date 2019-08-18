@@ -1,13 +1,13 @@
 import unittest
 
-from localizer.converter.JSONConverter import JSONConverter
-from localizer.lib import FileHelper, JsonHelper
-from localizer.model.IntermediateEntry import IntermediateEntry
-from localizer.model.IntermediateLanguage import IntermediateLanguage
-from localizer.model.IntermediateLocalization import IntermediateLocalization
-from localizer.model.LocalizationFile import LocalizationFile
+from Logen.converter.JSONConverter import JSONConverter
+from Logen.lib import FileHelper, JsonHelper
+from Logen.model.IntermediateEntry import IntermediateEntry
+from Logen.model.IntermediateLanguage import IntermediateLanguage
+from Logen.model.IntermediateLocalization import IntermediateLocalization
+from Logen.model.LocalizationFile import LocalizationFile
 
-from localizer.tests import TestHelper
+from Logen.tests import TestHelper
 
 class TestJSONConverter(unittest.TestCase):
 
@@ -20,7 +20,7 @@ class TestJSONConverter(unittest.TestCase):
 
     def test_assertJSONStructure(self):
         """Assures equality between json and dict representation"""
-        dict = JsonHelper.readJSON("localizer/tests/testdata/ExampleJSON_noComments.json")
+        dict = JsonHelper.readJSON("Logen/tests/testdata/ExampleJSON_noComments.json")
         expectation = JsonHelper.dictToJSONString(dict).replace('\n', '').replace(' ', '')
 
         exampleDict = self._createExampleDict()
@@ -31,13 +31,13 @@ class TestJSONConverter(unittest.TestCase):
     def test_toIntermediate(self):
         """Assures equality between converted dict and expected intermediate representation"""
         expectation = TestHelper.createExampleIntermediateLocalization(addComment = False)
-        result = self.sut.toIntermediate("localizer/tests/testdata/ExampleJSON_noComments.json")
+        result = self.sut.toIntermediate("Logen/tests/testdata/ExampleJSON_noComments.json")
         self.assertEqual(expectation, result)
 
     def test_fromIntermediate(self):
         """Assures equality between json dict created from intermediate localization and expected content of file."""
         expectedFilepath = "FileName.json"
-        expectedDict = JsonHelper.readJSON("localizer/tests/testdata/ExampleJSON_noComments.json")
+        expectedDict = JsonHelper.readJSON("Logen/tests/testdata/ExampleJSON_noComments.json")
         expectedContent = JsonHelper.dictToJSONString(expectedDict)
         expectation = LocalizationFile(expectedFilepath, expectedContent)
         localization = TestHelper.createExampleIntermediateLocalization(addComment = False)

@@ -3,13 +3,13 @@ import sys
 
 from typing import List
 
-from localizer.converter.AndroidConverter import AndroidConverter
-from localizer.converter.JSONConverter import JSONConverter
-from localizer.converter.iOSConverter import iOSConverter
-from localizer.converter.iOSEnumConverter import iOSEnumConverter
+from Logen.converter.AndroidConverter import AndroidConverter
+from Logen.converter.JSONConverter import JSONConverter
+from Logen.converter.iOSConverter import iOSConverter
+from Logen.converter.iOSEnumConverter import iOSEnumConverter
 
-from localizer import main_subcommand_convert
-from localizer import main_subcommand_list
+from Logen import main_subcommand_convert
+from Logen import main_subcommand_list
 
 #--------------------
 # properties

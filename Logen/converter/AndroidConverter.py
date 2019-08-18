@@ -1,12 +1,12 @@
 import os
 from typing import List, Optional, Tuple
 
-from localizer.converter.ConverterInterface import ConverterInterface as Base
-from localizer.lib import FileHelper
-from localizer.model.IntermediateEntry import IntermediateEntry
-from localizer.model.IntermediateLanguage import IntermediateLanguage
-from localizer.model.IntermediateLocalization import IntermediateLocalization
-from localizer.model.LocalizationFile import LocalizationFile
+from Logen.converter.ConverterInterface import ConverterInterface as Base
+from Logen.lib import FileHelper
+from Logen.model.IntermediateEntry import IntermediateEntry
+from Logen.model.IntermediateLanguage import IntermediateLanguage
+from Logen.model.IntermediateLocalization import IntermediateLocalization
+from Logen.model.LocalizationFile import LocalizationFile
 
 class AndroidConverter(Base):
 
@@ -81,7 +81,7 @@ class AndroidConverter(Base):
                 androidKey = "{}.{}".format(identifier, entry.key)
                 content += self._makeAndroidEntry(androidKey, entry.value, entry.comment)
 
-            filecontent = self._makeAndroidGeneratedWarning() + FileHelper.readFile("localizer/templates/template_android_resource_file.txt").format(content)
+            filecontent = self._makeAndroidGeneratedWarning() + FileHelper.readFile("Logen/templates/template_android_resource_file.txt").format(content)
             localizationFile = LocalizationFile(filename, filecontent)
             listOfLocalizationFiles.append(localizationFile)
 
@@ -188,7 +188,7 @@ class AndroidConverter(Base):
         return entry
 
     def _makeAndroidGeneratedWarning(self) -> str:
-        warning = FileHelper.readFile("localizer/templates/template_common_generated_warning.txt")
+        warning = FileHelper.readFile("Logen/templates/template_common_generated_warning.txt")
         return "<!-- \n{} \n-->\n\n".format(warning)
 
     def _makeAndroidEntry(

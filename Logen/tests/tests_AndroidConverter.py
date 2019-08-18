@@ -1,13 +1,13 @@
 import unittest
 
-from localizer.converter.AndroidConverter import AndroidConverter
-from localizer.lib import FileHelper
-from localizer.model.IntermediateEntry import IntermediateEntry
-from localizer.model.IntermediateLanguage import IntermediateLanguage
-from localizer.model.IntermediateLocalization import IntermediateLocalization
-from localizer.model.LocalizationFile import LocalizationFile
+from Logen.converter.AndroidConverter import AndroidConverter
+from Logen.lib import FileHelper
+from Logen.model.IntermediateEntry import IntermediateEntry
+from Logen.model.IntermediateLanguage import IntermediateLanguage
+from Logen.model.IntermediateLocalization import IntermediateLocalization
+from Logen.model.LocalizationFile import LocalizationFile
 
-from localizer.tests import TestHelper
+from Logen.tests import TestHelper
 
 class TestAndroidConverter(unittest.TestCase):
 
@@ -20,12 +20,12 @@ class TestAndroidConverter(unittest.TestCase):
 
     def test_toIntermediate(self):
         expectation = TestHelper.createExampleIntermediateLocalization(addComment = True)
-        result = self.sut.toIntermediate("localizer/tests/testdata/values-ExampleLanguage/FileName.xml")
+        result = self.sut.toIntermediate("Logen/tests/testdata/values-ExampleLanguage/FileName.xml")
         self.assertEqual(expectation, result, msg = TestHelper.errorMessageForIntermediateLocalization(expectation, result))
 
     def test_fromIntermediate(self):
         expectedFilepath = "values-ExampleLanguage/FileName.xml"
-        expectedContent = FileHelper.readFile("localizer/tests/testdata/values-ExampleLanguage/FileName.xml")
+        expectedContent = FileHelper.readFile("Logen/tests/testdata/values-ExampleLanguage/FileName.xml")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
         intermediate = TestHelper.createExampleIntermediateLocalization(addComment = True)
         result = self.sut.fromIntermediate(intermediate)[0]

@@ -1,10 +1,10 @@
 from typing import List, Optional
 
-from localizer.converter.ConverterInterface import ConverterInterface as Base
-from localizer.model.IntermediateEntry import IntermediateEntry
-from localizer.model.IntermediateLanguage import IntermediateLanguage
-from localizer.model.IntermediateLocalization import IntermediateLocalization
-from localizer.model.LocalizationFile import LocalizationFile
+from Logen.converter.ConverterInterface import ConverterInterface as Base
+from Logen.model.IntermediateEntry import IntermediateEntry
+from Logen.model.IntermediateLanguage import IntermediateLanguage
+from Logen.model.IntermediateLocalization import IntermediateLocalization
+from Logen.model.LocalizationFile import LocalizationFile
 
 class ConverterSpy(Base):    
     

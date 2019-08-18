@@ -118,11 +118,11 @@
             "name": "Debug convert",
             "type": "python",
             "request": "launch",
-            "module": "localizer.main",
+            "module": "Logen.main",
             "console": "integratedTerminal",
             "args": [
                 "convert",                                                      // subcommand
-                "localizer/tests/bigtests/localization_src/information.json",   // source
+                "Logen/tests/bigtests/localization_src/information.json",   // source
                 "~/Desktop/test/localization_gen",                              // destination
                 "json",                                                         // import converter
                 "ios",                                                          // export converter
@@ -134,7 +134,7 @@
             "name": "Debug Bigtests",
             "type": "python",
             "request": "launch",
-            "module": "localizer.tests.tests_Bigtests",
+            "module": "Logen.tests.tests_Bigtests",
             "console": "integratedTerminal",
             "args": []
         }
@@ -143,7 +143,7 @@
             "name": "Debug all tests",
             "type": "python",
             "request": "launch",
-            "module": "localizer.tests.run_all",
+            "module": "Logen.tests.run_all",
             "console": "integratedTerminal",
             "args": []
         }

@@ -1,14 +1,14 @@
 import unittest
 
-from localizer.lib import FileHelper
-from localizer.lib import JsonHelper
+from Logen.lib import FileHelper
+from Logen.lib import JsonHelper
 
-from localizer.model.IntermediateEntry import IntermediateEntry
-from localizer.model.IntermediateLanguage import IntermediateLanguage
-from localizer.model.IntermediateLocalization import IntermediateLocalization
-from localizer.model.LocalizationFile import LocalizationFile
+from Logen.model.IntermediateEntry import IntermediateEntry
+from Logen.model.IntermediateLanguage import IntermediateLanguage
+from Logen.model.IntermediateLocalization import IntermediateLocalization
+from Logen.model.LocalizationFile import LocalizationFile
 
-from localizer.converter.iOSEnumConverter import iOSEnumConverter
+from Logen.converter.iOSEnumConverter import iOSEnumConverter
 
 class TestiOSEnumConverter(unittest.TestCase):
 
@@ -23,7 +23,7 @@ class TestiOSEnumConverter(unittest.TestCase):
 
     def test_fromIntermediate(self):
         expectedFilepath = "FileNameLocalizableKeys.swift"
-        expectedContent = FileHelper.readFile("localizer/tests/testdata/FileNameLocalizableKeys.swift")
+        expectedContent = FileHelper.readFile("Logen/tests/testdata/FileNameLocalizableKeys.swift")
         expectation = LocalizationFile(expectedFilepath, expectedContent)
         intermediate = self._createExampleIntermediateLocalization()
         result = self.sut.fromIntermediate(intermediate)[0]

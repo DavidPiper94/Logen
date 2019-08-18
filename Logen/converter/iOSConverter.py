@@ -1,12 +1,12 @@
 import os
 from typing import List, Optional
 
-from localizer.converter.ConverterInterface import ConverterInterface as Base
-from localizer.lib import FileHelper
-from localizer.model.IntermediateEntry import IntermediateEntry
-from localizer.model.IntermediateLanguage import IntermediateLanguage
-from localizer.model.IntermediateLocalization import IntermediateLocalization
-from localizer.model.LocalizationFile import LocalizationFile
+from Logen.converter.ConverterInterface import ConverterInterface as Base
+from Logen.lib import FileHelper
+from Logen.model.IntermediateEntry import IntermediateEntry
+from Logen.model.IntermediateLanguage import IntermediateLanguage
+from Logen.model.IntermediateLocalization import IntermediateLocalization
+from Logen.model.LocalizationFile import LocalizationFile
 
 class iOSConverter(Base):
 
@@ -52,7 +52,7 @@ class iOSConverter(Base):
     def fromIntermediate(self, intermediateLocalization: IntermediateLocalization) -> List[LocalizationFile]:
         listOfLocalizationFiles = []
 
-        sectionHeaderTemplate = FileHelper.readFile("localizer/templates/template_ios_section_header.txt")
+        sectionHeaderTemplate = FileHelper.readFile("Logen/templates/template_ios_section_header.txt")
 
         for language in intermediateLocalization.intermediateLanguages:
 
@@ -119,7 +119,7 @@ class iOSConverter(Base):
         return entry
 
     def _makeiOSGeneratedWarning(self) -> str:
-        warning = FileHelper.readFile("localizer/templates/template_common_generated_warning.txt")
+        warning = FileHelper.readFile("Logen/templates/template_common_generated_warning.txt")
         return "/*\n{}\n */\n".format(warning)
 
     def _lineFromIntermediateEntry(self, entry: IntermediateEntry) -> str:
