@@ -5,7 +5,7 @@ setup(
   name = "Logen",
   packages = ["Logen"],
   entry_points = {
-      "console_scripts": ["logen = Logen.main"]
+      "console_scripts": ["logen = Logen:main"]
   },
   version = "0.1.1",
   license = "MIT",
