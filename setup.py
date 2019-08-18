@@ -6,16 +6,16 @@ setup(
   name = "Logen",
   packages = find_packages(),                   # finds all packages and subpackages automatically
   entry_points = {
-      "console_scripts": ["logen = Logen:main"]
+      "console_scripts": ["logen = Logen.main:main"]
   },
-  version = "0.1.5",
+  version = "0.1.6",
   license = "MIT",
   description = "Generates and converts between various localization formats.",
   long_description = "Generates and converts between various localization formats.",
   author = "David Piper",
   author_email = "david@dpiper.de",
   url = "https://github.com/DavidPiper94",     # Provide either the link to your github or to your website
-  download_url = "https://github.com/DavidPiper94/Logen/archive/v_0.1.5.tar.gz",
+  download_url = "https://github.com/DavidPiper94/Logen/archive/v_0.1.6.tar.gz",
   keywords = [
       "localization",
       "converter",
