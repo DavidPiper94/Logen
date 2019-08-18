@@ -19,35 +19,13 @@ class Bigtests(unittest.TestCase):
         jsonIntermediate = JSONConverter().toIntermediate(jsonFilepath)
         self.assertIsNone(jsonIntermediate)
 
-    def test_toIntermediate(self):
+    def test(self):
+        bigtestPath = "./localizer/tests/bigtests"
 
-        files = ["information", "intro", "loading", "menu", "musicwish", "photo", "settings", "timetable"]
-        for currentFile in files:
+        # Only execute tests if bigtests folder exists
+        if not FileHelper.exists(bigtestPath):
+            pass
 
-            jsonFilepath = "localizer/tests/bigtests/localization_src/{}.json".format(currentFile)
-            jsonIntermediate = JSONConverter().toIntermediate(jsonFilepath)
-
-            iosDeFilepath = "localizer/tests/bigtests/localization_gen/ios/de.lproj/{}.strings".format(currentFile)
-            iosDeIntermediate = iOSConverter().toIntermediate(iosDeFilepath)
-            iosBaseFilepath = "localizer/tests/bigtests/localization_gen/ios/Base.lproj/{}.strings".format(currentFile)
-            iosBaseIntermediate = iOSConverter().toIntermediate(iosBaseFilepath)
-            iosMergeResult = iOSConverter().merge(iosDeIntermediate, iosBaseIntermediate)
-            iosIntermediate = iosMergeResult.result
-
-            androidDeFilepath = "localizer/tests/bigtests/localization_gen/android/values-de/{}.xml".format(currentFile)
-            androidDeIntermediate = AndroidConverter().toIntermediate(androidDeFilepath)
-            androidBaseFilepath = "localizer/tests/bigtests/localization_gen/android/values-Base/{}.xml".format(currentFile)
-            androidBaseIntermediate = AndroidConverter().toIntermediate(androidBaseFilepath)
-            androidIntermediate = AndroidConverter().merge(androidDeIntermediate, androidBaseIntermediate).result
-
-            self.assertEqual(jsonIntermediate, 
-                    iosIntermediate, 
-                    msg = TestHelper.errorMessageForIntermediateLocalization(jsonIntermediate, iosIntermediate) + "at file: {}".format(currentFile))
-            self.assertEqual(jsonIntermediate, 
-                    androidIntermediate, 
-                    msg = TestHelper.errorMessageForIntermediateLocalization(jsonIntermediate, androidIntermediate))
-
-    def test_neu(self):
         # Define all registers and extract processable extensions.
         converter = [iOSConverter(), AndroidConverter(), JSONConverter()]
         extensions = list(map(lambda x: x.fileExtension(), converter))
@@ -55,7 +33,6 @@ class Bigtests(unittest.TestCase):
         # Find all files with an extension which can be processed by any converter.
         convertableFilepaths = []
         for extension in extensions:
-            bigtestPath = "./localizer/tests/bigtests"
             for path in pathlib.Path(bigtestPath).rglob("*{}".format(extension)):
                 convertableFilepaths.append(str(path))
             
