@@ -1,5 +1,6 @@
 from distutils.core import setup
 import setuptools
+from setuptools import find_packages
 
 setup(
   name = "Logen",
