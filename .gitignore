@@ -5,6 +5,7 @@
 
 /build
 /dist
+/Logen.egg-info
 
 # mypy
 .mypy_cache/
