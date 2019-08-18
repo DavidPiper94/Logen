@@ -12,7 +12,6 @@ from localizer.model.LocalizationFile import LocalizationFile
 
 from localizer.tests import TestHelper
 
-# TODO: Fix this test after correct compare.
 class Bigtests(unittest.TestCase):
 
     def test_vsCode(self):

@@ -54,8 +54,13 @@ def _parseArgsForConverting(args: argparse.Namespace, converter: List[ConverterI
     global importConverterIdentifier
     importConverterIdentifier = args.importConverter
     extension = FileHelper.fileExtension(sourceFilepath)
-    # TODO: Better comparison, e.g. lowercased
-    matchingImportConverter = list(filter(lambda x: x.fileExtension() == extension and x.identifier() == importConverterIdentifier, converter))
+    print(extension)
+    matchingImportConverter = list(
+        filter(
+            lambda x: x.fileExtension() == extension and x.identifier() == importConverterIdentifier, 
+            converter
+        )
+    )
     if len(matchingImportConverter) == 0:
         _handleError("ERROR: No matching converter found with identifier {} for fileextension {}".format(importConverterIdentifier, extension))
     else:
