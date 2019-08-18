@@ -41,6 +41,5 @@ class MainTests(unittest.TestCase):
         parsedTestArgs = main.parse(testArgs)
         self.assertEqual(expectedFunction, parsedTestArgs.func)
 
-
 if __name__ == '__main__':
     unittest.main()

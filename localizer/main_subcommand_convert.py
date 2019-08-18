@@ -1,4 +1,5 @@
 import sys
+import argparse
 from typing import List, Optional
 
 from localizer.lib import FileHelper
@@ -23,16 +24,17 @@ dryRun = False
 # Starting point
 #--------------------
 
-def start(args, converter: List[ConverterInterface]):
+def start(args: argparse.Namespace, converter: List[ConverterInterface]) -> None:
     _parseArgsForConverting(args, converter)
     intermediate = _importToIntermediateLocalization(sourceFilepath, converter)
-    _exportToLocalizationFile(intermediate, converter)
+    if isinstance(intermediate, IntermediateLocalization):
+        _exportToLocalizationFile(intermediate, converter)
 
 #--------------------
 # private helper
 #--------------------
 
-def _parseArgsForConverting(args, converter: List[ConverterInterface]):
+def _parseArgsForConverting(args: argparse.Namespace, converter: List[ConverterInterface]) -> None:
 
     # select and validate converter for export
     global exportConverterIdentifier
@@ -92,13 +94,13 @@ def _importToIntermediateLocalization(
 def _exportToLocalizationFile(
     intermediateLocalization: IntermediateLocalization, 
     converter: List[ConverterInterface]
-):
+) -> None:
     exportConverter = list(filter(lambda x: x.identifier() == exportConverterIdentifier, converter))
     for exporter in exportConverter:
         for file in exporter.fromIntermediate(intermediateLocalization):
             _handleLocalizationFile(file)
 
-def _handleLocalizationFile(localizationFile: LocalizationFile):
+def _handleLocalizationFile(localizationFile: LocalizationFile) -> None:
     global dryRun
     if dryRun:
         print(localizationFile.filecontent)
@@ -106,7 +108,7 @@ def _handleLocalizationFile(localizationFile: LocalizationFile):
         destination = destinationDirectory + "/" + localizationFile.filepath
         _writeFile(destination, localizationFile.filecontent)
 
-def _writeFile(path: str, content: str):
+def _writeFile(path: str, content: str) -> None:
     directoryPath = FileHelper.directoryPath(path)
 
     if FileHelper.exists(path):
@@ -125,7 +127,7 @@ def _printSummary(
     destinationFilepath: str, 
     importConverterIdentifier: str, 
     exportConverterIdentifier: str
-):
+) -> None:
     _handleInfo(
         "Summary:\n"
         + "input: {}\n".format(sourceFilepath)
@@ -134,12 +136,12 @@ def _printSummary(
         + "converter for export: {}".format(exportConverterIdentifier)
     )
 
-def _handleError(errorText: str):
+def _handleError(errorText: str) -> None:
     print(TerminalStyle.FAIL + errorText + TerminalStyle.ENDC)
     sys.exit()
 
-def _handleWarning(warningText: str):
+def _handleWarning(warningText: str) -> None:
     print(TerminalStyle.WARNING + warningText + TerminalStyle.ENDC)
 
-def _handleInfo(infoText: str):
+def _handleInfo(infoText: str) -> None:
     print(TerminalStyle.GREEN + infoText + TerminalStyle.ENDC)

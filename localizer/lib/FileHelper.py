@@ -7,7 +7,7 @@ from typing import List
 # Files
 #--------------------
 
-def writeFile(filepath: str, content: str):
+def writeFile(filepath: str, content: str) -> None:
     textFile = open(filepath, "w")
     textFile.write(content)
     textFile.close()
@@ -40,8 +40,8 @@ def exists(filepath: str) -> bool:
 # Direcories
 #--------------------
 
-def createDir(filepath: str):
+def createDir(filepath: str) -> None:
     os.makedirs(filepath)
 
-def removeDir(filepath: str):
+def removeDir(filepath: str) -> None:
     shutil.rmtree(filepath)

@@ -22,10 +22,10 @@ class ConverterSpy(Base):
     # Methods to change functionality
     #--------------------------------------------------
 
-    def changeFileExtensionTo(self, newFileExtension: str):
+    def changeFileExtensionTo(self, newFileExtension: str) -> None:
         self._fileExtension = newFileExtension
 
-    def changeIdentifierTo(self, newIdentifier: str):
+    def changeIdentifierTo(self, newIdentifier: str) -> None:
         self._identifier = newIdentifier
 
     #--------------------------------------------------
@@ -42,13 +42,13 @@ class ConverterSpy(Base):
     # Base class conformance
     #--------------------------------------------------
 
-    def fileExtension(self): return self._fileExtension
+    def fileExtension(self) -> str: return self._fileExtension
 
-    def identifier(self): return self._identifier
+    def identifier(self) -> str: return self._identifier
 
-    def importDescription(self): raise NotImplementedError
+    def importDescription(self) -> str: raise NotImplementedError
 
-    def exportDescription(self): raise NotImplementedError
+    def exportDescription(self) -> str: raise NotImplementedError
 
     def toIntermediate(
         self, 
@@ -56,7 +56,9 @@ class ConverterSpy(Base):
     ) -> Optional[IntermediateLocalization]: 
 
         self._didImport = True
-        return None
+        # Return empty IntermediateLocalization, because the subcommand convert checks if the returned Intermediate localization is none.
+        # When returning none, the subcommand convert won't continue in tests.
+        return IntermediateLocalization("", [])
         
     def fromIntermediate(
         self, 
