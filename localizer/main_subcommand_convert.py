@@ -19,6 +19,7 @@ destinationDirectory = ""
 importConverterIdentifier = ""
 exportConverterIdentifier = ""
 dryRun = False
+forceOverride = False
 
 #--------------------
 # Starting point
@@ -69,16 +70,22 @@ def _parseArgsForConverting(args: argparse.Namespace, converter: List[ConverterI
         # If dryRun is enabled, there is no need to process destination directory.
         return
 
+    # save forceOverride argument which is used when saving to a filepath
+    global forceOverride
+    forceOverride = args.force
+
     # save and validate destination filepath
     global destinationDirectory
     destinationDirectory = args.destination
     if not FileHelper.exists(destinationDirectory):
         FileHelper.createDir(destinationDirectory)
-    else:
-        _handleWarning("WARNING: Destination directory already exists. Do you want to override it?")
-        # TODO: Ask
-        #FileHelper.removeDir(destinationDirectory)
-        #FileHelper.createDir(destinationDirectory)
+    elif FileHelper.exists(destinationDirectory) and forceOverride:
+        _handleWarning("Warning: Destination directory [{}] already exists. Overwriting it.".format(destinationDirectory))
+        FileHelper.removeDir(destinationDirectory)
+        FileHelper.createDir(destinationDirectory)
+    else: 
+        _handleError("Error: Destination directory [{}] already exists. Use flag -f to override it.".format(destinationDirectory))
+        exit()
     
     # At this point everything was validated and nothing can go wrong (hopefully).
     if args.verbose:
