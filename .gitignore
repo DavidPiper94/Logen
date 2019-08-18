@@ -3,8 +3,12 @@
 /lib/__pycache__
 *.pyc
 
+/build
+/dist
+
 # mypy
 .mypy_cache/
+.vscode
 
 # testdata
 /Logen/tests/bigtests/*
