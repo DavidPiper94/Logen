@@ -16,7 +16,7 @@ Installing Logen is as easy as ```pip install Logen```
 
 Possible subcommands are *convert* and *list*. 
 
-## Convert
+### Convert
 
 Converts one localization format to another.
 
@@ -31,7 +31,7 @@ Optional arguments:
 - -d/--dryRun for printing result to console instead of writing to a file
 - -v/--verbose for additional information
 
-## List
+### List
 
 Lists all available converter and their descriptions.
 
@@ -45,6 +45,9 @@ Lists all available converter and their descriptions.
 # More information
 
 [An intro to Logen](https://medium.com/@HeyDaveTheDev/logen-converting-localization-formats-f32fcfeca95d)
+WIP:  An overview of the converting process
+TODO: A deepdive into the project
+TODO: Adding support for a new format
 
 # License
 
