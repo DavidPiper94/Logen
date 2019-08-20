@@ -8,6 +8,10 @@ Logen generates localization files in various formats and can converte one forma
 
 Logen provides a foundation for adding even more converter if you want to generate a localization format which is currently not supported.
 
+# How to install
+
+Installing Logen is as easy as ```pip install Logen```
+
 # How to use
 
 Possible subcommands are *convert* and *list*. 
@@ -32,9 +36,15 @@ Optional arguments:
 Lists all available converter and their descriptions.
 
 # Planned features
+
 - Adding guides on how to use it and how to add a new custom converter.
 - More localizations to support even more languages and platforms (e.g. for Python).
 - Make it possible to register external converter.
+- Add functionallity to validate existing localizations both syntactically as well as content wise.
+
+# More information
+
+[An intro to Logen](https://medium.com/@HeyDaveTheDev/logen-converting-localization-formats-f32fcfeca95d)
 
 # License
 
