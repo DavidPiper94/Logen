@@ -1,5 +1,6 @@
 import unittest
 import pathlib
+from typing import List
 
 from ..converter.AndroidConverter import AndroidConverter
 from ..converter.JSONConverter import JSONConverter
@@ -31,14 +32,41 @@ class Bigtests(unittest.TestCase):
         extensions = list(map(lambda x: x.fileExtension(), converter))
 
         # Find all files with an extension which can be processed by any converter.
-        convertableFilepaths = []
-        for extension in extensions:
-            for path in pathlib.Path(bigtestPath).rglob("*{}".format(extension)):
-                convertableFilepaths.append(str(path))
+        convertableFilepaths = self._findConvertableFilepaths(bigtestPath, extensions)
             
         # 1. alle mit gleicher extension finden
         # Sort files by filename and extension.
         # Structure will be { 'filename': { 'extension': [path, path, ...] } }
+        sortedFilepathsDict = self._structureConvertableFilepaths(convertableFilepaths)
+
+        # 2. alle mit entsprechender converter in intermediate umwandeln
+        # 3. die mit gleicher extension mergen
+        intermediateLocalizations = self._buildListOfIntermediateLocalizations(sortedFilepathsDict, converter)
+
+        # 4. vergleichen
+        for filename, listOfLocalizations in intermediateLocalizations.items():
+            for localization in listOfLocalizations:
+                # Assure all are the same by comparing all items to the first localization in the list.
+                expectation = localization
+                actual = listOfLocalizations[0]
+                self.assertEqual(
+                    expectation, 
+                    actual, 
+                    msg = TestHelper.errorMessageForIntermediateLocalization(expectation, actual) + "at file: {}".format(filename)
+                )
+                
+    def _filenameFor(self, path):
+        ext = FileHelper.fileExtension(path)
+        return FileHelper.filename(path).replace(ext, '')
+
+    def _findConvertableFilepaths(self, inDirectory: str, validExtension: List[str]) -> List[str]:
+        convertableFilepaths = []
+        for extension in validExtension:
+            for path in pathlib.Path(inDirectory).rglob("*{}".format(extension)):
+                convertableFilepaths.append(str(path))
+        return convertableFilepaths
+
+    def _structureConvertableFilepaths(self, convertableFilepaths: List[str]) -> List[str]:
         sortedFilepathsDict = {}
         for filepath in convertableFilepaths:
             filename = self._filenameFor(filepath)
@@ -53,11 +81,11 @@ class Bigtests(unittest.TestCase):
                 sortedFilepathsDict[filename][extension] = []
 
             sortedFilepathsDict[filename][extension].append(filepath)
+        return sortedFilepathsDict
 
-        # 2. alle mit entsprechender converter in intermediate umwandeln
-        # 3. die mit gleicher extension mergen
+    def _buildListOfIntermediateLocalizations(self, structuredConvertableFilepahts: List[str], converter) -> dict:        
         intermediateLocalizations = {}
-        for filename, extensionDict in sortedFilepathsDict.items():
+        for filename, extensionDict in structuredConvertableFilepahts.items():
             for extension, pathList in extensionDict.items():
 
                 # Get first converter available for current extension.
@@ -74,7 +102,11 @@ class Bigtests(unittest.TestCase):
                         merged = currentConverter.merge(intermediateWithSameExtension, newIntermediate)
                         if merged is not None:
                             intermediateWithSameExtension = merged.result
-                            self.assertEqual([], merged.missingEntries)
+                            self.assertEqual(
+                                [],
+                                merged.missingEntries,
+                                msg = self._mergedErrorMessage(path, merged)
+                            )
                         else:
                             # This is the case for .vscode/settings.json
                             pass
@@ -83,20 +115,16 @@ class Bigtests(unittest.TestCase):
                     intermediateLocalizations[filename] = []
 
                 intermediateLocalizations[filename].append(intermediateWithSameExtension)
+        return intermediateLocalizations
 
-        # 4. vergleichen
-        for filename, listOfLocalizations in intermediateLocalizations.items():
-            for localization in listOfLocalizations:
-                # Assure all are the same by comparing all items to the first localization in the list.
-                expectation = localization
-                actual = listOfLocalizations[0]
-                self.assertEqual(expectation, 
-                    actual, 
-                    msg = TestHelper.errorMessageForIntermediateLocalization(expectation, actual) + "at file: {}".format(filename))
-                
-    def _filenameFor(self, path):
-        ext = FileHelper.fileExtension(path)
-        return FileHelper.filename(path).replace(ext, '')
+    def _mergedErrorMessage(self, path: str, merged) -> str:
+        msg = "\n-----"
+        msg += "\nDetails:"
+        msg += "\n-----"
+        msg += "\nError at path: {}".format(path)
+        msg += "\nDifference:"
+        msg += "\n{}".format(str(merged))
+        return msg
 
 if __name__ == '__main__':
     unittest.main()
