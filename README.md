@@ -45,8 +45,8 @@ Lists all available converter and their descriptions.
 # More information
 
 [An intro to Logen](https://medium.com/@HeyDaveTheDev/logen-converting-localization-formats-f32fcfeca95d)</br>
-WIP:  An overview of the converting process</br>
-TODO: A deepdive into the project</br>
+[An overview of the converting process](https://medium.com/@HeyDaveTheDev/an-overview-of-converting-localization-formats-with-logen-2bc6606d6bb0)</br>
+WIP: A deepdive into the project</br>
 TODO: Adding support for a new format
 
 # License
