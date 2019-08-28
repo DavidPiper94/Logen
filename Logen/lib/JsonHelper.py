@@ -19,4 +19,4 @@ def isJSONFile(filepath: str) -> bool:
     return ext == ".json"
 
 def dictToJSONString(dict: dict) -> str:
-    return json.dumps(dict)
+    return json.dumps(dict, indent = 4, ensure_ascii = False)
