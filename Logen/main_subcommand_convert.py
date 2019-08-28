@@ -86,7 +86,6 @@ def _parseArgsForConverting(args: argparse.Namespace, converter: List[ConverterI
     elif FileHelper.exists(destinationDirectory) and forceOverride:
         _handleWarning("Warning: Destination directory [{}] already exists. Overwriting it.".format(destinationDirectory))
         FileHelper.removeDir(destinationDirectory)
-        FileHelper.createDir(destinationDirectory)
     else: 
         _handleError("Error: Destination directory [{}] already exists. Use flag -f to override it.".format(destinationDirectory))
         exit()
