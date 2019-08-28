@@ -16,6 +16,7 @@ class AndroidConverter(Base):
 
     _nameTagOpenStart = "<string name=\""
     _nameTagOpenEnd = ">"
+    _nameTagFormattedParameter = "formatted=\"false\""
     _nameTagClose = "</string>"
     _folderNamePrefix = "values-"
 
@@ -142,6 +143,12 @@ class AndroidConverter(Base):
         return comment
 
     def _extractKey(self, line: str, localizationIdentifier: str) -> Tuple[str, str]:
+        
+        # A line may contain a formatted parameter before end of opening string tag.
+        # Currently it is ignored, thus consume rest of opening tag until it closes.
+        # TODO: Handle formatted parameter
+        line = line.replace(self._nameTagFormattedParameter, "")
+        
         # Remove start of name tag.
         if line.startswith(self._nameTagOpenStart):
             prefixLength = len(self._nameTagOpenStart)
@@ -159,15 +166,9 @@ class AndroidConverter(Base):
         keyPrefix = "{}.".format(localizationIdentifier)
         key = key.replace(keyPrefix, "")
 
-        # A line may contain a formatted parameter before end of opening string tag.
-        # Currently it is ignored, thus consume rest of opening tag until it closes.
-        # TODO: Handle formatted parameter
-        while not line.startswith(self._nameTagOpenEnd):
-            line = line[1:]
-
         # Remove end of name tag
         if line.startswith(self._nameTagOpenEnd):
-            line = line[2:]
+            line = line[1:]
 
         return (key, line)
 
