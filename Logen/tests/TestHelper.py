@@ -30,8 +30,9 @@ def errorMessageForLocalizationFile(
         errorMessage += "\t- actual:      {}\n".format(actual.filepath)
     if expectation.filecontent != actual.filecontent:
         errorMessage += "Different filecontent\n"
-        errorMessage += "\t- expectation: {}\n".format(expectation.filecontent)
-        errorMessage += "\t- actual:      {}\n".format(actual.filecontent)
+        errorMessage += "\t- expectation: \n{}\n".format(expectation.filecontent)
+        errorMessage += "\t- actual:      \n{}\n".format(actual.filecontent)
+        errorMessage += "Diff: {}".format(diff_content(expectation.filecontent, actual.filecontent))
     return errorMessage
 
 def errorMessageForIntermediateLocalization( 
