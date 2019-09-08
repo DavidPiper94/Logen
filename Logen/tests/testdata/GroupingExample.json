@@ -1,0 +1,14 @@
+{
+    "timetable": {
+        "en": {
+            "TIMETABLE_HEADER": "Timetable",
+            "TIMETABLE_NO_CONTENT": "No data available yet",
+            "TIMETABLE_LOADING_CONTENT": "Loading new data ..."
+        },
+        "de": {
+            "TIMETABLE_HEADER": "Zeitplan",
+            "TIMETABLE_NO_CONTENT": "Noch keine Daten vorhanden",
+            "TIMETABLE_LOADING_CONTENT": "Lade neue Daten ..."
+        }
+    }
+}

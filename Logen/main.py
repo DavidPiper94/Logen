@@ -8,6 +8,9 @@ from Logen.converter.JSONConverter import JSONConverter
 from Logen.converter.iOSConverter import iOSConverter
 from Logen.converter.iOSEnumConverter import iOSEnumConverter
 
+# Add new converter to imports.
+from .converter.GroupingConverter import GroupingConverter
+
 from Logen import main_subcommand_convert
 from Logen import main_subcommand_list
 
@@ -19,7 +22,10 @@ registeredConverter = [
         iOSConverter(),
         iOSEnumConverter(),
         AndroidConverter(),
-        JSONConverter()
+        JSONConverter(),
+
+        # Add new converter to list of registered converter.
+        GroupingConverter()
 ]
 
 #--------------------
