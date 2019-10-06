@@ -37,7 +37,6 @@ Lists all available converter and their descriptions.
 
 # Planned features
 
-- Adding guides on how to use it and how to add a new custom converter.
 - More localizations to support even more languages and platforms (e.g. for Python).
 - Make it possible to register external converter.
 - Add functionallity to validate existing localizations both syntactically as well as content wise.
@@ -46,8 +45,8 @@ Lists all available converter and their descriptions.
 
 [An intro to Logen](https://medium.com/@HeyDaveTheDev/logen-converting-localization-formats-f32fcfeca95d)</br>
 [An overview of the converting process](https://medium.com/@HeyDaveTheDev/an-overview-of-converting-localization-formats-with-logen-2bc6606d6bb0)</br>
-WIP: A deepdive into the project</br>
-TODO: Adding support for a new format
+[A deepdive into the project](https://medium.com/@HeyDaveTheDev/logen-a-deep-dive-into-the-project-fbbc1a816e15)</br>
+[Adding your own converter](https://medium.com/@HeyDaveTheDev/logen-adding-your-own-converter-179b45c63e0e)
 
 # License
 
